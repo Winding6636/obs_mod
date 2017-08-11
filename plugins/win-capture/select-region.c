@@ -345,8 +345,4 @@ void select_region_free(void)
 
 	info.success = false;
 	info.cb = NULL;
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> change x264 & win-capture

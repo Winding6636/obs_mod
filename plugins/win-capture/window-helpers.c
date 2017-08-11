@@ -192,51 +192,10 @@ static bool check_window_valid(HWND window, enum window_search_mode mode)
 	return true;
 }
 
-<<<<<<< HEAD
 static inline HWND next_window(HWND window, enum window_search_mode mode)
-=======
-bool is_uwp_window(HWND hwnd)
-{
-	wchar_t name[256];
-
-	name[0] = 0;
-	if (!GetClassNameW(hwnd, name, sizeof(name) / sizeof(wchar_t)))
-		return false;
-
-	return wcscmp(name, L"ApplicationFrameWindow") == 0;
-}
-
-HWND get_uwp_actual_window(HWND parent)
-{
-	DWORD parent_id = 0;
-	HWND child;
-
-	GetWindowThreadProcessId(parent, &parent_id);
-	child = FindWindowEx(parent, NULL, NULL, NULL);
-
-	while (child) {
-		DWORD child_id = 0;
-		GetWindowThreadProcessId(child, &child_id);
-
-		if (child_id != parent_id)
-			return child;
-
-		child = FindWindowEx(parent, child, NULL, NULL);
-	}
-
-	return NULL;
-}
-
-static inline HWND next_window(HWND window, enum window_search_mode mode,
-		HWND *parent)
->>>>>>> change x264 & win-capture
 {
 	while (true) {
-<<<<<<< HEAD
 		window = GetNextWindow(window, GW_HWNDNEXT);
-=======
-		window = FindWindowEx(GetDesktopWindow(), window, NULL, NULL);
->>>>>>> change x264 & win-capture
 		if (!window || check_window_valid(window, mode))
 			break;
 	}
@@ -244,51 +203,22 @@ static inline HWND next_window(HWND window, enum window_search_mode mode,
 	return window;
 }
 
-<<<<<<< HEAD
 static inline HWND first_window(enum window_search_mode mode)
 {
 	HWND window = GetWindow(GetDesktopWindow(), GW_CHILD);
 	if (!check_window_valid(window, mode))
 		window = next_window(window, mode);
-=======
-static inline HWND first_window(enum window_search_mode mode, HWND *parent)
-{
-	HWND window = FindWindowEx(GetDesktopWindow(), NULL, NULL, NULL);
-
-	*parent = NULL;
-
-	if (!check_window_valid(window, mode))
-		window = next_window(window, mode, parent);
-
-	if (is_uwp_window(window)) {
-		HWND child = get_uwp_actual_window(window);
-		if (child) {
-			*parent = window;
-			return child;
-		}
-	}
-
->>>>>>> change x264 & win-capture
 	return window;
 }
 
 void fill_window_list(obs_property_t *p, enum window_search_mode mode,
 		add_window_cb callback)
 {
-<<<<<<< HEAD
 	HWND window = first_window(mode);
 
 	while (window) {
 		add_window(p, window, callback);
 		window = next_window(window, mode);
-=======
-	HWND parent;
-	HWND window = first_window(mode, &parent);
-
-	while (window) {
-		add_window(p, window, callback);
-		window = next_window(window, mode, &parent);
->>>>>>> change x264 & win-capture
 	}
 }
 
@@ -318,27 +248,12 @@ static int window_rating(HWND window,
 	else
 		exe_val += 3;
 
-<<<<<<< HEAD
 	if (dstr_cmpi(&cur_class, class) == 0)
 		total += class_val;
 	if (dstr_cmpi(&cur_title, title) == 0)
 		total += title_val;
 	if (dstr_cmpi(&cur_exe, exe) == 0)
 		total += exe_val;
-=======
-	if (uwp_window) {
-		if (dstr_cmpi(&cur_title, title) == 0 &&
-		    dstr_cmpi(&cur_exe, exe) == 0)
-			total += exe_val + title_val + class_val;
-	} else {
-		if (dstr_cmpi(&cur_class, class) == 0)
-			total += class_val;
-		if (dstr_cmpi(&cur_title, title) == 0)
-			total += title_val;
-		if (dstr_cmpi(&cur_exe, exe) == 0)
-			total += exe_val;
-	}
->>>>>>> change x264 & win-capture
 
 	dstr_free(&cur_class);
 	dstr_free(&cur_title);
@@ -353,38 +268,18 @@ HWND find_window(enum window_search_mode mode,
 		const char *title,
 		const char *exe)
 {
-<<<<<<< HEAD
 	HWND window      = first_window(mode);
 	HWND best_window = NULL;
 	int  best_rating = 0;
 
 	while (window) {
 		int rating = window_rating(window, priority, class, title, exe);
-=======
-	HWND parent;
-	HWND window      = first_window(mode, &parent);
-	HWND best_window = NULL;
-	int  best_rating = 0;
-
-	if (!class)
-		return NULL;
-
-	bool uwp_window  = strcmp(class, "Windows.UI.Core.CoreWindow") == 0;
-
-	while (window) {
-		int rating = window_rating(window, priority, class, title, exe,
-				uwp_window);
->>>>>>> change x264 & win-capture
 		if (rating > best_rating) {
 			best_rating = rating;
 			best_window = window;
 		}
 
-<<<<<<< HEAD
 		window = next_window(window, mode);
-=======
-		window = next_window(window, mode, &parent);
->>>>>>> change x264 & win-capture
 	}
 
 	return best_window;

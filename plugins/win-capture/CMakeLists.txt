@@ -17,13 +17,12 @@ set(win-capture_SOURCES
 	cursor-capture.c
 	game-capture.c
 	window-helpers.c
+	monitor-capture.c
 	window-capture.c
 	select-region.c
 	load-graphics-offsets.c
-    monitor-capture.c
 	duplicator-monitor-capture.c
     subregion-monitor-capture.c
-	load-graphics-offsets.c
 	plugin-main.c)
 
 add_library(win-capture MODULE
