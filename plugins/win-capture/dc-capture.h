@@ -23,7 +23,6 @@ struct dc_capture {
 
 	bool         capture_cursor;
 	bool         cursor_captured;
-	bool         cursor_hidden;
 	CURSORINFO   ci;
 
 	bool         valid;
