@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <windows.h>
 #include "../d3d8-api/d3d8.h"

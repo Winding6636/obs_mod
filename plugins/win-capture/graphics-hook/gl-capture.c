@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #ifdef _MSC_VER
 #pragma warning(disable : 4214) /* nonstandard extension, non-int bitfield */
 #pragma warning(disable : 4054) /* function pointer to data pointer */

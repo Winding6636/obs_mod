@@ -1,9 +1,7 @@
 project(win-capture)
 
 set(win-capture_HEADERS
-	nt-stuff.h
 	obfuscate.h
-	app-helpers.h
 	hook-helpers.h
 	inject-library.h
 	cursor-capture.h
@@ -15,7 +13,6 @@ set(win-capture_HEADERS
 set(win-capture_SOURCES
 	dc-capture.c
 	obfuscate.c
-	app-helpers.c
 	inject-library.c
 	cursor-capture.c
 	game-capture.c

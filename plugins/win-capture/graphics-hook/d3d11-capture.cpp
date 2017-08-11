@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <d3d11.h>
 #include <dxgi.h>
 
@@ -813,7 +814,7 @@ static inline void d3d11_shmem_capture(ID3D11Resource *backbuffer)
 	data.cur_tex = next_tex;
 }
 
-void d3d11_capture(void *swap_ptr, void *backbuffer_ptr, bool)
+void d3d11_capture(void *swap_ptr, void *backbuffer_ptr)
 {
 	IDXGIResource *dxgi_backbuffer = (IDXGIResource*)backbuffer_ptr;
 	IDXGISwapChain *swap = (IDXGISwapChain*)swap_ptr;
