@@ -7,21 +7,19 @@
 
 #include "hook-helpers.h"
 
-#define EVENT_CAPTURE_RESTART L"CaptureHook_Restart"
-#define EVENT_CAPTURE_STOP    L"CaptureHook_Stop"
+#define EVENT_CAPTURE_RESTART "CaptureHook_Restart"
+#define EVENT_CAPTURE_STOP    "CaptureHook_Stop"
 
-#define EVENT_HOOK_READY      L"CaptureHook_HookReady"
-#define EVENT_HOOK_EXIT       L"CaptureHook_Exit"
+#define EVENT_HOOK_READY      "CaptureHook_HookReady"
+#define EVENT_HOOK_EXIT       "CaptureHook_Exit"
 
-#define EVENT_HOOK_INIT       L"CaptureHook_Initialize"
+#define EVENT_HOOK_KEEPALIVE  "CaptureHook_KeepAlive"
 
-#define WINDOW_HOOK_KEEPALIVE L"CaptureHook_KeepAlive"
+#define MUTEX_TEXTURE1        "CaptureHook_TextureMutex1"
+#define MUTEX_TEXTURE2        "CaptureHook_TextureMutex2"
 
-#define MUTEX_TEXTURE1        L"CaptureHook_TextureMutex1"
-#define MUTEX_TEXTURE2        L"CaptureHook_TextureMutex2"
-
-#define SHMEM_HOOK_INFO       L"CaptureHook_HookInfo"
-#define SHMEM_TEXTURE         L"CaptureHook_Texture"
+#define SHMEM_HOOK_INFO       "Local\\CaptureHook_HookInfo"
+#define SHMEM_TEXTURE         "Local\\CaptureHook_Texture"
 
 #define PIPE_NAME             "CaptureHook_Pipe"
 
@@ -103,13 +101,19 @@ struct hook_info {
 
 #pragma pack(pop)
 
-#define GC_MAPPING_FLAGS (FILE_MAP_READ | FILE_MAP_WRITE)
-
-static inline HANDLE create_hook_info(DWORD id)
+static inline HANDLE get_hook_info(DWORD id)
 {
-	wchar_t new_name[64];
-	_snwprintf(new_name, 64, L"%s%lu", SHMEM_HOOK_INFO, id);
+	HANDLE handle;
+	char new_name[64];
+	sprintf(new_name, "%s%lu", SHMEM_HOOK_INFO, id);
 
-	return CreateFileMappingW(INVALID_HANDLE_VALUE, NULL, PAGE_READWRITE,
-			0, sizeof(struct hook_info), new_name);
+	handle = CreateFileMappingA(INVALID_HANDLE_VALUE, NULL,
+			PAGE_READWRITE, 0, sizeof(struct hook_info), new_name);
+
+	if (!handle && GetLastError() == ERROR_ALREADY_EXISTS) {
+		handle = OpenFileMappingA(FILE_MAP_ALL_ACCESS, false,
+				new_name);
+	}
+
+	return handle;
 }

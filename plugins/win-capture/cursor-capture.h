@@ -2,12 +2,6 @@
 
 #include <stdint.h>
 
-struct cached_cursor {
-	gs_texture_t *texture;
-	uint32_t cx;
-	uint32_t cy;
-};
-
 struct cursor_data {
 	gs_texture_t                   *texture;
 	HCURSOR                        current_cursor;
@@ -15,11 +9,6 @@ struct cursor_data {
 	long                           x_hotspot;
 	long                           y_hotspot;
 	bool                           visible;
-
-	uint32_t                       last_cx;
-	uint32_t                       last_cy;
-
-	DARRAY(struct cached_cursor)   cached_textures;
 };
 
 extern void cursor_capture(struct cursor_data *data);
