@@ -35,8 +35,6 @@
 #define info(format, ...)  do_log(LOG_INFO,    format, ##__VA_ARGS__)
 #define debug(format, ...) do_log(LOG_DEBUG,   format, ##__VA_ARGS__)
 
-//#define ENABLE_VFR
-
 /* ------------------------------------------------------------------------- */
 
 struct obs_x264 {
@@ -98,15 +96,14 @@ static void obs_x264_defaults(obs_data_t *settings)
 	obs_data_set_default_int   (settings, "buffer_size", 2500);
 	obs_data_set_default_int   (settings, "keyint_sec",  0);
 	obs_data_set_default_int   (settings, "crf",         23);
-#ifdef ENABLE_VFR
 	obs_data_set_default_bool  (settings, "vfr",         false);
-#endif
 	obs_data_set_default_string(settings, "rate_control","CBR");
+    obs_data_set_default_bool  (settings, "use_preset",  false);
 
 	obs_data_set_default_string(settings, "preset",      "veryfast");
 	obs_data_set_default_string(settings, "profile",     "");
 	obs_data_set_default_string(settings, "tune",        "");
-	obs_data_set_default_string(settings, "x264opts",    "");
+	obs_data_set_default_string(settings, "x264PresetFile",    "");
 }
 
 static inline void add_strings(obs_property_t *list, const char *const *strings)
@@ -128,7 +125,8 @@ static inline void add_strings(obs_property_t *list, const char *const *strings)
 #define TEXT_PROFILE    obs_module_text("Profile")
 #define TEXT_TUNE       obs_module_text("Tune")
 #define TEXT_NONE       obs_module_text("None")
-#define TEXT_X264_OPTS  obs_module_text("EncoderOptions")
+#define TEXT_USE_PREFILE  obs_module_text("UsePresetFile")
+#define TEXT_X264_PREFILE  obs_module_text("x264PresetFile")
 
 static bool use_bufsize_modified(obs_properties_t *ppts, obs_property_t *p,
 		obs_data_t *settings)
@@ -206,12 +204,11 @@ static obs_properties_t *obs_x264_props(void *unused)
 	obs_property_list_add_string(list, TEXT_NONE, "");
 	add_strings(list, x264_tune_names);
 
-#ifdef ENABLE_VFR
 	obs_properties_add_bool(props, "vfr", TEXT_VFR);
-#endif
 
-	obs_properties_add_text(props, "x264opts", TEXT_X264_OPTS,
-			OBS_TEXT_DEFAULT);
+	obs_properties_add_bool(props, "use_preset", TEXT_USE_PREFILE);
+
+        obs_properties_add_path(props, "ShowPreset", TEXT_X264_PREFILE,OBS_PATH_FILE,"*.*" , NULL);
 
 	return props;
 }
@@ -413,14 +410,10 @@ static void update_params(struct obs_x264 *obsx264, obs_data_t *settings,
 	int crf          = (int)obs_data_get_int(settings, "crf");
 	int width        = (int)obs_encoder_get_width(obsx264->encoder);
 	int height       = (int)obs_encoder_get_height(obsx264->encoder);
-	int bf           = (int)obs_data_get_int(settings, "bf");
 	bool use_bufsize = obs_data_get_bool(settings, "use_bufsize");
+	bool vfr         = obs_data_get_bool(settings, "vfr");
 	bool cbr_override= obs_data_get_bool(settings, "cbr");
 	enum rate_control rc;
-
-#ifdef ENABLE_VFR
-	bool vfr         = obs_data_get_bool(settings, "vfr");
-#endif
 
 	/* XXX: "cbr" setting has been deprecated */
 	if (cbr_override) {
@@ -456,11 +449,7 @@ static void update_params(struct obs_x264 *obsx264, obs_data_t *settings,
 	if (!use_bufsize)
 		buffer_size = bitrate;
 
-#ifdef ENABLE_VFR
 	obsx264->params.b_vfr_input          = vfr;
-#else
-	obsx264->params.b_vfr_input          = false;
-#endif
 	obsx264->params.rc.i_vbv_max_bitrate = bitrate;
 	obsx264->params.rc.i_vbv_buffer_size = buffer_size;
 	obsx264->params.rc.i_bitrate         = bitrate;
@@ -471,9 +460,6 @@ static void update_params(struct obs_x264 *obsx264, obs_data_t *settings,
 	obsx264->params.pf_log               = log_x264;
 	obsx264->params.p_log_private        = obsx264;
 	obsx264->params.i_log_level          = X264_LOG_WARNING;
-
-	if (obs_data_has_user_value(settings, "bf"))
-		obsx264->params.i_bframe = bf;
 
 	obsx264->params.vui.i_transfer =
 		get_x264_cs_val(info.colorspace, x264_transfer_names);
@@ -523,22 +509,82 @@ static void update_params(struct obs_x264 *obsx264, obs_data_t *settings,
 	     "\tfps_den:      %d\n"
 	     "\twidth:        %d\n"
 	     "\theight:       %d\n"
-	     "\tkeyint:       %d\n",
+	     "\tkeyint:       %d\n"
+	     "\tvfr:          %s\n",
 	     rate_control,
 	     obsx264->params.rc.i_vbv_max_bitrate,
 	     obsx264->params.rc.i_vbv_buffer_size,
 	     (int)obsx264->params.rc.f_rf_constant,
 	     voi->fps_num, voi->fps_den,
 	     width, height,
-	     obsx264->params.i_keyint_max);
+	     obsx264->params.i_keyint_max,
+	     vfr ? "on" : "off");
+}
+
+char *StrShift( char *String, size_t nShift )
+{
+	char *start = String;
+	char *stop  = String + strlen( String );
+	memmove( start + nShift, start, stop-start+1 );
+
+	return String + nShift;
+}
+
+char *StrReplace( char *String, const char *From, const char *To )
+{
+	size_t   nToLen;
+	size_t   nFromLen;
+	size_t   nShift;
+	char *start;
+	char *stop;
+	char *p;
+	
+	nToLen   = strlen( To );
+	nFromLen = strlen( From );
+	nShift   = nToLen - nFromLen;
+	start    = String;
+	stop     = String + strlen( String );
+
+	while( NULL != ( p = strstr( start, From ) ) )
+	{
+		start = StrShift( p + nFromLen, nShift );
+		stop  = stop + nShift;
+
+		memmove( p, To, nToLen );
+	}
+
+	return String;
 }
 
 static bool update_settings(struct obs_x264 *obsx264, obs_data_t *settings)
 {
+        bool usePreset   = obs_data_get_bool(settings, "use_preset");
 	char *preset     = bstrdup(obs_data_get_string(settings, "preset"));
 	char *profile    = bstrdup(obs_data_get_string(settings, "profile"));
 	char *tune       = bstrdup(obs_data_get_string(settings, "tune"));
-	const char *opts = obs_data_get_string(settings, "x264opts");
+	char s[100];
+	char opts[2048]  ="";
+	
+	if(usePreset)
+	{
+	    	const char *fname = obs_data_get_string(settings, "ShowPreset");
+	    	
+	    	#pragma warning(disable:4996)
+	    	FILE *fp;
+	    	fp = fopen(fname, "r");
+	    	if (fp == NULL){
+	    	}
+	    	else
+	    	{
+	    		while (fgets(s, 100, fp) != NULL)
+	    		{
+	    			StrReplace(s,"\r","");
+	    			StrReplace(s,"\n"," ");
+	    			strcat(opts, s);
+	    		}
+	    		fclose(fp);
+	    	}
+	}
 
 	char **paramlist;
 	bool success = true;

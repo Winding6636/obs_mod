@@ -1,11 +1,17 @@
 #include <util/dstr.h>
 #include "dc-capture.h"
 
-#define TEXT_MONITOR_CAPTURE obs_module_text("MonitorCapture")
+#define TEXT_MONITOR_CAPTURE obs_module_text("SubregionMonitorCapture")
 #define TEXT_CAPTURE_CURSOR  obs_module_text("CaptureCursor")
 #define TEXT_COMPATIBILITY   obs_module_text("Compatibility")
 #define TEXT_MONITOR         obs_module_text("Monitor")
 #define TEXT_PRIMARY_MONITOR obs_module_text("PrimaryMonitor")
+#define TEXT_SELECT_REGION   obs_module_text("Subregion.Select")
+#define TEXT_RESET_REGION    obs_module_text("Subregion.Reset")
+#define TEXT_RECT_LEFT       obs_module_text("RectLeft")
+#define TEXT_RECT_RIGHT      obs_module_text("RectRight")
+#define TEXT_RECT_TOP        obs_module_text("RectTop")
+#define TEXT_RECT_BOTTOM     obs_module_text("RectBottom")
 
 struct monitor_capture {
 	obs_source_t      *source;
@@ -13,6 +19,11 @@ struct monitor_capture {
 	int               monitor;
 	bool              capture_cursor;
 	bool              compatibility;
+
+	int               rectleft;
+	int               rectright;
+	int               recttop;
+	int               rectbottom;
 
 	struct dc_capture data;
 };
@@ -61,18 +72,26 @@ static void update_monitor(struct monitor_capture *capture,
 {
 	struct monitor_info monitor = {0};
 	uint32_t width, height;
+  
+	RECT rect;
+
 
 	monitor.desired_id = (int)obs_data_get_int(settings, "monitor");
 	EnumDisplayMonitors(NULL, NULL, enum_monitor, (LPARAM)&monitor);
 
 	capture->monitor = monitor.id;
 
-	width  = monitor.rect.right  - monitor.rect.left;
-	height = monitor.rect.bottom - monitor.rect.top;
+	rect.left   = (LONG)obs_data_get_int(settings, "rectleft");
+	rect.right  = (LONG)obs_data_get_int(settings, "rectright");
+	rect.top    = (LONG)obs_data_get_int(settings, "recttop");
+	rect.bottom = (LONG)obs_data_get_int(settings, "rectbottom");
 
-	dc_capture_init(&capture->data, monitor.rect.left, monitor.rect.top,
-			width, height, capture->capture_cursor,
-			capture->compatibility);
+	width  = rect.right - rect.left;
+	height = rect.bottom - rect.top;
+
+	dc_capture_init(&capture->data, rect.left, rect.top,
+		width, height, capture->capture_cursor,
+		capture->compatibility);
 }
 
 static inline void update_settings(struct monitor_capture *capture,
@@ -81,6 +100,11 @@ static inline void update_settings(struct monitor_capture *capture,
 	capture->monitor        = (int)obs_data_get_int(settings, "monitor");
 	capture->capture_cursor = obs_data_get_bool(settings, "capture_cursor");
 	capture->compatibility  = obs_data_get_bool(settings, "compatibility");
+
+	capture->rectleft       = (int)obs_data_get_int(settings, "rectleft");
+	capture->rectright      = (int)obs_data_get_int(settings, "rectright");
+	capture->recttop        = (int)obs_data_get_int(settings, "recttop");
+	capture->rectbottom     = (int)obs_data_get_int(settings, "rectbottom");
 
 	dc_capture_free(&capture->data);
 	update_monitor(capture, settings);
@@ -110,6 +134,14 @@ static void monitor_capture_defaults(obs_data_t *settings)
 	obs_data_set_default_int(settings, "monitor", 0);
 	obs_data_set_default_bool(settings, "capture_cursor", true);
 	obs_data_set_default_bool(settings, "compatibility", false);
+
+	int max_width  = GetSystemMetrics(SM_CXSCREEN);
+	int max_height = GetSystemMetrics(SM_CYSCREEN);
+
+	obs_data_set_default_int(settings, "rectleft", 0);
+	obs_data_set_default_int(settings, "rectright", max_width);
+	obs_data_set_default_int(settings, "recttop", 0);
+	obs_data_set_default_int(settings, "rectbottom", max_height);
 }
 
 static void monitor_capture_update(void *data, obs_data_t *settings)
@@ -211,26 +243,120 @@ static BOOL CALLBACK enum_monitor_props(HMONITOR handle, HDC hdc, LPRECT rect,
 	return TRUE;
 }
 
+static void select_region(void *data, POINT pos, SIZE size)
+{
+	struct monitor_capture *capture = data;
+	obs_data_t *s = obs_source_get_settings(capture->source);
+
+	struct monitor_info monitor = {0};
+
+	monitor.desired_id = (int)obs_data_get_int(s, "monitor");
+	EnumDisplayMonitors(NULL, NULL, enum_monitor, (LPARAM)&monitor);
+
+	obs_data_set_int(s, "rectleft", monitor.rect.left + pos.x);
+	obs_data_set_int(s, "rectright", monitor.rect.left + size.cx + pos.x);
+	obs_data_set_int(s, "recttop", monitor.rect.top + pos.y);
+	obs_data_set_int(s, "rectbottom", monitor.rect.top + size.cy + pos.y);
+	obs_data_release(s);
+
+	obs_source_update_properties(capture->source);
+	obs_source_update(capture->source, NULL);
+}
+
+static bool select_region_clicked(obs_properties_t *props, obs_property_t *p,
+		void *data)
+{
+	struct monitor_capture *capture = data;
+	obs_data_t *s = obs_source_get_settings(capture->source);
+	int idx = (int)obs_data_get_int(s, "monitor");
+	struct gs_monitor_info info;
+	RECT r = {0};
+	bool success;
+
+	obs_data_release(s);
+
+	obs_enter_graphics();
+	success = gs_get_duplicator_monitor_info(idx, &info);
+	obs_leave_graphics();
+
+	if (!success)
+		return false;
+
+	r.left   = info.x;
+	r.top    = info.y;
+	r.right  = info.x + info.cx;
+	r.bottom = info.y + info.cy;
+
+	select_region_begin(select_region, r, capture);
+	
+	return false;
+}
+
+static bool reset_region_clicked(obs_properties_t *props, obs_property_t *p,
+		void *data)
+{
+	struct monitor_capture *capture = data;
+	obs_data_t *s = obs_source_get_settings(capture->source);
+  
+	struct monitor_info monitor = {0};
+
+	monitor.desired_id = (int)obs_data_get_int(s, "monitor");
+	EnumDisplayMonitors(NULL, NULL, enum_monitor, (LPARAM)&monitor);
+
+	obs_data_set_int(s, "rectleft", monitor.rect.left);
+	obs_data_set_int(s, "rectright", monitor.rect.left + monitor.rect.right  - monitor.rect.left);
+	obs_data_set_int(s, "recttop", monitor.rect.top);
+	obs_data_set_int(s, "rectbottom", monitor.rect.top + monitor.rect.bottom - monitor.rect.top);
+
+	obs_source_update(capture->source, NULL);
+
+	return true;
+}
+
 static obs_properties_t *monitor_capture_properties(void *unused)
 {
 	UNUSED_PARAMETER(unused);
 
 	obs_properties_t *props = obs_properties_create();
+  	obs_property_t *p;
 
 	obs_property_t *monitors = obs_properties_add_list(props,
 		"monitor", TEXT_MONITOR,
 		OBS_COMBO_TYPE_LIST, OBS_COMBO_FORMAT_INT);
 
+	obs_properties_add_button(props, "select_region", TEXT_SELECT_REGION,
+			select_region_clicked);
+
+	obs_properties_add_button(props, "reset_subregion",
+			TEXT_RESET_REGION, reset_region_clicked);
+
 	obs_properties_add_bool(props, "compatibility", TEXT_COMPATIBILITY);
 	obs_properties_add_bool(props, "capture_cursor", TEXT_CAPTURE_CURSOR);
+
+	p = obs_properties_add_int_slider(props, "rectleft", TEXT_RECT_LEFT,
+			-20000, 20000, 1);
+  	obs_property_set_visible(p,false);
+
+	p = obs_properties_add_int_slider(props, "rectright", TEXT_RECT_RIGHT,
+			-20000, 20000, 1);
+  	obs_property_set_visible(p,false);
+
+	p = obs_properties_add_int_slider(props, "recttop", TEXT_RECT_TOP,
+			-20000, 20000, 1);
+  	obs_property_set_visible(p,false);
+
+	p = obs_properties_add_int_slider(props, "rectbottom", TEXT_RECT_BOTTOM,
+			-20000, 20000, 1);
+  	obs_property_set_visible(p,false);
+
 
 	EnumDisplayMonitors(NULL, NULL, enum_monitor_props, (LPARAM)monitors);
 
 	return props;
 }
 
-struct obs_source_info monitor_capture_info = {
-	.id             = "monitor_capture",
+struct obs_source_info subregion_monitor_capture_info = {
+	.id             = "subregion_monitor_capture",
 	.type           = OBS_SOURCE_TYPE_INPUT,
 	.output_flags   = OBS_SOURCE_VIDEO | OBS_SOURCE_CUSTOM_DRAW |
 	                  OBS_SOURCE_DO_NOT_DUPLICATE,

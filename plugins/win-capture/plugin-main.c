@@ -2,10 +2,12 @@
 #include <obs-module.h>
 #include <util/windows/win-version.h>
 #include <util/platform.h>
+#include "select-region.h"
 
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE("win-capture", "en-US")
 
+extern struct obs_source_info subregion_monitor_capture_info;
 extern struct obs_source_info duplicator_capture_info;
 extern struct obs_source_info monitor_capture_info;
 extern struct obs_source_info window_capture_info;
@@ -81,6 +83,8 @@ bool obs_module_load(void)
 	else
 		obs_register_source(&monitor_capture_info);
 
+	obs_register_source(&subregion_monitor_capture_info);
+
 	obs_leave_graphics();
 
 	obs_register_source(&window_capture_info);
@@ -94,4 +98,5 @@ bool obs_module_load(void)
 void obs_module_unload(void)
 {
 	wait_for_hook_initialization();
+	select_region_free();
 }
