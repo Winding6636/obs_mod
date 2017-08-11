@@ -9,6 +9,7 @@ set(win-capture_HEADERS
 	cursor-capture.h
 	graphics-hook-info.h
 	window-helpers.h
+	select-region.h
 	dc-capture.h)
 
 set(win-capture_SOURCES
@@ -19,10 +20,12 @@ set(win-capture_SOURCES
 	cursor-capture.c
 	game-capture.c
 	window-helpers.c
-	monitor-capture.c
 	window-capture.c
-	load-graphics-offsets.c
+	select-region.c
+    	monitor-capture.c
 	duplicator-monitor-capture.c
+    	subregion-monitor-capture.c
+	load-graphics-offsets.c
 	plugin-main.c)
 
 add_library(win-capture MODULE
