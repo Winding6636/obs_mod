@@ -1295,7 +1295,7 @@ void OBSBasic::OBSInit()
 	if (!sceneCollection)
 		throw "Failed to get scene collection name";
 
-	ret = snprintf(fileName, 512, "obs-studio/basic/scenes/%s.json",
+	ret = snprintf(fileName, 512, "obs-studio-vtf/basic/scenes/%s.json",
 			sceneCollection);
 	if (ret <= 0)
 		throw "Failed to create scene collection file name";
@@ -1856,7 +1856,7 @@ void OBSBasic::SaveProjectDeferred()
 	if (!sceneCollection)
 		return;
 
-	ret = snprintf(fileName, 512, "obs-studio/basic/scenes/%s.json",
+	ret = snprintf(fileName, 512, "obs-studio-vtf/basic/scenes/%s.json",
 			sceneCollection);
 	if (ret <= 0)
 		return;
@@ -3795,7 +3795,7 @@ void OBSBasic::on_actionMoveToBottom_triggered()
 static BPtr<char> ReadLogFile(const char *log)
 {
 	char logDir[512];
-	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio/logs") <= 0)
+	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio-vtf/logs") <= 0)
 		return nullptr;
 
 	string path = (char*)logDir;
@@ -3865,7 +3865,7 @@ void OBSBasic::UploadLog(const char *file)
 void OBSBasic::on_actionShowLogs_triggered()
 {
 	char logDir[512];
-	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio/logs") <= 0)
+	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio-vtf/logs") <= 0)
 		return;
 
 	QUrl url = QUrl::fromLocalFile(QT_UTF8(logDir));
@@ -3885,7 +3885,7 @@ void OBSBasic::on_actionUploadLastLog_triggered()
 void OBSBasic::on_actionViewCurrentLog_triggered()
 {
 	char logDir[512];
-	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio/logs") <= 0)
+	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio-vtf/logs") <= 0)
 		return;
 
 	const char* log = App()->GetCurrentLog();
@@ -4586,14 +4586,14 @@ void OBSBasic::on_settingsButton_clicked()
 
 void OBSBasic::on_actionWebsite_triggered()
 {
-	QUrl url = QUrl("https://obsproject.com", QUrl::TolerantMode);
+	QUrl url = QUrl("http://variedtastefinder.jp", QUrl::TolerantMode);
 	QDesktopServices::openUrl(url);
 }
 
 void OBSBasic::on_actionShowSettingsFolder_triggered()
 {
 	char path[512];
-	int ret = GetConfigPath(path, 512, "obs-studio");
+	int ret = GetConfigPath(path, 512, "obs-studio-vtf");
 	if (ret <= 0)
 		return;
 
@@ -5279,7 +5279,7 @@ int OBSBasic::GetProfilePath(char *path, size_t size, const char *file) const
 	if (!file)
 		file = "";
 
-	ret = GetConfigPath(profiles_path, 512, "obs-studio/basic/profiles");
+	ret = GetConfigPath(profiles_path, 512, "obs-studio-vtf/basic/profiles");
 	if (ret <= 0)
 		return ret;
 
