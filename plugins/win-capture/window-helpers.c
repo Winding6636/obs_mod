@@ -128,33 +128,6 @@ void get_window_class(struct dstr *class, HWND hwnd)
 		dstr_from_wcs(class, temp);
 }
 
-/* not capturable or internal windows */
-static const char *internal_microsoft_exes[] = {
-	"applicationframehost",
-	"shellexperiencehost",
-	"winstore.app",
-	"searchui",
-	NULL
-};
-
-static bool is_microsoft_internal_window_exe(const char *exe)
-{
-	char cur_exe[MAX_PATH];
-
-	if (!exe)
-		return false;
-
-	for (const char **vals = internal_microsoft_exes; *vals; vals++) {
-		strcpy(cur_exe, *vals);
-		strcat(cur_exe, ".exe");
-
-		if (strcmpi(cur_exe, exe) == 0)
-			return true;
-	}
-
-	return false;
-}
-
 static void add_window(obs_property_t *p, HWND hwnd, add_window_cb callback)
 {
 	struct dstr class   = {0};
@@ -165,10 +138,6 @@ static void add_window(obs_property_t *p, HWND hwnd, add_window_cb callback)
 
 	if (!get_window_exe(&exe, hwnd))
 		return;
-	if (is_microsoft_internal_window_exe(exe.array)) {
-		dstr_free(&exe);
-		return;
-	}
 	get_window_title(&title, hwnd);
 	get_window_class(&class, hwnd);
 
@@ -223,92 +192,33 @@ static bool check_window_valid(HWND window, enum window_search_mode mode)
 	return true;
 }
 
-bool is_uwp_window(HWND hwnd)
+static inline HWND next_window(HWND window, enum window_search_mode mode)
 {
-	wchar_t name[256];
-
-	name[0] = 0;
-	if (!GetClassNameW(hwnd, name, sizeof(name) / sizeof(wchar_t)))
-		return false;
-
-	return wcscmp(name, L"ApplicationFrameWindow") == 0;
-}
-
-HWND get_uwp_actual_window(HWND parent)
-{
-	DWORD parent_id = 0;
-	HWND child;
-
-	GetWindowThreadProcessId(parent, &parent_id);
-	child = FindWindowEx(parent, NULL, NULL, NULL);
-
-	while (child) {
-		DWORD child_id = 0;
-		GetWindowThreadProcessId(child, &child_id);
-
-		if (child_id != parent_id)
-			return child;
-
-		child = FindWindowEx(parent, child, NULL, NULL);
-	}
-
-	return NULL;
-}
-
-static inline HWND next_window(HWND window, enum window_search_mode mode,
-		HWND *parent)
-{
-	if (*parent) {
-		window = *parent;
-		*parent = NULL;
-	}
-
 	while (true) {
-		window = FindWindowEx(GetDesktopWindow(), window, NULL, NULL);
+		window = GetNextWindow(window, GW_HWNDNEXT);
 		if (!window || check_window_valid(window, mode))
 			break;
-	}
-
-	if (is_uwp_window(window)) {
-		HWND child = get_uwp_actual_window(window);
-		if (child) {
-			*parent = window;
-			return child;
-		}
 	}
 
 	return window;
 }
 
-static inline HWND first_window(enum window_search_mode mode, HWND *parent)
+static inline HWND first_window(enum window_search_mode mode)
 {
-	HWND window = FindWindowEx(GetDesktopWindow(), NULL, NULL, NULL);
-
-	*parent = NULL;
-
+	HWND window = GetWindow(GetDesktopWindow(), GW_CHILD);
 	if (!check_window_valid(window, mode))
-		window = next_window(window, mode, parent);
-
-	if (is_uwp_window(window)) {
-		HWND child = get_uwp_actual_window(window);
-		if (child) {
-			*parent = window;
-			return child;
-		}
-	}
-
+		window = next_window(window, mode);
 	return window;
 }
 
 void fill_window_list(obs_property_t *p, enum window_search_mode mode,
 		add_window_cb callback)
 {
-	HWND parent;
-	HWND window = first_window(mode, &parent);
+	HWND window = first_window(mode);
 
 	while (window) {
 		add_window(p, window, callback);
-		window = next_window(window, mode, &parent);
+		window = next_window(window, mode);
 	}
 }
 
@@ -316,8 +226,7 @@ static int window_rating(HWND window,
 		enum window_priority priority,
 		const char *class,
 		const char *title,
-		const char *exe,
-		bool uwp_window)
+		const char *exe)
 {
 	struct dstr cur_class = {0};
 	struct dstr cur_title = {0};
@@ -339,18 +248,12 @@ static int window_rating(HWND window,
 	else
 		exe_val += 3;
 
-	if (uwp_window) {
-		if (dstr_cmpi(&cur_title, title) == 0 &&
-		    dstr_cmpi(&cur_exe, exe) == 0)
-			total += exe_val + title_val + class_val;
-	} else {
-		if (dstr_cmpi(&cur_class, class) == 0)
-			total += class_val;
-		if (dstr_cmpi(&cur_title, title) == 0)
-			total += title_val;
-		if (dstr_cmpi(&cur_exe, exe) == 0)
-			total += exe_val;
-	}
+	if (dstr_cmpi(&cur_class, class) == 0)
+		total += class_val;
+	if (dstr_cmpi(&cur_title, title) == 0)
+		total += title_val;
+	if (dstr_cmpi(&cur_exe, exe) == 0)
+		total += exe_val;
 
 	dstr_free(&cur_class);
 	dstr_free(&cur_title);
@@ -365,25 +268,18 @@ HWND find_window(enum window_search_mode mode,
 		const char *title,
 		const char *exe)
 {
-	HWND parent;
-	HWND window      = first_window(mode, &parent);
+	HWND window      = first_window(mode);
 	HWND best_window = NULL;
 	int  best_rating = 0;
 
-	if (!class)
-		return NULL;
-
-	bool uwp_window  = strcmp(class, "Windows.UI.Core.CoreWindow") == 0;
-
 	while (window) {
-		int rating = window_rating(window, priority, class, title, exe,
-				uwp_window);
+		int rating = window_rating(window, priority, class, title, exe);
 		if (rating > best_rating) {
 			best_rating = rating;
 			best_window = window;
 		}
 
-		window = next_window(window, mode, &parent);
+		window = next_window(window, mode);
 	}
 
 	return best_window;
