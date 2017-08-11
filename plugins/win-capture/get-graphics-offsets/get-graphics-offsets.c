@@ -15,8 +15,6 @@ int main(int argc, char *argv[])
 	wc.lpfnWndProc   = (WNDPROC)DefWindowProcA;
 	wc.lpszClassName = DUMMY_WNDCLASS;
 
-	SetErrorMode(SEM_FAILCRITICALERRORS);
-
 	if (!RegisterClassA(&wc)) {
 		printf("failed to register '%s'\n", DUMMY_WNDCLASS);
 		return -1;
@@ -36,7 +34,6 @@ int main(int argc, char *argv[])
 	printf("is_d3d9ex_clsoff=0x%"PRIx32"\n", d3d9.is_d3d9ex_clsoff);
 	printf("[dxgi]\n");
 	printf("present=0x%"PRIx32"\n", dxgi.present);
-	printf("present1=0x%"PRIx32"\n", dxgi.present1);
 	printf("resize=0x%"PRIx32"\n", dxgi.resize);
 
 	(void)argc;
