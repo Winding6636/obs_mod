@@ -1,3 +1,5 @@
+#define _CRT_SECURE_NO_WARNINGS
+
 #ifdef _MSC_VER
 #pragma warning(disable : 4152) /* casting func ptr to void */
 #endif

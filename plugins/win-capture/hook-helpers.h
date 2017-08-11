@@ -4,41 +4,36 @@
 #define inline __inline
 #endif
 
-#define GC_EVENT_FLAGS (EVENT_MODIFY_STATE | SYNCHRONIZE)
-#define GC_MUTEX_FLAGS (SYNCHRONIZE)
-
-static inline HANDLE create_event(const wchar_t *name)
+static inline HANDLE get_event(const char *name)
 {
-	return CreateEventW(NULL, false, false, name);
+	HANDLE event = CreateEventA(NULL, false, false, name);
+	if (!event)
+		event = OpenEventA(EVENT_ALL_ACCESS, false, name);
+
+	return event;
 }
 
-static inline HANDLE open_event(const wchar_t *name)
+static inline HANDLE get_mutex(const char *name)
 {
-	return OpenEventW(GC_EVENT_FLAGS, false, name);
+	HANDLE event = CreateMutexA(NULL, false, name);
+	if (!event)
+		event = OpenMutexA(MUTEX_ALL_ACCESS, false, name);
+
+	return event;
 }
 
-static inline HANDLE create_mutex(const wchar_t *name)
+static inline HANDLE get_event_plus_id(const char *name, DWORD id)
 {
-	return CreateMutexW(NULL, false, name);
+	char new_name[64];
+	sprintf(new_name, "%s%lu", name, id);
+	return get_event(new_name);
 }
 
-static inline HANDLE open_mutex(const wchar_t *name)
+static inline HANDLE get_mutex_plus_id(const char *name, DWORD id)
 {
-	return OpenMutexW(GC_MUTEX_FLAGS, false, name);
-}
-
-static inline HANDLE create_event_plus_id(const wchar_t *name, DWORD id)
-{
-	wchar_t new_name[64];
-	_snwprintf(new_name, 64, L"%s%lu", name, id);
-	return create_event(new_name);
-}
-
-static inline HANDLE create_mutex_plus_id(const wchar_t *name, DWORD id)
-{
-	wchar_t new_name[64];
-	_snwprintf(new_name, 64, L"%s%lu", name, id);
-	return create_mutex(new_name);
+	char new_name[64];
+	sprintf(new_name, "%s%lu", name, id);
+	return get_mutex(new_name);
 }
 
 static inline bool object_signalled(HANDLE event)
