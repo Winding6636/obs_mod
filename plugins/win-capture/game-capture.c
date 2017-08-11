@@ -127,6 +127,10 @@ struct game_capture {
 	bool                          dwm_capture : 1;
 	bool                          initial_config : 1;
 	bool                          convert_16bit : 1;
+<<<<<<< HEAD
+=======
+	bool                          is_app : 1;
+>>>>>>> change x264 & win-capture
 
 	struct game_capture_config    config;
 
@@ -142,6 +146,11 @@ struct game_capture {
 	HANDLE                        global_hook_info_map;
 	HANDLE                        target_process;
 	HANDLE                        texture_mutexes[2];
+<<<<<<< HEAD
+=======
+	wchar_t                       *app_sid;
+	int                           retrying;
+>>>>>>> change x264 & win-capture
 
 	union {
 		struct {

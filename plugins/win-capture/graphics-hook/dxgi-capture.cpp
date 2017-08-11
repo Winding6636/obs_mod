@@ -35,7 +35,12 @@ static bool setup_dxgi(IDXGISwapChain *swap)
 	 * quite know. */
 	if (_strcmpi(process_name, "iw6sp64_ship.exe") == 0 ||
 	    _strcmpi(process_name, "iw6mp64_ship.exe") == 0 ||
+<<<<<<< HEAD
 	    _strcmpi(process_name, "justcause3.exe") == 0) {
+=======
+	    _strcmpi(process_name, "justcause3.exe") == 0 ||
+	    _strcmpi(process_name, "theHunterCotW_F.exe") == 0) {
+>>>>>>> change x264 & win-capture
 		ignore_d3d10 = true;
 	}
 
@@ -141,7 +146,11 @@ static HRESULT STDMETHODCALLTYPE hook_present(IDXGISwapChain *swap,
 			backbuffer = get_dxgi_backbuffer(swap);
 
 			if (!!backbuffer) {
+<<<<<<< HEAD
 				data.capture(swap, backbuffer);
+=======
+				data.capture(swap, backbuffer, capture_overlay);
+>>>>>>> change x264 & win-capture
 				backbuffer->Release();
 			}
 		}
