@@ -142,7 +142,7 @@ static bool d3d8_shmem_init(IDirect3DDevice8 *device)
 		return false;
 	}
 
-	hlog("d3d8 memory capture successful");
+	hlog("d3d8 memory capture successfull");
 	return true;
 }
 
