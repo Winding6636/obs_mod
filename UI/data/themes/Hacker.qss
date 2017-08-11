@@ -30,10 +30,10 @@
 
 /* General style, we override only what is needed. */
 QWidget {
-    background-color: rgb(42, 42, 42); /* dark */
-    alternate-background-color: rgb(31,30,31); /* veryDark */
-    color: rgb(225,224,225); /* veryLight */
-    selection-background-color: rgb(42,130,218); /* blue */
+    background-color: rgb(0,0,0); /* dark */
+    alternate-background-color: rgb(0,0,0); /* veryDark */
+    color: rgb(0,255,0); /* veryLight */
+    selection-background-color: rgb(0,204,51); /* blue */
     selection-color: black;
 }
 
@@ -49,7 +49,7 @@ QWidget::disabled {
 }
 
 QAbstractItemView {
-    background-color: rgb(31,30,31); /* veryDark */
+    background-color: rgb(0,0,0); /* veryDark */
 }
 
 QToolTip {
@@ -59,20 +59,26 @@ QToolTip {
 }
 
 QMenuBar::item {
-    background-color: rgb(42, 42, 42); /* dark */
+    background-color: rgb(0,51,0); /* dark */
+}
+
+QListWidget {
+    background-image: url(./Hacker/danger.png);
 }
 
 QListWidget::item:selected:!active {
     color: rgb(255, 255, 255);
-    background-color: rgb(48,47,48);
+    background-color: rgb(0,51,0);
 }
 
 
 /* Group Box */
 
 QGroupBox {
-    border: 1px solid rgb(31,30,31); /* veryDark */;
-    border-radius: 5px;
+    border-color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5;
     padding-top: 16px;
 }
 
@@ -192,7 +198,10 @@ QToolButton:pressed {
 /* Tab Widget */
 
 QTabWidget::pane { /* The tab widget frame */
-    border-top: 1px solid rgb(31,30,31); /* veryDark */
+    border-color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5;
 }
 
 QTabWidget::tab-bar {
@@ -229,15 +238,13 @@ QTabBar::tab:pressed {
 
 QComboBox {
     background-color: QLinearGradient(x1: 0, y1: 0, x2: 0, y2: 1,
-        stop: 0 rgb(86,85,86),
-        stop: 0.1 rgb(82,81,82),
-        stop: 0.5 rgb(78,77,78),
-        stop: 0.9 rgb(74,73,74),
-        stop: 1 rgb(70,69,70));
-    border-style: solid;
-    border: 1px;
-    border-radius: 3px;
-    border-color: rgb(31,30,31); /* veryDark */
+        stop: 0 rgb(51,102,51),
+        stop: 0.1 rgb(51,102,51),
+        stop: 0.5 rgb(51,102,51),
+        stop: 0.9 rgb(51,102,51),
+        stop: 1 rgb(51,102,51));
+    border-color: #ffffff;
+    border-style: none;
     padding: 2px;
     padding-left: 10px;
 }
@@ -279,7 +286,10 @@ QComboBox::down-arrow:editable {
 
 QLineEdit, QTextEdit, QPlainTextEdit {
     background-color: rgb(31,30,31); /* veryDark */
-    border: none;
+    border-color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5;
     padding-left: 2px;
 }
 
@@ -288,7 +298,10 @@ QLineEdit, QTextEdit, QPlainTextEdit {
 
 QSpinBox, QDoubleSpinBox {
     background-color: rgb(31,30,31); /* veryDark */
-    border: none;
+    border-color: #ffffff;
+    border-style: solid;
+    border-width: 1px;
+    border-radius: 5;
     padding-left: 2px;
     padding-right: 15px;
     margin-right: 10px;
@@ -349,28 +362,32 @@ QSpinBox::down-arrow, QDoubleSpinBox::down-arrow {
 /* Buttons */
 
 QPushButton {
-    color: rgb(225,224,225); /* veryLight */
-    background-color: rgb(88,87,88); /* kindaDark */
-    border: none;
-    border-radius: 3px;
+    color: rgb(0,255,0); /* veryLight */
+    background-color: rgb(51,102,51); /* kindaDark */
+    background-image: none;
+    border-style: none;
     padding: 4px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
 QPushButton::flat {
+    background-image: none;
     background-color: rgb(58,57,58); /* dark */
 }
 
 QPushButton:hover {
-    background-color: rgb(122,121,122); /* light */
+    background-image: none;
+    background-color: rgb(105,151,63); /* light */
 }
 
 QPushButton:pressed {
+    background-image: none;
     background-color: rgb(31,30,31); /* veryDark */
 }
 
 QPushButton:checked {
+    background-image: none;
     background-color: rgb(122,121,122); /* light */
 }
 
