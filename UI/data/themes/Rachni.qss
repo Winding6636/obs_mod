@@ -52,8 +52,9 @@ QWidget {
 	selection-background-color: rgb(0, 188, 212); /* Cyan (Primary) */
 	selection-color: rgb(239, 240, 241); /* White */
 	outline: none;
-	font-family: Noto Sans, Tahoma;
+	font-family: ƒƒCƒŠƒI,Noto Sans, Tahoma;
 	font-size: 11px;
+	font-weight: bold;
 }
 
 QWidget::disabled {
