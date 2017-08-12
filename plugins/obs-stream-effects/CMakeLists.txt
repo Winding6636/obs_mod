@@ -62,7 +62,7 @@ if(TARGET obs-studio)
 else()
 	# Standlone Specific
 
-	SET(PATH_OBSStudio "${PROJECT_SOURCE_DIR}/../../" CACHE PATH "OBS Studio Source Code Directory")
+	SET(PATH_OBSStudio "${PROJECT_SOURCE_DIR}/../.." CACHE PATH "OBS Studio Source Code Directory")
 	if(PATH_OBSStudio STREQUAL "")
 		message(FATAL_ERROR "PATH_OBSStudio not set!")
 		return()
