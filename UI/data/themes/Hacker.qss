@@ -35,6 +35,10 @@ QWidget {
     color: rgb(0,255,0); /* veryLight */
     selection-background-color: rgb(0,204,51); /* blue */
     selection-color: black;
+	outline: none;
+	font-family: メイリオ,Noto Sans, Tahoma;
+	font-size: 11px;
+	font-weight: bold;
 }
 
 * [frameShape="1"], * [frameShape="2"], * [frameShape="3"], * [frameShape="4"], * [frameShape="5"], * [frameShape="6"] {
