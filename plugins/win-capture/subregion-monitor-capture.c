@@ -1,5 +1,6 @@
 #include <util/dstr.h>
 #include "dc-capture.h"
+#include "select-region.h"
 
 #define TEXT_MONITOR_CAPTURE obs_module_text("SubregionMonitorCapture")
 #define TEXT_CAPTURE_CURSOR  obs_module_text("CaptureCursor")
