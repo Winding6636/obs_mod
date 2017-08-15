@@ -7,6 +7,7 @@
 OBS_DECLARE_MODULE()
 OBS_MODULE_USE_DEFAULT_LOCALE("win-capture", "en-US")
 
+extern struct obs_source_info subregion_monitor_capture_info;
 extern struct obs_source_info duplicator_capture_info;
 extern struct obs_source_info monitor_capture_info;
 extern struct obs_source_info window_capture_info;
@@ -48,6 +49,8 @@ bool obs_module_load(void)
 		obs_register_source(&duplicator_capture_info);
 	else
 		obs_register_source(&monitor_capture_info);
+
+	obs_register_source(&subregion_monitor_capture_info);
 
 	obs_leave_graphics();
 
