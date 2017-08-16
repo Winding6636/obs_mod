@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <dxgi.h>
 
 #include "../d3d8-api/d3d8.h"
@@ -143,7 +142,7 @@ static bool d3d8_shmem_init(IDirect3DDevice8 *device)
 		return false;
 	}
 
-	hlog("d3d8 memory capture successfull");
+	hlog("d3d8 memory capture successful");
 	return true;
 }
 
