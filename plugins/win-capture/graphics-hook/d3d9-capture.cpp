@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <d3d9.h>
 #include <d3d11.h>
 #include <dxgi.h>
@@ -33,8 +32,8 @@ struct d3d9_data {
 	uint32_t               cy;
 	D3DFORMAT              d3d9_format;
 	DXGI_FORMAT            dxgi_format;
-	bool                   using_shtex : 1;
-	bool                   using_scale : 1;
+	bool                   using_shtex;
+	bool                   using_scale;
 
 	/* shared texture */
 	IDirect3DSurface9      *d3d9_copytex;
