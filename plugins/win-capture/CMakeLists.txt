@@ -23,6 +23,7 @@ set(win-capture_SOURCES
 	window-capture.c
 	load-graphics-offsets.c
 	duplicator-monitor-capture.c
+	subregion-monitor-capture.c
 	plugin-main.c)
 
 add_library(win-capture MODULE
