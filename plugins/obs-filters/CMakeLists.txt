@@ -20,20 +20,30 @@ include_directories(${LIBSPEEXDSP_INCLUDE_DIRS}
 
 set(obs-filters_SOURCES
 	obs-filters.c
-	color-correction-filter.c
 	async-delay-filter.c
-	gpu-delay.c
+	chroma-key-filter.c
+	color-correction-filter.c
+	color-grade-filter.c
+	color-key-filter.c
+	compressor-filter.c
 	crop-filter.c
+	crosshatching-filter.c
+	cross-stitching-filter.c
+	droste-filter.c
+	gain-filter.c
+	gpu-delay.c
+	like-a-dream-filter.c
+	luma-key-filter.c
+	mask-filter.c
+	night-vision-filter.c
+	noise-gate-filter.c
+	pixelation-filter.c
+	posterize-filter.c
+	radial-blur-filter.c
 	scale-filter.c
 	scroll-filter.c
-	chroma-key-filter.c
-	color-key-filter.c
-	color-grade-filter.c
-	sharpness-filter.c
-	gain-filter.c
-	noise-gate-filter.c
-	mask-filter.c
-	compressor-filter.c)
+	sepia-filter.c
+	sharpness-filter.c)
 
 add_library(obs-filters MODULE
 	${obs-filters_SOURCES}
