@@ -1,0 +1,96 @@
+// Written by Xaymar.
+// https://www.shadertoy.com/view/MtdXDM
+// Translated/adapted to OBS by c3r1c3.
+
+uniform float4x4 ViewProj;
+uniform texture2d tex_a;
+uniform texture2d tex_b;
+// Transition duration/time allotment.
+uniform float pixelate_val;
+
+// Configurable
+//float transitionTime = 1.5; // Transition lasts x Seconds.
+//float maximumBlockSize = 9.0; // Maximum Block Size (2 ^ x)
+//float2 blockOffset = float2(0.5, 0.5); // Inner Block offset
+//float2 pixelateCenter = float2(0.5, 0.5); // Pixelate offset.
+
+sampler_state textureSampler {
+	Filter   = Linear;
+	AddressU = Clamp;
+	AddressV = Clamp;
+};
+
+struct VertData
+{
+	float4 pos : POSITION;
+	float2 uv : TEXCOORD0;
+};
+
+VertData VSDefault(VertData v_in)
+{
+	VertData vert_out;
+	vert_out.pos = mul(float4(v_in.pos.xyz, 1.0), ViewProj);
+	vert_out.uv = v_in.uv;
+	return vert_out;
+}
+
+float4 PSPixelate(VertData v_in) : TARGET
+{
+	float4 a_val = tex_a.Sample(textureSampler, v_in.uv);
+	float4 b_val = tex_b.Sample(textureSampler, v_in.uv);
+	return lerp(a_val, b_val, pixelate_val);
+    /*
+	// Animation Calculations
+	// Time in 0..pixelate_val
+	float animTime = clamp(time - transitionDelay, 0.0, pixelate_val);
+	// Time as Progress (0..1)
+	float animProgress = animTime / pixelate_val;
+	// Progress as a bounce value (0..1..0)
+	float animStuff = 1.0 - (abs(animProgress - 0.5) * 2.0);
+	// There are two ways to calculate this, one is pixel aligned the other is block aligned.
+	// Block Size, always a multiple of 2. (Pixel Aligned)
+	float animBlockSize = floor(pow(2.0, maximumBlockSize * animStuff));
+
+	//float animBlockSize = pow(2.0, floor(maximumBlockSize * animStuff));
+	// Block Size, always a multiple of 2. (Block Aligned)
+	// Block aligned block size needs a higher maximumBlockSize in order to look fluid, try changing it from 9 to 12 with it active.
+
+	// UV Calculations
+	// Use 0..1 UVs
+	float2 finalUV = v_in.uv;
+	// Offset by the pixelation center.
+	finalUV -= pixelateCenter;
+	// Convert to 0..Resolution UVs for pixelation.
+	finalUV *= iResolution.xy;
+	// Divide by current block size.
+	finalUV /= animBlockSize;
+	// Use floor() on it to get aligned pixels. *1
+	finalUV = floor(finalUV) + blockOffset;
+	// Multiply by current block size.
+	finalUV *= animBlockSize;
+	// Convert back to 0..1 UVs for texture sampling.
+	finalUV /= iResolution.xy;
+	// Revert the offset by the pixelation center again.
+	finalUV += pixelateCenter;
+	// Now we have fully pixelated UVs without needing any additional magic.
+	// In theory it should be possible to do this without needing the texture resolution,
+	//  but that one is much more than I want to do - and also really hard.
+	//
+	// *1: GLSL and HLSL can use round here to get a block that is centered on the pixelateCenter.
+
+	 // Using mix here to hide the obvious instant transition using a fade.
+	 // Can also be changed to "- 0.5) * 65535.0" for the instant transition effect.
+	float4 color = mix(texture2D( iChannel0, finalUV),texture2D( iChannel1, finalUV),clamp((animProgress - 0.45) * 16.0, 0.0, 1.0);
+
+	return color;
+*/
+
+}
+technique Swipe
+{
+	pass
+	{
+		vertex_shader = VSDefault(v_in);
+		pixel_shader = PSPixelate(v_in);
+	}
+}
