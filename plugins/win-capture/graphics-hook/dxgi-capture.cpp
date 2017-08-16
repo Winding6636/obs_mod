@@ -1,23 +1,29 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <d3d10_1.h>
 #include <d3d11.h>
-#include <dxgi.h>
+#include <dxgi1_2.h>
 #include <d3dcompiler.h>
 
 #include "d3d1x_shaders.hpp"
 #include "graphics-hook.h"
 #include "../funchook.h"
 
+#if COMPILE_D3D12_HOOK
+#include <d3d12.h>
+#endif
+
 typedef HRESULT (STDMETHODCALLTYPE *resize_buffers_t)(IDXGISwapChain*, UINT,
 		UINT, UINT, DXGI_FORMAT, UINT);
 typedef HRESULT (STDMETHODCALLTYPE *present_t)(IDXGISwapChain*, UINT, UINT);
+typedef HRESULT (STDMETHODCALLTYPE *present1_t)(IDXGISwapChain1*, UINT, UINT,
+		const DXGI_PRESENT_PARAMETERS *);
 
 static struct func_hook resize_buffers;
 static struct func_hook present;
+static struct func_hook present1;
 
 struct dxgi_swap_data {
 	IDXGISwapChain *swap;
-	void (*capture)(void*, void*);
+	void (*capture)(void*, void*, bool);
 	void (*free)(void);
 };
 
@@ -25,29 +31,30 @@ static struct dxgi_swap_data data = {};
 
 static bool setup_dxgi(IDXGISwapChain *swap)
 {
-	const char *process_name = get_process_name();
-	bool ignore_d3d10 = false;
 	IUnknown *device;
 	HRESULT hr;
 
-	/* Call of duty ghosts allows the context to be queried as a d3d10
-	 * context when it's actually a d3d11 context.  Why this is I don't
-	 * quite know. */
-	if (_strcmpi(process_name, "iw6sp64_ship.exe") == 0 ||
-	    _strcmpi(process_name, "iw6mp64_ship.exe") == 0 ||
-	    _strcmpi(process_name, "justcause3.exe") == 0) {
-		ignore_d3d10 = true;
-	}
+	hr = swap->GetDevice(__uuidof(ID3D11Device), (void**)&device);
+	if (SUCCEEDED(hr)) {
+		ID3D11Device *d3d11 = reinterpret_cast<ID3D11Device*>(device);
+		D3D_FEATURE_LEVEL level = d3d11->GetFeatureLevel();
+		device->Release();
 
-	if (!ignore_d3d10) {
-		hr = swap->GetDevice(__uuidof(ID3D10Device), (void**)&device);
-		if (SUCCEEDED(hr)) {
+		if (level >= D3D_FEATURE_LEVEL_11_0) {
 			data.swap = swap;
-			data.capture = d3d10_capture;
-			data.free = d3d10_free;
-			device->Release();
+			data.capture = d3d11_capture;
+			data.free = d3d11_free;
 			return true;
 		}
+	}
+
+	hr = swap->GetDevice(__uuidof(ID3D10Device), (void**)&device);
+	if (SUCCEEDED(hr)) {
+		data.swap = swap;
+		data.capture = d3d10_capture;
+		data.free = d3d10_free;
+		device->Release();
+		return true;
 	}
 
 	hr = swap->GetDevice(__uuidof(ID3D11Device), (void**)&device);
@@ -58,6 +65,17 @@ static bool setup_dxgi(IDXGISwapChain *swap)
 		device->Release();
 		return true;
 	}
+
+#if COMPILE_D3D12_HOOK
+	hr = swap->GetDevice(__uuidof(ID3D12Device), (void**)&device);
+	if (SUCCEEDED(hr)) {
+		data.swap = swap;
+		data.capture = d3d12_capture;
+		data.free = d3d12_free;
+		device->Release();
+		return true;
+	}
+#endif
 
 	return false;
 }
@@ -87,12 +105,12 @@ static HRESULT STDMETHODCALLTYPE hook_resize_buffers(IDXGISwapChain *swap,
 	return hr;
 }
 
-static inline IDXGIResource *get_dxgi_backbuffer(IDXGISwapChain *swap)
+static inline IUnknown *get_dxgi_backbuffer(IDXGISwapChain *swap)
 {
 	IDXGIResource *res = nullptr;
 	HRESULT hr;
 
-	hr = swap->GetBuffer(0, __uuidof(ID3D11Resource), (void**)&res);
+	hr = swap->GetBuffer(0, __uuidof(IUnknown), (void**)&res);
 	if (FAILED(hr))
 		hlog_hr("get_dxgi_backbuffer: GetBuffer failed", hr);
 
@@ -102,7 +120,7 @@ static inline IDXGIResource *get_dxgi_backbuffer(IDXGISwapChain *swap)
 static HRESULT STDMETHODCALLTYPE hook_present(IDXGISwapChain *swap,
 		UINT sync_interval, UINT flags)
 {
-	IDXGIResource *backbuffer = nullptr;
+	IUnknown *backbuffer = nullptr;
 	bool capture_overlay = global_hook_info->capture_overlay;
 	bool test_draw = (flags & DXGI_PRESENT_TEST) != 0;
 	bool capture;
@@ -117,7 +135,7 @@ static HRESULT STDMETHODCALLTYPE hook_present(IDXGISwapChain *swap,
 		backbuffer = get_dxgi_backbuffer(swap);
 
 		if (!!backbuffer) {
-			data.capture(swap, backbuffer);
+			data.capture(swap, backbuffer, capture_overlay);
 			backbuffer->Release();
 		}
 	}
@@ -141,7 +159,54 @@ static HRESULT STDMETHODCALLTYPE hook_present(IDXGISwapChain *swap,
 			backbuffer = get_dxgi_backbuffer(swap);
 
 			if (!!backbuffer) {
-				data.capture(swap, backbuffer);
+				data.capture(swap, backbuffer, capture_overlay);
+				backbuffer->Release();
+			}
+		}
+	}
+
+	return hr;
+}
+
+static HRESULT STDMETHODCALLTYPE hook_present1(IDXGISwapChain1 *swap,
+		UINT sync_interval, UINT flags,
+		const DXGI_PRESENT_PARAMETERS *params)
+{
+	IUnknown *backbuffer = nullptr;
+	bool capture_overlay = global_hook_info->capture_overlay;
+	bool test_draw = (flags & DXGI_PRESENT_TEST) != 0;
+	bool capture;
+	HRESULT hr;
+
+	if (!data.swap && !capture_active()) {
+		setup_dxgi(swap);
+	}
+
+	capture = !test_draw && swap == data.swap && !!data.capture;
+	if (capture && !capture_overlay) {
+		backbuffer = get_dxgi_backbuffer(swap);
+
+		if (!!backbuffer) {
+			DXGI_SWAP_CHAIN_DESC1 desc;
+			swap->GetDesc1(&desc);
+			data.capture(swap, backbuffer, capture_overlay);
+			backbuffer->Release();
+		}
+	}
+
+	unhook(&present1);
+	present1_t call = (present1_t)present1.call_addr;
+	hr = call(swap, sync_interval, flags, params);
+	rehook(&present1);
+
+	if (capture && capture_overlay) {
+		if (resize_buffers_called) {
+			resize_buffers_called = false;
+		} else {
+			backbuffer = get_dxgi_backbuffer(swap);
+
+			if (!!backbuffer) {
+				data.capture(swap, backbuffer, capture_overlay);
 				backbuffer->Release();
 			}
 		}
@@ -187,6 +252,7 @@ bool hook_dxgi(void)
 	HRESULT hr;
 	void *present_addr;
 	void *resize_addr;
+	void *present1_addr = nullptr;
 
 	if (!dxgi_module) {
 		return false;
@@ -236,14 +302,22 @@ bool hook_dxgi(void)
 			global_hook_info->offsets.dxgi.present);
 	resize_addr = get_offset_addr(dxgi_module,
 			global_hook_info->offsets.dxgi.resize);
+	if (global_hook_info->offsets.dxgi.present1)
+		present1_addr = get_offset_addr(dxgi_module,
+				global_hook_info->offsets.dxgi.present1);
 
 	hook_init(&present, present_addr, (void*)hook_present,
 			"IDXGISwapChain::Present");
 	hook_init(&resize_buffers, resize_addr, (void*)hook_resize_buffers,
 			"IDXGISwapChain::ResizeBuffers");
+	if (present1_addr)
+		hook_init(&present1, present1_addr, (void*)hook_present1,
+				"IDXGISwapChain1::Present1");
 
 	rehook(&resize_buffers);
 	rehook(&present);
+	if (present1_addr)
+		rehook(&present1);
 
 	hlog("Hooked DXGI");
 	return true;
