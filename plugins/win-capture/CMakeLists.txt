@@ -9,6 +9,7 @@ set(win-capture_HEADERS
 	cursor-capture.h
 	graphics-hook-info.h
 	window-helpers.h
+	select-region.h
 	dc-capture.h)
 
 set(win-capture_SOURCES
@@ -21,6 +22,7 @@ set(win-capture_SOURCES
 	window-helpers.c
 	monitor-capture.c
 	window-capture.c
+	select-region.c
 	load-graphics-offsets.c
 	duplicator-monitor-capture.c
 	subregion-monitor-capture.c
