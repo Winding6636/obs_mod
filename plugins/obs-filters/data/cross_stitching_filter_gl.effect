@@ -30,7 +30,11 @@ uniform float  stitch_gap;
 uniform float  negative_bias;
 uniform float4 stitch_color;
 uniform bool   invert;
+<<<<<<< HEAD
 uniform bool   grayscale;
+=======
+uniform bool   greyscale;
+>>>>>>> f6b63da5558ab5403bd9a9f93cb5272b0c08eb0c
 
 /*
  * Here we set how the base texture will be sampled/read/interpreted.
@@ -47,7 +51,12 @@ sampler_state textureSampler {
  * Here we create the struct to hold the current position and texture info
  * of the vertex in question.
  */
+<<<<<<< HEAD
 struct VertData {
+=======
+struct VertData
+{
+>>>>>>> f6b63da5558ab5403bd9a9f93cb5272b0c08eb0c
 	float4 pos : POSITION;
 	float2 uv  : TEXCOORD0;
 };
@@ -73,6 +82,7 @@ VertData VSDefault(VertData vert_in)
 float4 PSCrossStitch(VertData vert_in) : TARGET
 {
 	float4 pix_pos;
+<<<<<<< HEAD
 	float4 color;
 	float4 transColor;
 	float  luminance;
@@ -86,6 +96,21 @@ float4 PSCrossStitch(VertData vert_in) : TARGET
 
 	/* Get the current pixel's screen coordinates. */
 	pix_pos = gl_FragCoord;
+=======
+    float4 color;
+    float4 transColor;
+    float  luminance;
+    float2 textureSized;
+
+	/* Get current Texture Size */
+	textureSized = textureSize(image,0);
+
+	/* Get the current pixels' color. */
+	color = image.Sample(textureSampler, vert_in.uv);
+
+	/* Get the current pixel's screen coordinates. */
+    pix_pos = gl_FragCoord;
+>>>>>>> f6b63da5558ab5403bd9a9f93cb5272b0c08eb0c
 
 	float2 cPos = vert_in.uv * textureSized;
 
@@ -95,7 +120,12 @@ float4 PSCrossStitch(VertData vert_in) : TARGET
 	int remX = int(mod(cPos.x, stitch_gap));
 	int remY = int(mod(cPos.y, stitch_gap));
 
+<<<<<<< HEAD
 	if (remX == 0 && remY == 0) {
+=======
+	if (remX == 0 && remY == 0)
+	{
+>>>>>>> f6b63da5558ab5403bd9a9f93cb5272b0c08eb0c
 		tlPos = cPos;
 	}
 
@@ -103,6 +133,7 @@ float4 PSCrossStitch(VertData vert_in) : TARGET
 	blPos.y += (stitch_gap - negative_bias);
 
 	if ((remX == remY) || (((int(cPos.x) -
+<<<<<<< HEAD
 			int(blPos.x)) == (int(blPos.y) - int(cPos.y))))) {
 		if (!invert) {
 			transColor = stitch_color;
@@ -125,6 +156,41 @@ float4 PSCrossStitch(VertData vert_in) : TARGET
 	transColor.a = color.a;
 
 	if (grayscale) {
+=======
+		int(blPos.x)) == (int(blPos.y) - int(cPos.y)))))
+	{
+		if (!invert)
+		{
+			transColor = stitch_color;
+			transColor.a = color.a;
+		}
+		else
+		{
+			transColor = image.Sample(textureSampler, tlPos *
+			        float2((1.0 / textureSized.x),(1.0 / textureSized.y))) *
+			        1.4;
+			transColor.a = color.a;
+		}
+	}
+	else
+	{
+		if (!invert)
+		{
+			transColor = image.Sample(textureSampler, tlPos *
+			        float2((1.0 / textureSized.x),(1.0 / textureSized.y))) *
+			        1.4;
+			transColor.a = color.a;
+		}
+		else
+		{
+			transColor = stitch_color;
+			transColor.a = color.a;
+		}
+	}
+
+	if (greyscale)
+	{
+>>>>>>> f6b63da5558ab5403bd9a9f93cb5272b0c08eb0c
 		luminance = length(transColor) * 0.5;
 		transColor.rgb = float3(luminance, luminance, luminance);
 	}
@@ -140,4 +206,8 @@ technique Draw
 		vertex_shader = VSDefault(vert_in);
 		pixel_shader  = PSCrossStitch(vert_in);
 	}
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> f6b63da5558ab5403bd9a9f93cb5272b0c08eb0c
