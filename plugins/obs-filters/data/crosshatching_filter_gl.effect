@@ -37,8 +37,7 @@ uniform float threshold_4;
  * Below is what you would normally use in OBS. Why?
  * Linear filtering 'messes' with the image the least.
  */
-sampler_state textureSampler
-{
+sampler_state textureSampler {
 	Filter    = Linear;
 	AddressU  = Clamp;
 	AddressV  = Clamp;
@@ -48,8 +47,7 @@ sampler_state textureSampler
  * Here we create the struct to hold the current position and texture info
  * of the vertex in question.
  */
-struct VertData
-{
+struct VertData {
 	float4 pos : POSITION;
 	float2 uv  : TEXCOORD0;
 };
@@ -75,9 +73,9 @@ VertData VSDefault(VertData vert_in)
 float4 PSCrosshatch(VertData vert_in) : TARGET
 {
 	float  luminance;
-    float4 pix_pos;
-    float4 color;
-    float3 trans_color;
+	float4 pix_pos;
+	float4 color;
+	float3 trans_color;
 
 	/*
 	 * Send the vertex position to SV_Position to get
@@ -99,34 +97,26 @@ float4 PSCrosshatch(VertData vert_in) : TARGET
 	luminance = length(color.rgb);
 
 	/* Now we do the actual math for the crosshatching. */
-	if (luminance < threshold_1)
-	{
-		if (mod(pix_pos.x + pix_pos.y, (offset * 2)) == 0.0)
-		{
+	if (luminance < threshold_1) {
+		if (mod(pix_pos.x + pix_pos.y, (offset * 2)) == 0.0) {
 			trans_color = float3(0.0, 0.0, 0.0);
 		}
 	}
 
-	if (luminance < threshold_2)
-	{
-		if (mod(pix_pos.x - pix_pos.y, (offset * 2)) == 0.0)
-		{
+	if (luminance < threshold_2) {
+		if (mod(pix_pos.x - pix_pos.y, (offset * 2)) == 0.0) {
 			trans_color = float3(0.0, 0.0, 0.0);
 		}
 	}
 
-	if (luminance < threshold_3)
-	{
-		if (mod(pix_pos.x + pix_pos.y - offset, (offset * 2)) == 0.0)
-		{
+	if (luminance < threshold_3) {
+		if (mod(pix_pos.x + pix_pos.y - offset, (offset * 2)) == 0.0) {
 			trans_color = float3(0.0, 0.0, 0.0);
 		}
 	}
 
-	if (luminance < threshold_4)
-	{
-		if (mod(pix_pos.x - pix_pos.y - offset, (offset * 2)) == 0.0)
-		{
+	if (luminance < threshold_4) {
+		if (mod(pix_pos.x - pix_pos.y - offset, (offset * 2)) == 0.0) {
 			trans_color = float3(0.0, 0.0, 0.0);
 		}
 	}
