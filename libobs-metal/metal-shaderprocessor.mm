@@ -46,7 +46,7 @@ static inline void AddInputLayoutVar(shader_var *var,
 }
 
 static inline void BuildVertexDescFromVars(shader_parser *parser, darray *vars,
-		__unsafeunretained MTLVertexDescriptor *vd, size_t &index)
+		__unsafe_unretained MTLVertexDescriptor *vd, size_t &index)
 {
 	shader_var *array = (shader_var*)vars->array;
 
