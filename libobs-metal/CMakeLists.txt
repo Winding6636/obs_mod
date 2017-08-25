@@ -57,7 +57,8 @@ target_compile_options(libobs-metal
 		-msse2
 		-msse3
 		-msse4.1
-		-msse4.2)
+		-msse4.2
+		-fobjc-arc)
 target_link_libraries(libobs-metal
 	PRIVATE
 		${libobs-metal_PLATFORM_DEPS}
