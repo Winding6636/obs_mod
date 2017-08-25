@@ -67,7 +67,7 @@ static inline void BuildVertexDescFromVars(shader_parser *parser, darray *vars,
 	}
 }
 
-void ShaderProcessor::BuildVertexDesc(__unsafeunretained MTLVertexDescriptor *vertexDesc)
+void ShaderProcessor::BuildVertexDesc(__weak MTLVertexDescriptor *vertexDesc)
 {
 	shader_func *func = shader_parser_getfunc(&parser, "main");
 	if (!func)

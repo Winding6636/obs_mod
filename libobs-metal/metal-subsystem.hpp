@@ -226,7 +226,7 @@ struct gs_vertex_buffer : gs_obj {
 	std::vector<id<MTLBuffer>> uvBuffers;
 
 	inline id<MTLBuffer> PrepareBuffer(void *array, size_t elementSize,
-		__unsafeunretained NSString *name);
+			__weak NSString *name);
 	void PrepareBuffers();
 
 	void MakeBufferList(gs_vertex_shader *shader,
