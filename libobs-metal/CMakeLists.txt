@@ -49,7 +49,8 @@ set_target_properties(libobs-metal
 	PROPERTIES
 		OUTPUT_NAME libobs-metal
 		PREFIX ""
-		XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES)
+		XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_ARC YES
+		XCODE_ATTRIBUTE_CLANG_ENABLE_OBJC_WEAK YES)
 target_compile_options(libobs-metal
 	PUBLIC
 		-msse
