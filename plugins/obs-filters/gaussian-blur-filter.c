@@ -16,17 +16,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
 #include <obs-module.h>
-#include "obs-c3-filters-config.h"
+#include "obs-filters-config.h"
 
 #define SETTING_RADIUS                "radius"
+#define SETTING_BLUR_ALPHA            "blur_alpha"
 #define SETTING_TEX_X_OFFSET          "tex_x_offset"
 #define SETTING_TEX_Y_OFFSET          "tex_y_offset"
 #define SETTING_WEIGHT_AMOUNT         "weight_amount"
 
 #define OMT_                           obs_module_text
 #define TEXT_RADIUS                    OMT_("Radius")
+#define TEXT_BLUR_ALPHA                OMT_("Blur.Alpha")
 
-#define MAX_RADIUS                     15
+#define MAX_RADIUS                     33
 #define MAX_OTHER                      (MAX_RADIUS - 1) / 2
 
 
@@ -37,15 +39,17 @@ struct gaussian_blur_filter_data {
 	gs_effect_t                  *effect;
 
 	gs_eparam_t                  *radius_param;
+	gs_eparam_t                  *blur_alpha_param;
 	gs_eparam_t                  *tex_x_offset_param;
 	gs_eparam_t                  *tex_y_offset_param;
 	gs_eparam_t                  *weight_param;
 
 	uint8_t                       radius;
+	bool                          blur_alpha;
 	uint32_t                      src_width;
 	uint32_t                      src_height;
 
-	float                         weight_amount[MAX_RADIUS][4];
+	float                         weight_amount[MAX_OTHER][4];
 	float                         tex_x_offset;
 	float                         tex_y_offset;
 };
@@ -105,7 +109,8 @@ static void inline gaussian_blur_filter_texture_update(void *data)
 		k--;
 	}
 
-	for (int i = 0; i < kernel; i++)
+	/* Now turn the values into the proper final kernel amounts. */
+	for (int i = 0; i < filter->radius; i++)
 	{
 		for (int h = 0; h < 4; h++) {
 			filter->weight_amount[i][h] = 
@@ -145,6 +150,8 @@ static void gaussian_blur_filter_update(void *data, obs_data_t *settings)
 	/* Now pull in all the settings from the UI. */
 	filter->radius = (uint8_t)obs_data_get_int(settings,
 			SETTING_RADIUS);
+	filter->blur_alpha = obs_data_get_int(settings,
+			SETTING_BLUR_ALPHA);
 
 	/* Call function to calculate the array numbers. */
 	gaussian_blur_filter_texture_update(filter);
@@ -188,7 +195,7 @@ static void *gaussian_blur_filter_create(obs_data_t *settings,
 
 	filter->context = context;
 
-	for (size_t i = 0; i < MAX_RADIUS; i++) {
+	for (size_t i = 0; i < MAX_OTHER; i++) {
 		for (size_t j = 0; i < 4; i++) {
 			filter->weight_amount[i][j] = 1.0f;
 		}
@@ -223,6 +230,8 @@ static void *gaussian_blur_filter_create(obs_data_t *settings,
 	if (filter->effect) {
 		filter->radius_param = gs_effect_get_param_by_name(
 				filter->effect, SETTING_RADIUS);
+		filter->blur_alpha_param = gs_effect_get_param_by_name(
+				filter->effect, SETTING_BLUR_ALPHA);
 		filter->tex_x_offset_param = gs_effect_get_param_by_name(
 				filter->effect, SETTING_TEX_X_OFFSET);
 		filter->tex_y_offset_param = gs_effect_get_param_by_name(
@@ -283,6 +292,7 @@ static void gaussian_blur_filter_render(void *data, gs_effect_t *effect)
 
 	/* Now pass variables to the .shader file. */
 	gs_effect_set_int(filter->radius_param, filter->radius);
+	gs_effect_set_bool(filter->blur_alpha_param, filter->blur_alpha);
 	gs_effect_set_float(filter->tex_x_offset_param, filter->tex_x_offset);
 	gs_effect_set_float(filter->tex_y_offset_param, filter->tex_y_offset);
 	gs_effect_set_val(filter->weight_param, filter->weight_amount,
@@ -305,6 +315,7 @@ static obs_properties_t *gaussian_blur_filter_properties(void *data)
 
 	obs_properties_add_int_slider(props, SETTING_RADIUS,
 			TEXT_RADIUS, 3, MAX_RADIUS, 1);
+	obs_properties_add_bool(props, SETTING_BLUR_ALPHA, TEXT_BLUR_ALPHA);
 
 	UNUSED_PARAMETER(data);
 	return props;
@@ -318,7 +329,8 @@ static obs_properties_t *gaussian_blur_filter_properties(void *data)
  */
 static void gaussian_blur_filter_defaults(obs_data_t *settings)
 {
-	obs_data_set_default_int(settings, SETTING_RADIUS, 5);
+	obs_data_set_default_int(settings, SETTING_RADIUS, 29);
+	obs_data_set_default_bool(settings, SETTING_BLUR_ALPHA, FALSE);
 }
 
 /*
