@@ -1,5 +1,5 @@
 #include <obs-module.h>
-#include "obs-filters-config.h"
+#include "obs-c3-filters-config.h"
 
 OBS_DECLARE_MODULE()
 

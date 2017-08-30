@@ -99,11 +99,11 @@ typedef struct ffmpeg_filter_settings ffmpeg_filter_settings_t;
  * FFMPEG audio filter and pass those values into the
  * ffmpeg_filter_settings struct so the filter can be properly constructed.
  */
-//extern void ffmpeg_filter_graph_create(void *ffmpeg_settings);
+extern void ffmpeg_filter_graph_create(void *ffmpeg_settings);
 
-//extern void ffmpeg_filter_graph_update(void *ffmpeg_settings);
+extern void ffmpeg_filter_graph_update(void *ffmpeg_settings);
 
-//extern void ffmpeg_filter_process(void *ffmpeg_settings);
+extern void ffmpeg_filter_process(void *ffmpeg_settings);
 
 /*
  * The below comes from audio-resampler-ffmpeg.c and if the

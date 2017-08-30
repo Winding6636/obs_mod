@@ -16,7 +16,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
 
 #include <obs-module.h>
-#include "obs-filters-config.h"
+#include "obs-c3-filters-config.h"
 
 #define SETTING_RADIUS                "radius"
 #define SETTING_TEX_X_OFFSET          "tex_x_offset"
