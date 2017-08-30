@@ -79,18 +79,17 @@ float4 PSLikeADream(VertData vert_in) : TARGET
 			vert_in.uv);
 
 	/* Now we layer the image on itself for a hazy look. */
-	for (int i = 1; i <= number_of_shifts; i++)
-	{
+	for (int i = 1; i <= number_of_shifts; i++) {
 		currentPixel = currentPixel + image.Sample(textureSampler,
 				vert_in.uv + (i * shift_gap));
 		currentPixel = currentPixel + image.Sample(textureSampler,
 				vert_in.uv - (i * shift_gap));
 	}
 
-	/* Now convert to greyscale. */
-	float greyscale = ((currentPixel.r + currentPixel.g + currentPixel.b) *
+	/* Now convert to grayscale. */
+	float grayscale = ((currentPixel.r + currentPixel.g + currentPixel.b) *
 			0.3333);
-	currentPixel.rgb = float3(greyscale, greyscale, greyscale);
+	currentPixel.rgb = float3(grayscale, grayscale, grayscale);
 
 	/* Now address the gamma. */
 	currentPixel.rgb = pow(currentPixel.rgb, gamma);
@@ -99,8 +98,8 @@ float4 PSLikeADream(VertData vert_in) : TARGET
 	currentPixel.rgb = currentPixel.rgb * (number_of_shifts * .015);
 
 	/* Now add the color tint. */
-	if(currentPixel.r > (0.5 - tint_range) && currentPixel.r < (0.5 + tint_range))
-	{
+	if(currentPixel.r > (0.5 - tint_range) && currentPixel.r <
+			(0.5 + tint_range)) {
 		currentPixel.rgb = lerp(float3(1.0, 1.0, 1.0),
 				tint.rgb, 1 - currentPixel.r);
 	}
@@ -109,7 +108,7 @@ float4 PSLikeADream(VertData vert_in) : TARGET
 	currentPixel.a = opacity;
 
 	/* Now return the result(s) to the main shader. */
-	 return currentPixel;
+	return currentPixel;
 }
 
 /* This call actually executes the above functions on the GPU. */

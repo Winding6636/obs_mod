@@ -1,13 +1,16 @@
 /****************************************************************************
 Copyright (C) 2017 by c3r1c3 <c3r1c3@nevermindonline.com>
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 (at your option) any later version.
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
@@ -31,12 +34,12 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 #define OMT                            obs_module_text
 
-#define TEXT_NOISE_TEX_PATH            OMT("Noise.Texture")
-#define TEXT_REFRESH_RATE              OMT("Refresh.Rate")
-#define TEXT_MOTION_RATE               OMT("Motion.Rate")
-#define TEXT_LUM_THRESH                OMT("Luminance.Threshold")
-#define TEXT_LUM_BOOST                 OMT("Luminance.Boost")
-#define TEXT_COLOR_AMP                 OMT("Color.Amplification")
+#define TEXT_NOISE_TEX_PATH            OMT("NightVision.NoiseTexture")
+#define TEXT_REFRESH_RATE              OMT("NightVision.RefreshRate")
+#define TEXT_MOTION_RATE               OMT("NightVision.MotionRate")
+#define TEXT_LUM_THRESH                OMT("NightVision.LuminanceThreshold")
+#define TEXT_LUM_BOOST                 OMT("NightVision.LuminanceBoost")
+#define TEXT_COLOR_AMP                 OMT("NightVision.ColorAmplification")
 
 
 struct night_vision_filter_data {
@@ -73,17 +76,17 @@ struct night_vision_filter_data {
 
 
 /*
- * As the functions' namesake, this provides the user facing name
- * of your Filter.
+ * As the function's name implies, this provides the user facing name
+ * of your filter.
  */
 static const char *night_vision_filter_name(void *unused)
 {
 	UNUSED_PARAMETER(unused);
-	return obs_module_text("Night.Vision");
+	return obs_module_text("NightVision");
 }
 
 /*
- * This function is called (see bottom of this file for more details
+ * This function is called (see bottom of this file for more details)
  * whenever the OBS filter interface changes. So when the user is messing
  * with a slider this function is called to update the internal settings
  * in OBS, and hence the settings being passed to the CPU/GPU.
@@ -136,9 +139,8 @@ static void night_vision_filter_update(void *data, obs_data_t *settings)
 	 */
 	char *effect_path = obs_module_file("night_vision_filter.effect");
 	/* Check for the effect and log if it's missing */
-	if (!effect_path) {
+	if (!effect_path)
 		blog(LOG_ERROR, "Could not find night_vision_filter.effect");
-	}
 
 	/*
 	 * Destroy the current filter, then load up the new one, then free
@@ -183,7 +185,7 @@ static void *night_vision_filter_create(obs_data_t *settings,
 		obs_source_t *context)
 {
 	/*
-	 * Because of limitations of pre-c99 compilers, you can't create an
+	 * Because of limitations of pre-C99 compilers, you can't create an
 	 * array that doesn't have a know size at compile time. The below
 	 * function calculates the size needed and allocates memory to
 	 * handle the source.
@@ -335,7 +337,7 @@ static obs_properties_t *night_vision_filter_properties(void *data)
 }
 
 /*
- * As the functions' namesake, this provides the default settings for any
+ * As the function's name implies, this provides the default settings for any
  * options you wish to provide a default for. *NOTE* this function is
  * completely optional, as is providing a default for any particular
  * option.
@@ -354,7 +356,7 @@ static void night_vision_filter_defaults(obs_data_t *settings)
  * which function to call when it needs to update a setting? Or a source? Or
  * what type of source this is?
  *
- * OBS does it through the obs_source_info_struct. Notice how variables are
+ * OBS does it through the obs_source_info struct. Notice how variables are
  * assigned the name of a function? Notice how the function name has the
  * variable name in it? While not mandatory, it helps a ton for you (and those
  * reading your code) to follow this convention.

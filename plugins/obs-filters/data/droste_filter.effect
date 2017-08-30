@@ -36,8 +36,7 @@ uniform float downscale_inversion;
  * Below is what you would normally use in OBS. Why?
  * Linear filtering 'messes' with the image the least.
  */
-sampler_state textureSampler
-{
+sampler_state textureSampler {
 	Filter    = Linear;
 	AddressU  = Clamp;
 	AddressV  = Clamp;
@@ -47,8 +46,7 @@ sampler_state textureSampler
  * Here we create the struct to hold the current position and texture info
  * of the vertex in question.
  */
-struct VertData
-{
+struct VertData {
 	float4 pos : POSITION;
 	float2 uv  : TEXCOORD0;
 };
@@ -57,8 +55,7 @@ bool innerRectangle(float2 uv, float2 location, float2 size)
 {
 	bool test = false;
 	if (uv.x >= location.x && uv.x <= location.x + size.x &&
-		uv.y >= location.y && uv.y <= location.y + size.y)
-	{
+			uv.y >= location.y && uv.y <= location.y + size.y) {
 		test = true;
 	}
 	return test;
@@ -97,10 +94,8 @@ float4 PSDroste(VertData vert_in) : TARGET
 	float2 location = float2(0.0, 0.0);
 	float2 size = float2(1.0, 1.0);
 
-	for (int i = 0; i <= number_of_repeats; i++)
-	{
-		if (innerRectangle(vert_in.uv, location, size))
-		{
+	for (int i = 0; i <= number_of_repeats; i++) {
+		if (innerRectangle(vert_in.uv, location, size)) {
 			color =	image.Sample(textureSampler,
 					((vert_in.uv - location) / size));
 		}

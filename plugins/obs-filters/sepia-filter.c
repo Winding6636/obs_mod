@@ -1,13 +1,16 @@
 /*****************************************************************************
 Copyright (C) 2016 by c3r1c3 <c3r1c3@nevermindonline.com>
+
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 2 of the License, or
 (at your option) any later version.
+
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
+
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 *****************************************************************************/
@@ -22,11 +25,11 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #define SETTING_GREEN_CHANNEL          "green_channel"
 
 #define OMT                            obs_module_text
-#define TEXT_GAMMA                     OMT("Gamma")
-#define TEXT_OPACITY                   OMT("Opacity")
-#define TEXT_INTENSITY                 OMT("Intensity")
-#define TEXT_RED_CHANNEL               OMT("Red.Channel")
-#define TEXT_GREEN_CHANNEL             OMT("Green.Channel")
+#define TEXT_GAMMA                     OMT("Sepia.Gamma")
+#define TEXT_OPACITY                   OMT("Sepia.Opacity")
+#define TEXT_INTENSITY                 OMT("Sepia.Intensity")
+#define TEXT_RED_CHANNEL               OMT("Sepia.RedChannel")
+#define TEXT_GREEN_CHANNEL             OMT("Sepia.GreenChannel")
 
 struct sepia_filter_data {
 	obs_source_t                   *context;
@@ -50,17 +53,17 @@ struct sepia_filter_data {
 
 
 /*
- * As the functions' namesake, this provides the user facing name
- * of your Filter.
+ * As the function's name implies, this provides the user facing name
+ * of your filter.
  */
 static const char *sepia_filter_name(void *unused)
 {
 	UNUSED_PARAMETER(unused);
-	return obs_module_text("Sepia.Tone");
+	return obs_module_text("SepiaTone");
 }
 
 /*
- * This function is called (see bottom of this file for more details
+ * This function is called (see bottom of this file for more details)
  * whenever the OBS filter interface changes. So when the user is messing
  * with a slider this function is called to update the internal settings
  * in OBS, and hence the settings being passed to the CPU/GPU.
@@ -139,7 +142,7 @@ static void sepia_filter_destroy(void *data)
 static void *sepia_filter_create(obs_data_t *settings, obs_source_t *context)
 {
 	/*
-	 * Because of limitations of pre-c99 compilers, you can't create an
+	 * Because of limitations of pre-C99 compilers, you can't create an
 	 * array that doesn't have a know size at compile time. The below
 	 * function calculates the size needed and allocates memory to
 	 * handle the source.
@@ -248,7 +251,7 @@ static obs_properties_t *sepia_filter_properties(void *data)
 }
 
 /*
- * As the functions' namesake, this provides the default settings for any
+ * As the function's name implies, this provides the default settings for any
  * options you wish to provide a default for. *NOTE* this function is
  * completely optional, as is providing a default for any particular
  * option.
@@ -267,7 +270,7 @@ static void sepia_filter_defaults(obs_data_t *settings)
  * which function to call when it needs to update a setting? Or a source? Or
  * what type of source this is?
  *
- * OBS does it through the obs_source_info_struct. Notice how variables are
+ * OBS does it through the obs_source_info struct. Notice how variables are
  * assigned the name of a function? Notice how the function name has the
  * variable name in it? While not mandatory, it helps a ton for you (and those
  * reading your code) to follow this convention.

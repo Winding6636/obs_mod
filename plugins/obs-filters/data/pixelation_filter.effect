@@ -1,4 +1,4 @@
-﻿/****************************************************************************
+/****************************************************************************
 Copyright (C) 2017 by c3r1c3 <c3r1c3@nevermindonline.com>
 
 This program is free software: you can redistribute it and/or modify
@@ -71,10 +71,10 @@ VertData VSDefault(VertData vert_in)
  */
 float4 PSPixelation(VertData vert_in) : TARGET
 {
-        float2 uv = float2((block_width * floor(vert_in.uv.x /
-				block_width) + horiz_weight),
-		(block_height * floor(vert_in.uv.y /
-				block_height) + vert_weight));
+	float2 uv = float2((block_width * floor(vert_in.uv.x /
+			block_width) + horiz_weight),
+			(block_height * floor(vert_in.uv.y /
+			block_height) + vert_weight));
 	float4 imageSample = image.Sample(textureSampler, uv);
 
 	return imageSample;

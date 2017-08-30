@@ -14,7 +14,6 @@ extern struct obs_source_info compressor_filter;
 extern struct obs_source_info crop_filter;
 extern struct obs_source_info crosshatching_filter;
 extern struct obs_source_info cross_stitching_filter;
-extern struct obs_source_info compressor_filter;
 extern struct obs_source_info droste_filter;
 extern struct obs_source_info gain_filter;
 extern struct obs_source_info gpu_delay_filter;
@@ -23,11 +22,9 @@ extern struct obs_source_info luma_key_filter;
 extern struct obs_source_info mask_filter;
 extern struct obs_source_info night_vision_filter;
 extern struct obs_source_info noise_gate_filter;
-
 #if SPEEXDSP_ENABLED
-	extern struct obs_source_info noise_suppress_filter;
+extern struct obs_source_info noise_suppress_filter;
 #endif
-
 extern struct obs_source_info pixelation_filter;
 extern struct obs_source_info posterize_filter;
 extern struct obs_source_info radial_blur_filter;
@@ -55,11 +52,9 @@ bool obs_module_load(void)
 	obs_register_source(&mask_filter);
 	obs_register_source(&night_vision_filter);
 	obs_register_source(&noise_gate_filter);
-
-	#if SPEEXDSP_ENABLED
-		obs_register_source(&noise_suppress_filter);
-	#endif
-
+#if SPEEXDSP_ENABLED
+	obs_register_source(&noise_suppress_filter);
+#endif
 	obs_register_source(&pixelation_filter);
 	obs_register_source(&posterize_filter);
 	obs_register_source(&radial_blur_filter);

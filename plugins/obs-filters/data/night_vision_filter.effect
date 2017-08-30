@@ -89,19 +89,16 @@ float4 PSNightVision(VertData vert_in) : TARGET
 	noiseSampleUV.y = cos_movement;
 
 	float3 noiseSample = noise_texture.Sample(noiseSampler, (vert_in.uv *
-		float2(3.5, 3.5)) + noiseSampleUV).rgb;
+			float2(3.5, 3.5)) + noiseSampleUV).rgb;
 	float3 colorUp = image.Sample(textureSampler, vert_in.uv +
-		(noiseSample.xy * float2(0.005,0.005))).rgb;
+			(noiseSample.xy * float2(0.005,0.005))).rgb;
 
 	float luminance = dot(hvc, colorUp);
-	if (luminance < luminance_threshold)
-	{
+	if (luminance < luminance_threshold) {
 		colorUp *= color_amplification;
 		imageSample.rgb = (colorUp + (noiseSample *
 				luminance_boost)) * vision_color;
-	}
-	else
-	{
+	} else {
 		imageSample.rb = float2(0.0, 0.0);
 	}
 

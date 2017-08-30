@@ -71,9 +71,8 @@ float4 PS_RadialBlur(VertData vert_in) : TARGET
 {
 	vert_in.uv -= xy_offset;
 	float4 color = float4(0.0, 0.0, 0.0, 0.0);
-	for (int i = 0; i < iterations; i++)
-	{
-	    float iTemp = i;
+	for (int i = 0; i < iterations; i++) {
+		float iTemp = i;
 		float scale = zoom + blur_width *
 				(iTemp / (iterations - 1));
 		color += image.Sample(textureSampler,
@@ -92,3 +91,4 @@ technique Draw
 		pixel_shader  = PS_RadialBlur(vert_in);
 	}
 }
+
