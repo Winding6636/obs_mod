@@ -1,17 +1,14 @@
 /******************************************************************************
     Copyright (C) 2013-2014 by Hugh Bailey <obs.jim@gmail.com>
                                Philippe Groarke <philippe.groarke@gmail.com>
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 2 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
@@ -47,10 +44,6 @@
 #include "window-basic-main-outputs.hpp"
 
 #include <util/platform.h>
-
-#ifdef __APPLE__
-#include <util/mac/mac-version.h>
-#endif
 
 using namespace std;
 
@@ -446,26 +439,6 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	ui->enableAutoUpdates = nullptr;
 #endif
 
-#if defined(__APPLE__) && defined(__MAC_10_12)
-	struct mac_version_info ver;
-	get_mac_ver(&ver);
-	
-	if (ver.identifier < MACOS_SIERRA) {
-#endif
-#ifndef _WIN32
-		delete ui->rendererLabel;
-		delete ui->renderer;
-		delete ui->adapterLabel;
-		delete ui->adapter;
-		ui->rendererLabel = nullptr;
-		ui->renderer = nullptr;
-		ui->adapterLabel = nullptr;
-		ui->adapter = nullptr;
-#endif
-#if defined(__APPLE__) && defined(__MAC_10_12)
-	}
-#endif
-
 #ifdef _WIN32
 	uint32_t winVer = GetWindowsVersion();
 	if (winVer > 0 && winVer < 0x602) {
@@ -500,6 +473,10 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 		ui->processPriority->addItem(QTStr(pri.name), pri.val);
 
 #else
+	delete ui->rendererLabel;
+	delete ui->renderer;
+	delete ui->adapterLabel;
+	delete ui->adapter;
 	delete ui->processPriorityLabel;
 	delete ui->processPriority;
 	delete ui->advancedGeneralGroupBox;
@@ -508,6 +485,10 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 #ifdef __APPLE__
 	delete ui->disableAudioDucking;
 #endif
+	ui->rendererLabel = nullptr;
+	ui->renderer = nullptr;
+	ui->adapterLabel = nullptr;
+	ui->adapter = nullptr;
 	ui->processPriorityLabel = nullptr;
 	ui->processPriority = nullptr;
 	ui->advancedGeneralGroupBox = nullptr;
@@ -1090,27 +1071,12 @@ void OBSBasicSettings::LoadStream1Settings()
 
 void OBSBasicSettings::LoadRendererList()
 {
-#if defined(_WIN32) || (defined(__APPLE__) && defined(__MAC_10_12))
-#if defined(__APPLE__)
-	struct mac_version_info ver;
-	get_mac_ver(&ver);
-		
-	if (ver.identifier < MACOS_SIERRA)
-		return;
-#endif
-
+#ifdef _WIN32
 	const char *renderer = config_get_string(GetGlobalConfig(), "Video",
 			"Renderer");
-#ifdef _WIN32
+
 	ui->renderer->addItem(QT_UTF8("Direct3D 11"));
-#endif
-#if defined(__APPLE__) && defined(__MAC_10_12)
-	if (ver.identifier >= MACOS_SIERRA)
-		ui->renderer->addItem(QT_UTF8("Metal"));
-#endif
-#ifdef _WIN32
 	if (opt_allow_opengl || strcmp(renderer, "OpenGL") == 0)
-#endif
 		ui->renderer->addItem(QT_UTF8("OpenGL"));
 
 	int idx = ui->renderer->findText(QT_UTF8(renderer));
@@ -2621,14 +2587,11 @@ void OBSBasicSettings::SaveAdvancedSettings()
 	QString lastMonitoringDevice = config_get_string(main->Config(),
 			"Audio", "MonitoringDeviceId");
 
-#if defined(_WIN32) || defined(__APPLE__)
+#ifdef _WIN32
 	if (WidgetChanged(ui->renderer))
 		config_set_string(App()->GlobalConfig(), "Video", "Renderer",
 				QT_TO_UTF8(ui->renderer->currentText()));
 
-#endif
-	
-#ifdef _WIN32
 	std::string priority =
 		QT_TO_UTF8(ui->processPriority->currentData().toString());
 	config_set_string(App()->GlobalConfig(), "General", "ProcessPriority",

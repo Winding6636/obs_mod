@@ -2,17 +2,14 @@
     Copyright (C) 2013-2015 by Hugh Bailey <obs.jim@gmail.com>
                                Zachary Lund <admin@computerquip.com>
                                Philippe Groarke <philippe.groarke@gmail.com>
-
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 2 of the License, or
     (at your option) any later version.
-
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU General Public License for more details.
-
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ******************************************************************************/
@@ -151,6 +148,23 @@ OBSBasic::OBSBasic(QWidget *parent)
 
 	ui->sources->setItemDelegate(new VisibilityItemDelegate(ui->sources));
 
+	const char *geometry = config_get_string(App()->GlobalConfig(),
+			"BasicWindow", "geometry");
+	if (geometry != NULL) {
+		QByteArray byteArray = QByteArray::fromBase64(
+				QByteArray(geometry));
+		restoreGeometry(byteArray);
+
+		QRect windowGeometry = normalGeometry();
+		if (!WindowPositionValid(windowGeometry)) {
+			QRect rect = App()->desktop()->geometry();
+			setGeometry(QStyle::alignedRect(
+						Qt::LeftToRight,
+						Qt::AlignCenter,
+						size(), rect));
+		}
+	}
+
 	char styleSheetPath[512];
 	int ret = GetProfilePath(styleSheetPath, sizeof(styleSheetPath),
 			"stylesheet.qss");
@@ -269,31 +283,6 @@ OBSBasic::OBSBasic(QWidget *parent)
 	assignDockToggle(ui->mixerDock, ui->toggleMixer);
 	assignDockToggle(ui->transitionsDock, ui->toggleTransitions);
 	assignDockToggle(ui->controlsDock, ui->toggleControls);
-
-	//hide all docking panes
-	ui->toggleScenes->setChecked(false);
-	ui->toggleSources->setChecked(false);
-	ui->toggleMixer->setChecked(false);
-	ui->toggleTransitions->setChecked(false);
-	ui->toggleControls->setChecked(false);
-
-	//restore parent window geometry
-	const char *geometry = config_get_string(App()->GlobalConfig(),
-			"BasicWindow", "geometry");
-	if (geometry != NULL) {
-		QByteArray byteArray = QByteArray::fromBase64(
-				QByteArray(geometry));
-		restoreGeometry(byteArray);
-
-		QRect windowGeometry = normalGeometry();
-		if (!WindowPositionValid(windowGeometry)) {
-			QRect rect = App()->desktop()->geometry();
-			setGeometry(QStyle::alignedRect(
-						Qt::LeftToRight,
-						Qt::AlignCenter,
-						size(), rect));
-		}
-	}
 }
 
 static void SaveAudioDevice(const char *name, int channel, obs_data_t *parent,
@@ -1303,7 +1292,7 @@ void OBSBasic::OBSInit()
 	if (!sceneCollection)
 		throw "Failed to get scene collection name";
 
-	ret = snprintf(fileName, 512, "obs-studio-vtf/basic/scenes/%s.json",
+	ret = snprintf(fileName, 512, "obs-studio/basic/scenes/%s.json",
 			sceneCollection);
 	if (ret <= 0)
 		throw "Failed to create scene collection file name";
@@ -1864,7 +1853,7 @@ void OBSBasic::SaveProjectDeferred()
 	if (!sceneCollection)
 		return;
 
-	ret = snprintf(fileName, 512, "obs-studio-vtf/basic/scenes/%s.json",
+	ret = snprintf(fileName, 512, "obs-studio/basic/scenes/%s.json",
 			sceneCollection);
 	if (ret <= 0)
 		return;
@@ -2718,6 +2707,12 @@ bool OBSBasic::Active() const
 	return outputHandler->Active();
 }
 
+#ifdef _WIN32
+#define IS_WIN32 1
+#else
+#define IS_WIN32 0
+#endif
+
 static inline int AttemptToResetVideo(struct obs_video_info *ovi)
 {
 	return obs_reset_video(ovi);
@@ -2810,15 +2805,14 @@ int OBSBasic::ResetVideo()
 	}
 
 	ret = AttemptToResetVideo(&ovi);
-#if defined(_WIN32) || (defined(__APPLE__) && defined(__MAC_10_11))
-	if (ret != OBS_VIDEO_SUCCESS) {
+	if (IS_WIN32 && ret != OBS_VIDEO_SUCCESS) {
 		if (ret == OBS_VIDEO_CURRENTLY_ACTIVE) {
 			blog(LOG_WARNING, "Tried to reset when "
 			                  "already active");
 			return ret;
 		}
 
-		/* Try OpenGL if DirectX/Metal fails on windows/macOS */
+		/* Try OpenGL if DirectX fails on windows */
 		if (astrcmpi(ovi.graphics_module, DL_OPENGL) != 0) {
 			blog(LOG_WARNING, "Failed to initialize obs video (%d) "
 					  "with graphics_module='%s', retrying "
@@ -2829,9 +2823,6 @@ int OBSBasic::ResetVideo()
 			ret = AttemptToResetVideo(&ovi);
 		}
 	} else if (ret == OBS_VIDEO_SUCCESS) {
-#else
-	if (ret == OBS_VIDEO_SUCCESS) {
-#endif
 		ResizePreview(ovi.base_width, ovi.base_height);
 		if (program)
 			ResizeProgram(ovi.base_width, ovi.base_height);
@@ -3801,7 +3792,7 @@ void OBSBasic::on_actionMoveToBottom_triggered()
 static BPtr<char> ReadLogFile(const char *log)
 {
 	char logDir[512];
-	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio-vtf/logs") <= 0)
+	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio/logs") <= 0)
 		return nullptr;
 
 	string path = (char*)logDir;
@@ -3871,7 +3862,7 @@ void OBSBasic::UploadLog(const char *file)
 void OBSBasic::on_actionShowLogs_triggered()
 {
 	char logDir[512];
-	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio-vtf/logs") <= 0)
+	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio/logs") <= 0)
 		return;
 
 	QUrl url = QUrl::fromLocalFile(QT_UTF8(logDir));
@@ -3891,7 +3882,7 @@ void OBSBasic::on_actionUploadLastLog_triggered()
 void OBSBasic::on_actionViewCurrentLog_triggered()
 {
 	char logDir[512];
-	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio-vtf/logs") <= 0)
+	if (GetConfigPath(logDir, sizeof(logDir), "obs-studio/logs") <= 0)
 		return;
 
 	const char* log = App()->GetCurrentLog();
@@ -4592,14 +4583,14 @@ void OBSBasic::on_settingsButton_clicked()
 
 void OBSBasic::on_actionWebsite_triggered()
 {
-	QUrl url = QUrl("http://variedtastefinder.jp", QUrl::TolerantMode);
+	QUrl url = QUrl("https://obsproject.com", QUrl::TolerantMode);
 	QDesktopServices::openUrl(url);
 }
 
 void OBSBasic::on_actionShowSettingsFolder_triggered()
 {
 	char path[512];
-	int ret = GetConfigPath(path, 512, "obs-studio-vtf");
+	int ret = GetConfigPath(path, 512, "obs-studio");
 	if (ret <= 0)
 		return;
 
@@ -5285,7 +5276,7 @@ int OBSBasic::GetProfilePath(char *path, size_t size, const char *file) const
 	if (!file)
 		file = "";
 
-	ret = GetConfigPath(profiles_path, 512, "obs-studio-vtf/basic/profiles");
+	ret = GetConfigPath(profiles_path, 512, "obs-studio/basic/profiles");
 	if (ret <= 0)
 		return ret;
 
