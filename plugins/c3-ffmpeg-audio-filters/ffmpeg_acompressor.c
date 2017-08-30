@@ -345,9 +345,9 @@ static void ffmpeg_acompressor_update(void *data, obs_data_t *settings)
 	// Use avfilter_insert_filter to re-insert theupdating settings for the acompressor?
 
 
-	/*memcpy(pdata->fmpg_set.options_str,
+	memcpy(pdata->fmpg_set.options_str,
 			pdata->fmpg_set.options_str,
-			OPTIONS_LENGTH * sizeof(uint8_t));*/
+			OPTIONS_LENGTH * sizeof(uint8_t));
 
 
 	/*
@@ -355,7 +355,7 @@ static void ffmpeg_acompressor_update(void *data, obs_data_t *settings)
 	 * I need to figure out a way to check for said chain and wrap
 	 * this statement in said if.
 	 */
-	 fmpeg_filter_graph_update(pdata->fmpg_set);
+	fmpeg_filter_graph_update(pdata->fmpg_set);
 
 	// Move to another more proper place: (Maybe create?)
 	ffmpeg_filter_graph_create(pdata->fmpg_set);

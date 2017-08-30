@@ -120,7 +120,7 @@ bool inline obs_module_load(void)
 }
 
 /* Now time to create the FFMPEG audio graph. */
-/*
+
 extern void ffmpeg_filter_graph_create(void *ffmpeg_settings)
 {
 	struct ffmpeg_filter_settings *ffms = ffmpeg_settings;
@@ -362,4 +362,3 @@ extern void ffmpeg_filter_graph_create(void *ffmpeg_settings)
 fail:
 	UNUSED_PARAMETER(ffms);
 }
-*/
