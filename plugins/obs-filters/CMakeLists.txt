@@ -31,6 +31,7 @@ set(obs-filters_SOURCES
 	cross-stitching-filter.c
 	droste-filter.c
 	gain-filter.c
+	gaussian-blur-filter.c
 	gpu-delay.c
 	like-a-dream-filter.c
 	luma-key-filter.c
