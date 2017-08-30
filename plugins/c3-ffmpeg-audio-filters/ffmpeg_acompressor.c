@@ -63,7 +63,7 @@ struct ffmpeg_acompressor_data {
 };
 
 
-/*
+
 #include <ao/ao.h>
 
 static ao_device *device = NULL;
@@ -255,7 +255,6 @@ int main(int argc, char *argv[]) {
 
 	return 0;
 }
-*/
 
 
 
@@ -356,14 +355,14 @@ static void ffmpeg_acompressor_update(void *data, obs_data_t *settings)
 	 * I need to figure out a way to check for said chain and wrap
 	 * this statement in said if.
 	 */
-	 //ffmpeg_filter_graph_update(pdata->fmpg_set);
+	 fmpeg_filter_graph_update(pdata->fmpg_set);
 
 	// Move to another more proper place: (Maybe create?)
-	//ffmpeg_filter_graph_create(pdata->fmpg_set);
+	ffmpeg_filter_graph_create(pdata->fmpg_set);
 
 	/* Copy to update settings? Initialize with a null string? */
 	// create volume filter
-	/*double vol = 0.40;
+	double vol = 0.40;
 	snprintf(strbuf, sizeof(strbuf), "volume=%f", vol);
 	fprintf(stderr, "volume: %s\n", strbuf);
 	pdata->fmpg_set.err_code = avfilter_graph_create_filter(&volume_ctx, volume, NULL,
@@ -584,7 +583,7 @@ static void *ffmpeg_acompressor_create(obs_data_t *settings,
 	    pdata->fmpg_set.filter_name,
 	    pdata->link,
 	    obs_data_get_int(settings, SETTING_LINK));
-    //*pdata->detec_meth = obs_data_get_string(settings, SETTING_DETECTION);
+    pdata->detec_meth = obs_data_get_string(settings, SETTING_DETECTION);
     memset(pdata->detec_meth, NULL, sizeof(pdata->detec_meth));
     if (obs_data_get_int(settings, SETTING_DETECTION) == 0) {
 	    strncpy(pdata->detec_meth, "rms", 3);
@@ -882,7 +881,7 @@ static struct obs_audio_data *ffmpeg_acompressor_filter_audio(void *data,
 				pdata->fmpg_set.audio_filter_ctx,
 				pdata->fmpg_set.frame);
 		if (pdata->fmpg_set.err_code < 0) {
-			//av_frame_unref(pdata->fmpg_set.frame);
+			av_frame_unref(pdata->fmpg_set.frame);
 			blog(LOG_ERROR, "%s: Error submitting the frame to the filtergraph:",
 				pdata->fmpg_set.filter_name);
 
