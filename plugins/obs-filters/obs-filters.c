@@ -16,7 +16,6 @@ extern struct obs_source_info crosshatching_filter;
 extern struct obs_source_info cross_stitching_filter;
 extern struct obs_source_info droste_filter;
 extern struct obs_source_info gain_filter;
-extern struct obs_source_info gaussian_blur_filter;
 extern struct obs_source_info gpu_delay_filter;
 extern struct obs_source_info like_a_dream_filter;
 extern struct obs_source_info luma_key_filter;
@@ -47,7 +46,6 @@ bool obs_module_load(void)
 	obs_register_source(&cross_stitching_filter);
 	obs_register_source(&droste_filter);
 	obs_register_source(&gain_filter);
-	obs_register_source(&gaussian_blur_filter);
 	obs_register_source(&gpu_delay_filter);
 	obs_register_source(&like_a_dream_filter);
 	obs_register_source(&luma_key_filter);
