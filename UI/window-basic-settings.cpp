@@ -407,7 +407,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->colorRange,           COMBO_CHANGED,  ADV_CHANGED);
 	HookWidget(ui->disableOSXVSync,      CHECK_CHANGED,  ADV_CHANGED);
 	HookWidget(ui->resetOSXVSync,        CHECK_CHANGED,  ADV_CHANGED);
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || HAVE_PULSEAUDIO
 	HookWidget(ui->monitoringDevice,     COMBO_CHANGED,  ADV_CHANGED);
 #endif
 #ifdef _WIN32
@@ -428,15 +428,11 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->enableNewSocketLoop,  CHECK_CHANGED,  ADV_CHANGED);
 	HookWidget(ui->enableLowLatencyMode, CHECK_CHANGED,  ADV_CHANGED);
 
-#if !defined(_WIN32) && !defined(__APPLE__)
-	delete ui->monitoringDevice;
-	delete ui->monitoringDeviceLabel;
-	delete ui->advAudioGroupBox;
+#if !defined(_WIN32) && !defined(__APPLE__) && !HAVE_PULSEAUDIO
 	delete ui->enableAutoUpdates;
-	ui->monitoringDevice = nullptr;
-	ui->monitoringDeviceLabel = nullptr;
-	ui->advAudioGroupBox = nullptr;
+	delete ui->advAudioGroupBox;
 	ui->enableAutoUpdates = nullptr;
+	ui->advAudioGroupBox = nullptr;
 #endif
 
 #ifdef _WIN32
@@ -482,7 +478,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	delete ui->advancedGeneralGroupBox;
 	delete ui->enableNewSocketLoop;
 	delete ui->enableLowLatencyMode;
-#ifdef __APPLE__
+#if defined(__APPLE__) || HAVE_PULSEAUDIO
 	delete ui->disableAudioDucking;
 #endif
 	ui->rendererLabel = nullptr;
@@ -494,7 +490,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	ui->advancedGeneralGroupBox = nullptr;
 	ui->enableNewSocketLoop = nullptr;
 	ui->enableLowLatencyMode = nullptr;
-#ifdef __APPLE__
+#if defined(__APPLE__) || HAVE_PULSEAUDIO
 	ui->disableAudioDucking = nullptr;
 #endif
 #endif
@@ -581,7 +577,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 
 	FillSimpleRecordingValues();
 	FillSimpleStreamingValues();
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || HAVE_PULSEAUDIO
 	FillAudioMonitoringDevices();
 #endif
 
@@ -2023,7 +2019,7 @@ void OBSBasicSettings::LoadAdvancedSettings()
 			"Video", "ColorSpace");
 	const char *videoColorRange = config_get_string(main->Config(),
 			"Video", "ColorRange");
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || HAVE_PULSEAUDIO
 	const char *monDevName = config_get_string(main->Config(), "Audio",
 			"MonitoringDeviceName");
 	const char *monDevId = config_get_string(main->Config(), "Audio",
@@ -2055,7 +2051,7 @@ void OBSBasicSettings::LoadAdvancedSettings()
 
 	LoadRendererList();
 
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || HAVE_PULSEAUDIO
 	if (!SetComboByValue(ui->monitoringDevice, monDevId))
 		SetInvalidValue(ui->monitoringDevice, monDevName, monDevId);
 #endif
@@ -2619,7 +2615,7 @@ void OBSBasicSettings::SaveAdvancedSettings()
 	SaveCombo(ui->colorFormat, "Video", "ColorFormat");
 	SaveCombo(ui->colorSpace, "Video", "ColorSpace");
 	SaveComboData(ui->colorRange, "Video", "ColorRange");
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || HAVE_PULSEAUDIO
 	SaveCombo(ui->monitoringDevice, "Audio", "MonitoringDeviceName");
 	SaveComboData(ui->monitoringDevice, "Audio", "MonitoringDeviceId");
 #endif
@@ -2645,7 +2641,7 @@ void OBSBasicSettings::SaveAdvancedSettings()
 	SaveSpinBox(ui->reconnectMaxRetries, "Output", "MaxRetries");
 	SaveComboData(ui->bindToIP, "Output", "BindIP");
 
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || HAVE_PULSEAUDIO
 	QString newDevice = ui->monitoringDevice->currentData().toString();
 
 	if (lastMonitoringDevice != newDevice) {
