@@ -137,9 +137,6 @@ static void stinger_video_render(void *data, gs_effect_t *effect)
 	UNUSED_PARAMETER(effect);
 }
 
-<<<<<<< HEAD
-static float mix_a(void *data, float t)
-=======
 static inline float calc_fade(float t, float mul)
 {
 	t *= mul;
@@ -147,7 +144,6 @@ static inline float calc_fade(float t, float mul)
 }
 
 static float mix_a_fade_in_out(void *data, float t)
->>>>>>> c9182a987885da948941d486117aa4afefeceee2
 {
 	UNUSED_PARAMETER(data);
 	return 1.0f - t;
