@@ -141,8 +141,7 @@ private:
 	os_cpu_usage_info_t *cpuUsageInfo = nullptr;
 
 	OBSService service[NUMBER_OF_STREAM_SERVERS];
-	//std::unique_ptr<BasicOutputHandler> outputHandler;
-	std::unique_ptr<BasicOutputHandler> outputHandler[NUMBER_OF_STREAM_SERVERS];
+	std::unique_ptr<BasicOutputHandler> outputHandler;
 	bool streamingStopping = false;
 	bool recordingStopping = false;
 	bool replayBufferStopping = false;
@@ -266,7 +265,7 @@ private:
 
 	QListWidgetItem *GetTopSelectedSourceItem();
 
-	obs_hotkey_pair_id streamingHotkeys[NUMBER_OF_STREAM_SERVERS], recordingHotkeys,
+	obs_hotkey_pair_id streamingHotkeys, recordingHotkeys,
 	                   replayBufHotkeys;
 	obs_hotkey_id forceStreamingStopHotkey;
 
@@ -361,28 +360,26 @@ private:
 		obs_data_array_t *savedPreviewProjectors);
 
 public slots:
-	void StartStreaming(int id);
-	void StopStreaming(int id);
-	void ForceStopStreaming(int id);
+	void StartStreaming();
+	void StopStreaming();
+	void ForceStopStreaming();
 
 	void StreamDelayStarting(int sec);
 	void StreamDelayStopping(int sec);
-	/*todo add this slot to button2/button3*/
+
 	void StreamingStart();
-	/*todo add this slot to button2/button3*/
 	void StreamStopping();
-	/*todo add this slot to button2/button3*/
 	void StreamingStop(int errorcode, QString last_error);
 
-	void StartRecording(int id);
-	void StopRecording(int id);
+	void StartRecording();
+	void StopRecording();
 
 	void RecordingStart();
 	void RecordStopping();
 	void RecordingStop(int code);
 
-	void StartReplayBuffer(int id);
-	void StopReplayBuffer(int id);
+	void StartReplayBuffer();
+	void StopReplayBuffer();
 
 	void ReplayBufferStart();
 	void ReplayBufferStopping();
@@ -682,9 +679,9 @@ private slots:
 
 
     void on_streamButton_2_clicked();
-
+    
     void on_streamButton_3_clicked();
-
+    
 public slots:
 	void on_actionResetTransform_triggered();
 
@@ -701,5 +698,5 @@ public:
 
 private:
 	std::unique_ptr<Ui::OBSBasic> ui;
-    //Ui::OBSBasic ui;
+   Ui::OBSBasic ui;
 };

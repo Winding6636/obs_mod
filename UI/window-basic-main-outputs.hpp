@@ -6,14 +6,14 @@ class OBSBasic;
 
 struct BasicOutputHandler {
 	OBSOutput              fileOutput;
-	OBSOutput              streamOutput[NUMBER_OF_STREAM_SERVERS];
+	OBSOutput              streamOutput;
 	OBSOutput              replayBuffer;
 	bool                   streamingActive = false;
 	bool                   recordingActive = false;
 	bool                   delayActive = false;
 	bool                   replayBufferActive = false;
 	OBSBasic               *main;
-	int					   ServiceCounter=0;
+
 	std::string            outputType;
 
 	OBSSignal              startRecording;
@@ -50,5 +50,5 @@ struct BasicOutputHandler {
 	}
 };
 
-BasicOutputHandler *CreateSimpleOutputHandler(OBSBasic *main);
-BasicOutputHandler *CreateAdvancedOutputHandler(OBSBasic *main);
+BasicOutputHandler *CreateSimpleOutputHandler(OBSBasic *main, int id);
+BasicOutputHandler *CreateAdvancedOutputHandler(OBSBasic *main, int id);

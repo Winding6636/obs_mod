@@ -128,7 +128,7 @@
      <item>
       <widget class="QStackedWidget" name="settingsPages">
        <property name="currentIndex">
-        <number>3</number>
+        <number>1</number>
        </property>
        <widget class="QWidget" name="generalPage">
         <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -719,7 +719,7 @@
             <item row="1" column="0" colspan="2">
              <widget class="QStackedWidget" name="recordingPages">
               <property name="currentIndex">
-               <number>0</number>
+               <number>1</number>
               </property>
               <widget class="QWidget" name="basicRecording">
                <layout class="QGridLayout" name="gridLayout_2">
@@ -936,17 +936,17 @@
                         </property>
                        </widget>
                       </item>
-                      <item row="2" column="1">
-                       <widget class="QLabel" name="label_45">
-                        <property name="text">
-                         <string>Basic.Settings.Output.ReplayBuffer.HotkeyMessage</string>
-                        </property>
-                       </widget>
-                      </item>
                       <item row="3" column="1">
                        <widget class="QLabel" name="simpleRBEstimate">
                         <property name="text">
                          <string notr="true"/>
+                        </property>
+                       </widget>
+                      </item>
+                      <item row="2" column="1">
+                       <widget class="QLabel" name="label_45">
+                        <property name="text">
+                         <string>Basic.Settings.Output.ReplayBuffer.HotkeyMessage</string>
                         </property>
                        </widget>
                       </item>
@@ -979,7 +979,7 @@
                 <item row="1" column="0">
                  <widget class="QStackedWidget" name="stackedWidget">
                   <property name="currentIndex">
-                   <number>0</number>
+                   <number>1</number>
                   </property>
                   <widget class="QWidget" name="advOutRecStandard">
                    <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1315,7 +1315,7 @@
                     <item row="1" column="1">
                      <widget class="QStackedWidget" name="stackedWidget_2">
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>1</number>
                       </property>
                       <widget class="QWidget" name="page_5">
                        <layout class="QHBoxLayout" name="horizontalLayout_12">
@@ -2502,7 +2502,7 @@
                      <item row="0" column="0">
                       <widget class="QTabWidget" name="advOutTabs">
                        <property name="currentIndex">
-                        <number>0</number>
+                        <number>1</number>
                        </property>
                        <property name="usesScrollButtons">
                         <bool>true</bool>
@@ -5795,8 +5795,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>818</width>
-           <height>695</height>
+           <width>98</width>
+           <height>28</height>
           </rect>
          </property>
          <layout class="QFormLayout" name="hotkeyLayout">

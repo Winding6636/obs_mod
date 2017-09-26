@@ -84,7 +84,7 @@ class OBSBasicSettings : public QDialog {
 private:
 	OBSBasic *main;
 
-	// Ui::OBSBasicSettings ui;
+//    Ui::OBSBasicSettings ui;
 	std::unique_ptr<Ui::OBSBasicSettings> ui;
 
 	bool generalChanged = false;
@@ -103,7 +103,7 @@ private:
 	OBSFFFormatDesc formats;
 
 	OBSPropertiesView *streamProperties[NUMBER_OF_STREAM_SERVERS] = {nullptr, nullptr, nullptr};
-	OBSPropertiesView *streamEncoderProps = nullptr;
+	OBSPropertiesView *streamEncoderProps[NUMBER_OF_STREAM_SERVERS] = {nullptr, nullptr, nullptr};
 	OBSPropertiesView *recordEncoderProps = nullptr;
 
 	QPointer<QLabel> advOutRecWarning;
@@ -114,7 +114,7 @@ private:
 	QString curNVENCPreset;
 	QString curAMDPreset;
 
-	QString curAdvStreamEncoder;
+	QString curAdvStreamEncoder[NUMBER_OF_STREAM_SERVERS];
 	QString curAdvRecordEncoder;
 
 	using AudioSource_t =
@@ -298,6 +298,10 @@ private slots:
 	void SimpleReplayBufferChanged();
 
 	void SimpleStreamingEncoderChanged();
+
+    void on_advOutEncoder_2_currentIndexChanged(int index);
+
+    void on_advOutEncoder_3_currentIndexChanged(int index);
 
 protected:
 	virtual void closeEvent(QCloseEvent *event);

@@ -484,8 +484,12 @@ void OBSBasic::on_actionImportProfile_triggered()
 					profileDir + "/basic.ini");
 			QFile::copy(dir + "/service.json",
 					profileDir + "/service.json");
-			QFile::copy(dir + "/streamEncoder.json",
-					profileDir + "/streamEncoder.json");
+			QFile::copy(dir + "/streamEncoder_0.json",
+					profileDir + "/streamEncoder_0.json");
+			QFile::copy(dir + "/streamEncoder_1.json",
+								profileDir + "/streamEncoder_1.json");
+			QFile::copy(dir + "/streamEncoder_2.json",
+								profileDir + "/streamEncoder_2.json");
 			QFile::copy(dir + "/recordEncoder.json",
 					profileDir + "/recordEncoder.json");
 			RefreshProfiles();
@@ -534,8 +538,14 @@ void OBSBasic::on_actionExportProfile_triggered()
 			if (QFile::exists(outputDir + "/service.json"))
 				QFile::remove(outputDir + "/service.json");
 
-			if (QFile::exists(outputDir + "/streamEncoder.json"))
-				QFile::remove(outputDir + "/streamEncoder.json");
+			if (QFile::exists(outputDir + "/streamEncoder_0.json"))
+				QFile::remove(outputDir + "/streamEncoder_0.json");
+
+			if (QFile::exists(outputDir + "/streamEncoder_1.json"))
+				QFile::remove(outputDir + "/streamEncoder_1.json");
+
+			if (QFile::exists(outputDir + "/streamEncoder_2.json"))
+				QFile::remove(outputDir + "/streamEncoder_2.json");
 
 			if (QFile::exists(outputDir + "/recordEncoder.json"))
 				QFile::remove(outputDir + "/recordEncoder.json");
@@ -545,8 +555,12 @@ void OBSBasic::on_actionExportProfile_triggered()
 				outputDir + "/basic.ini");
 		QFile::copy(inputPath + currentProfile + "/service.json",
 				outputDir + "/service.json");
-		QFile::copy(inputPath + currentProfile + "/streamEncoder.json",
-				outputDir + "/streamEncoder.json");
+		QFile::copy(inputPath + currentProfile + "/streamEncoder_0.json",
+				outputDir + "/streamEncoder_0.json");
+		QFile::copy(inputPath + currentProfile + "/streamEncoder_1.json",
+				outputDir + "/streamEncoder_1.json");
+		QFile::copy(inputPath + currentProfile + "/streamEncoder_2.json",
+				outputDir + "/streamEncoder_2.json");
 		QFile::copy(inputPath + currentProfile + "/recordEncoder.json",
 				outputDir + "/recordEncoder.json");
 	}

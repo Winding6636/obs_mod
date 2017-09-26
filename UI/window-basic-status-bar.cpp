@@ -111,7 +111,7 @@ void OBSBasicStatusBar::Deactivate()
 		totalRecordSeconds = 0;
 	}
 
-	if (!main->outputHandler->Active()) {
+	if (!main->outputHandler[0]->Active()) {
 		delete refreshTimer;
 
 		delayInfo->setText("");
@@ -409,10 +409,10 @@ void OBSBasicStatusBar::UpdateStatusBar()
 void OBSBasicStatusBar::StreamDelayStarting(int sec)
 {
 	OBSBasic *main = qobject_cast<OBSBasic*>(parent());
-	if (!main || !main->outputHandler)
+	if (!main || !main->outputHandler[0])
 		return;
 
-	streamOutput = main->outputHandler->streamOutput[1];
+	streamOutput = main->outputHandler[0]->streamOutput;
 
 	delaySecTotal = delaySecStarting = sec;
 	UpdateDelayMsg();

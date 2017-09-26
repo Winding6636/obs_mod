@@ -1808,7 +1808,7 @@ static void upgrade_settings(void)
 
 			if (config) {
 				const char *sEnc = config_get_string(config,
-						"AdvOut", "Encoder");
+						"AdvOut", "Encoder_0");
 				const char *rEnc = config_get_string(config,
 						"AdvOut", "RecEncoder");
 
@@ -1823,7 +1823,9 @@ static void upgrade_settings(void)
 				path[pathlen] = 0;
 				strcat(path, "/");
 				strcat(path, ent->d_name);
-				strcat(path, "/streamEncoder.json");
+				strcat(path, "/streamEncoder_0.json");
+				strcat(path, "/streamEncoder_1.json");
+				strcat(path, "/streamEncoder_2.json");
 				convert_14_2_encoder_setting(sEnc, path);
 			}
 
