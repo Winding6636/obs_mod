@@ -338,7 +338,10 @@ void OBSBasic::RefreshProfiles()
 void OBSBasic::ResetProfileData()
 {
 	ResetVideo();
-	service = nullptr;
+	for (int i = 0; i <NUMBER_OF_STREAM_SERVERS; i++)
+	{
+		service[i] = nullptr;
+	}
 	InitService();
 	ResetOutputs();
 	ClearHotkeys();

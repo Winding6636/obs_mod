@@ -750,7 +750,7 @@ void AutoConfig::SaveStreamSettings()
 		? "rtmp_custom"
 		: "rtmp_common";
 
-	obs_service_t *oldService = main->GetService();
+	obs_service_t *oldService = main->GetService()[0];
 	OBSData hotkeyData = obs_hotkeys_save_service(oldService);
 	obs_data_release(hotkeyData);
 
@@ -769,8 +769,8 @@ void AutoConfig::SaveStreamSettings()
 	if (!newService)
 		return;
 
-	main->SetService(newService);
-	main->SaveService();
+	main->SetService(newService, 0);
+	main->SaveService(0);
 
 	/* ---------------------------------- */
 	/* save stream settings               */

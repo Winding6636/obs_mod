@@ -132,6 +132,10 @@ OBSBasic::OBSBasic(QWidget *parent)
 	: OBSMainWindow  (parent),
 	  ui             (new Ui::OBSBasic)
 {
+	for (size_t i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
+	{
+		sprintf(Service_Path[i], "service_%d.json", i+1);
+	}
 	setAttribute(Qt::WA_NativeWindow);
 
 	projectorArray.resize(10, "");
@@ -860,60 +864,66 @@ retryScene:
 	disableSaving--;
 }
 
-#define SERVICE_PATH "service.json"
-
-void OBSBasic::SaveService()
+void OBSBasic::SaveService(unsigned char id)
 {
-	if (!service)
+	if (!service[id])
 		return;
 
-	char serviceJsonPath[512];
-	int ret = GetProfilePath(serviceJsonPath, sizeof(serviceJsonPath),
-			SERVICE_PATH);
-	if (ret <= 0)
+	if (!service[id])
 		return;
 
-	obs_data_t *data     = obs_data_create();
-	obs_data_t *settings = obs_service_get_settings(service);
+		char serviceJsonPath[512];
+		int ret = GetProfilePath(serviceJsonPath, sizeof(serviceJsonPath),
+				Service_Path[id]);
+		if (ret <= 0)
+			return;
 
-	obs_data_set_string(data, "type", obs_service_get_type(service));
-	obs_data_set_obj(data, "settings", settings);
+		obs_data_t *data     = obs_data_create();
+		obs_data_t *settings = obs_service_get_settings(service[id]);
 
-	if (!obs_data_save_json_safe(data, serviceJsonPath, "tmp", "bak"))
-		blog(LOG_WARNING, "Failed to save service");
+		obs_data_set_string(data, "type", obs_service_get_type(service[id]));
+		obs_data_set_obj(data, "settings", settings);
 
-	obs_data_release(settings);
-	obs_data_release(data);
+		if (!obs_data_save_json_safe(data, serviceJsonPath, "tmp", "bak"))
+				blog(LOG_WARNING, "Failed to save service");
+
+		obs_data_release(settings);
+		obs_data_release(data);
 }
 
 bool OBSBasic::LoadService()
 {
-	const char *type;
+	printf("*******OBSBasic::LoadService()****** \n");
+	const char *type[NUMBER_OF_STREAM_SERVERS];
+	char serviceJsonPath[NUMBER_OF_STREAM_SERVERS][512];
+	obs_data_t *data[NUMBER_OF_STREAM_SERVERS];
+	obs_data_t *settings[NUMBER_OF_STREAM_SERVERS];
+	obs_data_t *hotkey_data[NUMBER_OF_STREAM_SERVERS];
+	int ret;
+	bool ret_val=true;
+	for (size_t i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
+	{
+		 ret = GetProfilePath(serviceJsonPath[i], sizeof(serviceJsonPath[i]),
+			 Service_Path[i]);
+		 if (ret <= 0)
+			 return false;
+		 data[i] = obs_data_create_from_json_file_safe(serviceJsonPath[i],
+			 "bak");
+		 obs_data_set_default_string(data[i], "type", "rtmp_common");
+		 type[i] = obs_data_get_string(data[i], "type");
+		 settings[i] = obs_data_get_obj(data[i], "settings");
+		 hotkey_data[i] = obs_data_get_obj(data[i], "hotkeys");
+		 ret_val = true;
+		 service[i] = obs_service_create(type[i], "default_service", settings[i], hotkey_data[i]);
+		 obs_service_release(service[i]);
+		 ret_val = ret && !!service[i];
+		 obs_data_release(hotkey_data[i]);
+		 obs_data_release(settings[i]);
+		 obs_data_release(data[i]);
 
-	char serviceJsonPath[512];
-	int ret = GetProfilePath(serviceJsonPath, sizeof(serviceJsonPath),
-			SERVICE_PATH);
-	if (ret <= 0)
-		return false;
+	}
 
-	obs_data_t *data = obs_data_create_from_json_file_safe(serviceJsonPath,
-			"bak");
-
-	obs_data_set_default_string(data, "type", "rtmp_common");
-	type = obs_data_get_string(data, "type");
-
-	obs_data_t *settings = obs_data_get_obj(data, "settings");
-	obs_data_t *hotkey_data = obs_data_get_obj(data, "hotkeys");
-
-	service = obs_service_create(type, "default_service", settings,
-			hotkey_data);
-	obs_service_release(service);
-
-	obs_data_release(hotkey_data);
-	obs_data_release(settings);
-	obs_data_release(data);
-
-	return !!service;
+	return ret_val;
 }
 
 bool OBSBasic::InitService()
@@ -923,11 +933,15 @@ bool OBSBasic::InitService()
 	if (LoadService())
 		return true;
 
-	service = obs_service_create("rtmp_common", "default_service", nullptr,
-			nullptr);
-	if (!service)
-		return false;
-	obs_service_release(service);
+		for (int i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
+		{
+			service[i] = obs_service_create("rtmp_common", "default_service", nullptr,
+					nullptr);
+			if (!service[i])
+				return false;
+			obs_service_release(service[i]);
+
+		}
 
 	return true;
 }
@@ -1755,7 +1769,10 @@ OBSBasic::~OBSBasic()
 	obs_hotkey_set_callback_routing_func(nullptr, nullptr);
 	ClearHotkeys();
 
-	service = nullptr;
+	for (int i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
+	{
+		service[i] = nullptr;
+	}
 	outputHandler.reset();
 
 	if (interaction)
@@ -2818,20 +2835,23 @@ void OBSBasic::RenderMain(void *data, uint32_t cx, uint32_t cy)
 
 /* Main class functions */
 
-obs_service_t *OBSBasic::GetService()
+obs_service_t **OBSBasic::GetService()
 {
-	if (!service) {
-		service = obs_service_create("rtmp_common", NULL, NULL,
-				nullptr);
-		obs_service_release(service);
+	for(int i = 0 ; i < NUMBER_OF_STREAM_SERVERS; i ++)
+	{
+		if (!service[i]) {
+			service[i] = obs_service_create("rtmp_common", NULL, NULL,
+							nullptr);
+			obs_service_release(service[i]);
+		}
 	}
-	return service;
+	return (obs_service_t **)&service;
 }
 
-void OBSBasic::SetService(obs_service_t *newService)
+void OBSBasic::SetService(obs_service_t *newService ,  unsigned char id)
 {
 	if (newService)
-		service = newService;
+		service[id] = newService;
 }
 
 bool OBSBasic::StreamingActive() const
@@ -4171,6 +4191,7 @@ void OBSBasic::OpenSceneFilters()
 
 void OBSBasic::StartStreaming()
 {
+	printf("********************OBSBasic::StartStreaming()************************ \n");
 	if (outputHandler->StreamingActive())
 		return;
 	if (disableOutputsRef)
@@ -4189,7 +4210,13 @@ void OBSBasic::StartStreaming()
 		sysTrayStream->setText(ui->streamButton->text());
 	}
 
-	if (!outputHandler->StartStreaming(service)) {
+	bool StreamingNotStarted = false;
+	for (int i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
+	{
+		StreamingNotStarted = StreamingNotStarted || (!outputHandler->StartStreaming(service[i]));
+		for (size_t i = 0; i < 1000000000; i++);
+	}
+	if (StreamingNotStarted) {
 		ui->streamButton->setText(QTStr("Basic.Main.StartStreaming"));
 		ui->streamButton->setEnabled(true);
 
@@ -4362,7 +4389,7 @@ void OBSBasic::StreamingStart()
 {
 	ui->streamButton->setText(QTStr("Basic.Main.StopStreaming"));
 	ui->streamButton->setEnabled(true);
-	ui->statusbar->StreamStarted(outputHandler->streamOutput);
+	ui->statusbar->StreamStarted(outputHandler->streamOutput[0]);
 
 	if (sysTrayStream) {
 		sysTrayStream->setText(ui->streamButton->text());
@@ -4687,6 +4714,7 @@ void OBSBasic::ReplayBufferStop(int code)
 
 void OBSBasic::on_streamButton_clicked()
 {
+	printf("***************stream button clicked ************** \n");
 	if (outputHandler->StreamingActive()) {
 		bool confirm = config_get_bool(GetGlobalConfig(), "BasicWindow",
 				"WarnBeforeStoppingStream");

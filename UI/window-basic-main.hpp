@@ -60,6 +60,7 @@ class OBSBasicStats;
 
 #define PREVIEW_EDGE_SIZE 10
 
+#define NUMBER_OF_STREAM_SERVERS 3
 struct BasicOutputHandler;
 
 enum class QtDataRole {
@@ -116,6 +117,8 @@ private:
 	std::vector<std::string> projectorArray;
 	std::vector<int> previewProjectorArray;
 
+	char Service_Path[NUMBER_OF_STREAM_SERVERS][512];
+
 	bool loaded = false;
 	long disableSaving = 1;
 	bool projectChanged = false;
@@ -138,7 +141,7 @@ private:
 	QPointer<QTimer>    cpuUsageTimer;
 	os_cpu_usage_info_t *cpuUsageInfo = nullptr;
 
-	OBSService service;
+	OBSService service[NUMBER_OF_STREAM_SERVERS];
 	std::unique_ptr<BasicOutputHandler> outputHandler;
 	bool streamingStopping = false;
 	bool recordingStopping = false;
@@ -476,8 +479,8 @@ public:
 		return OBSSource(obs_scene_get_source(curScene));
 	}
 
-	obs_service_t *GetService();
-	void          SetService(obs_service_t *service);
+	obs_service_t **GetService();
+	void          SetService(obs_service_t *service, unsigned char id);
 
 	bool StreamingActive() const;
 	bool Active() const;
@@ -506,7 +509,7 @@ public:
 		return os_cpu_usage_info_query(cpuUsageInfo);
 	}
 
-	void SaveService();
+	void SaveService(unsigned char id);
 	bool LoadService();
 
 	inline void EnableOutputs(bool enable)

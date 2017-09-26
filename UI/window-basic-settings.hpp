@@ -36,7 +36,7 @@ class OBSPropertiesView;
 class OBSHotkeyWidget;
 
 #include "ui_OBSBasicSettings.h"
-
+#define NUMBER_OF_STREAM_SERVERS 3
 class SilentUpdateCheckBox : public QCheckBox {
 	Q_OBJECT
 
@@ -84,6 +84,7 @@ class OBSBasicSettings : public QDialog {
 private:
 	OBSBasic *main;
 
+	// Ui::OBSBasicSettings ui;
 	std::unique_ptr<Ui::OBSBasicSettings> ui;
 
 	bool generalChanged = false;
@@ -101,7 +102,7 @@ private:
 
 	OBSFFFormatDesc formats;
 
-	OBSPropertiesView *streamProperties = nullptr;
+	OBSPropertiesView *streamProperties[NUMBER_OF_STREAM_SERVERS] = {nullptr, nullptr, nullptr};
 	OBSPropertiesView *streamEncoderProps = nullptr;
 	OBSPropertiesView *recordEncoderProps = nullptr;
 

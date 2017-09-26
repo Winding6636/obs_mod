@@ -74,7 +74,7 @@ typedef struct obs_weak_service obs_weak_service_t;
 #include "obs-service.h"
 #include "obs-audio-controls.h"
 #include "obs-hotkey.h"
-
+#define NUMBER_OF_STREAM_SERVERS 3
 /**
  * @file
  * @brief Main libobs header used by applications.

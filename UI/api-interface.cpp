@@ -289,7 +289,7 @@ struct OBSStudioAPI : obs_frontend_callbacks {
 
 	obs_output_t *obs_frontend_get_streaming_output(void) override
 	{
-		OBSOutput output = main->outputHandler->streamOutput;
+		OBSOutput output = main->outputHandler->streamOutput[1];
 		obs_output_addref(output);
 		return output;
 	}
@@ -356,17 +356,17 @@ struct OBSStudioAPI : obs_frontend_callbacks {
 
 	void obs_frontend_set_streaming_service(obs_service_t *service) override
 	{
-		main->SetService(service);
+		main->SetService(service, 0);
 	}
 
 	obs_service_t *obs_frontend_get_streaming_service(void) override
 	{
-		return main->GetService();
+		return main->GetService()[0];
 	}
 
 	void obs_frontend_save_streaming_service(void) override
 	{
-		main->SaveService();
+		main->SaveService(0);
 	}
 
 	bool obs_frontend_preview_program_mode_active(void) override

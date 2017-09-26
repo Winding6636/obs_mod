@@ -37,6 +37,7 @@ static void OBSStreamStopping(void *data, calldata_t *params)
 
 static void OBSStartStreaming(void *data, calldata_t *params)
 {
+	printf("**********************OBSStartStreaming********************* \n");
 	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
 	output->streamingActive = true;
 	QMetaObject::invokeMethod(output->main, "StreamingStart");
@@ -427,7 +428,7 @@ void SimpleOutput::Update()
 	obs_data_set_string(aacSettings, "rate_control", "CBR");
 	obs_data_set_int(aacSettings, "bitrate", audioBitrate);
 
-	obs_service_apply_encoder_settings(main->GetService(),
+	obs_service_apply_encoder_settings(main->GetService()[0],
 			h264Settings, aacSettings);
 
 	if (advanced && !enforceBitrate) {
@@ -646,6 +647,7 @@ const char *FindAudioEncoderFromCodec(const char *type)
 
 bool SimpleOutput::StartStreaming(obs_service_t *service)
 {
+	printf("*******************SimpleOutput::StartStreaming******************* \n");
 	if (!Active())
 		SetupOutputs();
 
@@ -662,28 +664,29 @@ bool SimpleOutput::StartStreaming(obs_service_t *service)
 		startStreaming.Disconnect();
 		stopStreaming.Disconnect();
 
-		streamOutput = obs_output_create(type, "simple_stream",
+		streamOutput[ServiceCounter] = obs_output_create(type, "simple_stream",
 				nullptr, nullptr);
-		if (!streamOutput)
+
+		if (!streamOutput[ServiceCounter])
 			return false;
-		obs_output_release(streamOutput);
+		obs_output_release(streamOutput[ServiceCounter]);
 
 		streamDelayStarting.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"starting", OBSStreamStarting, this);
 		streamStopping.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"stopping", OBSStreamStopping, this);
 
 		startStreaming.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"start", OBSStartStreaming, this);
 		stopStreaming.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"stop", OBSStopStreaming, this);
 
 		const char *codec =
-			obs_output_get_supported_audio_codecs(streamOutput);
+			obs_output_get_supported_audio_codecs(streamOutput[ServiceCounter]);
 		if (!codec) {
 			return false;
 		}
@@ -709,9 +712,9 @@ bool SimpleOutput::StartStreaming(obs_service_t *service)
 		outputType = type;
 	}
 
-	obs_output_set_video_encoder(streamOutput, h264Streaming);
-	obs_output_set_audio_encoder(streamOutput, aacStreaming, 0);
-	obs_output_set_service(streamOutput, service);
+	obs_output_set_video_encoder(streamOutput[ServiceCounter], h264Streaming);
+	obs_output_set_audio_encoder(streamOutput[ServiceCounter], aacStreaming, 0);
+	obs_output_set_service(streamOutput[ServiceCounter], service);
 
 	/* --------------------- */
 
@@ -740,22 +743,31 @@ bool SimpleOutput::StartStreaming(obs_service_t *service)
 			enableNewSocketLoop);
 	obs_data_set_bool(settings, "low_latency_mode_enabled",
 			enableLowLatencyMode);
-	obs_output_update(streamOutput, settings);
+	obs_output_update(streamOutput[ServiceCounter], settings);
 	obs_data_release(settings);
 
 	if (!reconnect)
 		maxRetries = 0;
 
-	obs_output_set_delay(streamOutput, useDelay ? delaySec : 0,
+	obs_output_set_delay(streamOutput[ServiceCounter], useDelay ? delaySec : 0,
 			preserveDelay ? OBS_OUTPUT_DELAY_PRESERVE : 0);
 
-	obs_output_set_reconnect_settings(streamOutput, maxRetries,
+	obs_output_set_reconnect_settings(streamOutput[ServiceCounter], maxRetries,
 			retryDelay);
 
-	if (obs_output_start(streamOutput)) {
+	if (obs_output_start(streamOutput[ServiceCounter])) {
+			ServiceCounter++;
+			outputType = ""; 
+				if (ServiceCounter > 2)
+				{
+					outputType = type;
+					ServiceCounter = 0;
+				}
 		return true;
 	}
-
+	ServiceCounter++;
+	if (ServiceCounter > 2)
+		ServiceCounter = 0;
 	return false;
 }
 
@@ -792,7 +804,7 @@ void SimpleOutput::UpdateRecording()
 	if (usingRecordingPreset) {
 		if (!ffmpegOutput)
 			UpdateRecordingSettings();
-	} else if (!obs_output_active(streamOutput)) {
+	} else if (!obs_output_active(streamOutput[ServiceCounter])) {
 		Update();
 	}
 
@@ -942,10 +954,13 @@ bool SimpleOutput::StartReplayBuffer()
 
 void SimpleOutput::StopStreaming(bool force)
 {
-	if (force)
-		obs_output_force_stop(streamOutput);
-	else
-		obs_output_stop(streamOutput);
+	for (int i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
+	{
+		if (force)
+			obs_output_force_stop(streamOutput[i]);
+		else
+			obs_output_stop(streamOutput[i]);
+	}
 }
 
 void SimpleOutput::StopRecording(bool force)
@@ -966,7 +981,7 @@ void SimpleOutput::StopReplayBuffer(bool force)
 
 bool SimpleOutput::StreamingActive() const
 {
-	return obs_output_active(streamOutput);
+	return obs_output_active(streamOutput[ServiceCounter]);
 }
 
 bool SimpleOutput::RecordingActive() const
@@ -1149,7 +1164,7 @@ void AdvancedOutput::UpdateStreamSettings()
 	OBSData settings = GetDataFromJsonFile("streamEncoder.json");
 
 	if (applyServiceSettings)
-		obs_service_apply_encoder_settings(main->GetService(),
+		obs_service_apply_encoder_settings(main->GetService()[0],
 				settings, nullptr);
 
 	video_t *video = obs_get_video();
@@ -1352,7 +1367,7 @@ inline void AdvancedOutput::UpdateAudioSettings()
 
 	for (size_t i = 0; i < MAX_AUDIO_MIXES; i++) {
 		if (applyServiceSettings && (int)(i + 1) == streamTrackIndex)
-			obs_service_apply_encoder_settings(main->GetService(),
+			obs_service_apply_encoder_settings(main->GetService()[0],
 					nullptr, settings[i]);
 
 		obs_encoder_update(aacTrack[i], settings[i]);
@@ -1389,6 +1404,7 @@ int AdvancedOutput::GetAudioBitrate(size_t i) const
 
 bool AdvancedOutput::StartStreaming(obs_service_t *service)
 {
+	printf("******************AdvancedOutput::StartStreaming()********************\n");
 	if (!useStreamEncoder ||
 	    (!ffmpegOutput && !obs_output_active(fileOutput))) {
 		UpdateStreamSettings();
@@ -1415,28 +1431,28 @@ bool AdvancedOutput::StartStreaming(obs_service_t *service)
 		startStreaming.Disconnect();
 		stopStreaming.Disconnect();
 
-		streamOutput = obs_output_create(type, "adv_stream",
+		streamOutput[ServiceCounter] = obs_output_create(type, "adv_stream",
 				nullptr, nullptr);
-		if (!streamOutput)
+		if (!streamOutput[ServiceCounter])
 			return false;
-		obs_output_release(streamOutput);
+		obs_output_release(streamOutput[ServiceCounter]);
 
 		streamDelayStarting.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"starting", OBSStreamStarting, this);
 		streamStopping.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"stopping", OBSStreamStopping, this);
 
 		startStreaming.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"start", OBSStartStreaming, this);
 		stopStreaming.Connect(
-				obs_output_get_signal_handler(streamOutput),
+				obs_output_get_signal_handler(streamOutput[ServiceCounter]),
 				"stop", OBSStopStreaming, this);
 
 		const char *codec =
-			obs_output_get_supported_audio_codecs(streamOutput);
+				obs_output_get_supported_audio_codecs(streamOutput[ServiceCounter]);
 		if (!codec) {
 			return false;
 		}
@@ -1464,12 +1480,12 @@ bool AdvancedOutput::StartStreaming(obs_service_t *service)
 		outputType = type;
 	}
 
-	obs_output_set_video_encoder(streamOutput, h264Streaming);
-	obs_output_set_audio_encoder(streamOutput, streamAudioEnc, 0);
+	obs_output_set_video_encoder(streamOutput[ServiceCounter], h264Streaming);
+	obs_output_set_audio_encoder(streamOutput[ServiceCounter], streamAudioEnc, 0);
 
 	/* --------------------- */
 
-	obs_output_set_service(streamOutput, service);
+	obs_output_set_service(streamOutput[ServiceCounter], service);
 
 	bool reconnect = config_get_bool(main->Config(), "Output", "Reconnect");
 	int retryDelay = config_get_int(main->Config(), "Output", "RetryDelay");
@@ -1493,19 +1509,19 @@ bool AdvancedOutput::StartStreaming(obs_service_t *service)
 			enableNewSocketLoop);
 	obs_data_set_bool(settings, "low_latency_mode_enabled",
 			enableLowLatencyMode);
-	obs_output_update(streamOutput, settings);
+	obs_output_update(streamOutput[ServiceCounter], settings);
 	obs_data_release(settings);
 
 	if (!reconnect)
 		maxRetries = 0;
 
-	obs_output_set_delay(streamOutput, useDelay ? delaySec : 0,
+	obs_output_set_delay(streamOutput[ServiceCounter], useDelay ? delaySec : 0,
 			preserveDelay ? OBS_OUTPUT_DELAY_PRESERVE : 0);
 
-	obs_output_set_reconnect_settings(streamOutput, maxRetries,
+	obs_output_set_reconnect_settings(streamOutput[ServiceCounter], maxRetries,
 			retryDelay);
 
-	if (obs_output_start(streamOutput)) {
+	if (obs_output_start(streamOutput[ServiceCounter])) {
 		return true;
 	}
 
@@ -1524,7 +1540,7 @@ bool AdvancedOutput::StartRecording()
 		if (!ffmpegOutput) {
 			UpdateRecordingSettings();
 		}
-	} else if (!obs_output_active(streamOutput)) {
+	} else if (!obs_output_active(streamOutput[ServiceCounter])) {
 		UpdateStreamSettings();
 	}
 
@@ -1719,9 +1735,9 @@ bool AdvancedOutput::StartReplayBuffer()
 void AdvancedOutput::StopStreaming(bool force)
 {
 	if (force)
-		obs_output_force_stop(streamOutput);
+		obs_output_force_stop(streamOutput[ServiceCounter]);
 	else
-		obs_output_stop(streamOutput);
+		obs_output_stop(streamOutput[ServiceCounter]);
 }
 
 void AdvancedOutput::StopRecording(bool force)
@@ -1742,7 +1758,7 @@ void AdvancedOutput::StopReplayBuffer(bool force)
 
 bool AdvancedOutput::StreamingActive() const
 {
-	return obs_output_active(streamOutput);
+	return obs_output_active(streamOutput[ServiceCounter]);
 }
 
 bool AdvancedOutput::RecordingActive() const
