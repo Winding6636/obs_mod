@@ -837,12 +837,14 @@ retryScene:
 		opt_starting_scene.clear();
 
 	if (opt_start_streaming) {
+		blog(LOG_INFO, "Starting stream due to command line parameter");
 		QMetaObject::invokeMethod(this, "StartStreaming",
 				Qt::QueuedConnection);
 		opt_start_streaming = false;
 	}
 
 	if (opt_start_recording) {
+		blog(LOG_INFO, "Starting recording due to command line parameter");
 		QMetaObject::invokeMethod(this, "StartRecording",
 				Qt::QueuedConnection);
 		opt_start_recording = false;
@@ -1360,7 +1362,7 @@ void OBSBasic::OBSInit()
 	}
 
 	/* load audio monitoring */
-#if defined(_WIN32) || defined(__APPLE__)
+#if defined(_WIN32) || defined(__APPLE__) || HAVE_PULSEAUDIO
 	const char *device_name = config_get_string(basicConfig, "Audio",
 			"MonitoringDeviceName");
 	const char *device_id = config_get_string(basicConfig, "Audio",
@@ -2976,7 +2978,8 @@ int OBSBasic::ResetVideo()
 		VIDEO_CS_601 : VIDEO_CS_709;
 	ovi.range          = astrcmpi(colorRange, "Full") == 0 ?
 		VIDEO_RANGE_FULL : VIDEO_RANGE_PARTIAL;
-	ovi.adapter        = 0;
+	ovi.adapter        = config_get_uint(App()->GlobalConfig(),
+			"Video", "AdapterIdx");
 	ovi.gpu_conversion = true;
 	ovi.scale_type     = GetScaleType(basicConfig);
 
@@ -5954,7 +5957,12 @@ void OBSBasic::on_actionCopySource_triggered()
 	copyVisible = obs_sceneitem_visible(item);
 
 	ui->actionPasteRef->setEnabled(true);
-	ui->actionPasteDup->setEnabled(true);
+
+	uint32_t output_flags = obs_source_get_output_flags(source);
+	if ((output_flags & OBS_SOURCE_DO_NOT_DUPLICATE) == 0)
+		ui->actionPasteDup->setEnabled(true);
+	else
+		ui->actionPasteDup->setEnabled(false);
 }
 
 void OBSBasic::on_actionPasteRef_triggered()
