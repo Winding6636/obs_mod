@@ -520,6 +520,9 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->bindToIP,             COMBO_CHANGED,  ADV_CHANGED);
 	HookWidget(ui->enableNewSocketLoop,  CHECK_CHANGED,  ADV_CHANGED);
 	HookWidget(ui->enableLowLatencyMode, CHECK_CHANGED,  ADV_CHANGED);
+	ui->streamType->setVisible(false);
+	ui->streamType->setCurrentIndex(1);
+	ui->label_21->setVisible(false);
 
 #if !defined(_WIN32) && !defined(__APPLE__) && !HAVE_PULSEAUDIO
 	delete ui->enableAutoUpdates;
@@ -682,6 +685,10 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 			this, SLOT(SimpleRecordingEncoderChanged()));
 	connect(ui->simpleOutStrEncoder, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(SimpleStreamingEncoderChanged()));
+	connect(ui->simpleOutStrEncoder_3, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(SimpleStreamingEncoderChanged_2()));
+	connect(ui->simpleOutStrEncoder_4, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(SimpleStreamingEncoderChanged_3()));
 	connect(ui->simpleOutStrEncoder, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(SimpleRecordingEncoderChanged()));
 	connect(ui->simpleOutRecEncoder, SIGNAL(currentIndexChanged(int)),
@@ -1144,7 +1151,8 @@ void OBSBasicSettings::LoadStream1Settings()
 	for(int i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
 	{
 
-		const char *type = obs_service_get_type(service[i]);
+//		const char *type = obs_service_get_type(service[i]);
+		const char type[] = "rtmp_custom";//"rtmp_common"
 		obs_data_t *settings = obs_service_get_settings(service[i]);
 		delete streamProperties[i];
 		streamProperties[i] = new OBSPropertiesView(settings, type,
@@ -1452,26 +1460,60 @@ void OBSBasicSettings::LoadSimpleOutputSettings()
 			"FileNameWithoutSpace");
 	const char *format = config_get_string(main->Config(), "SimpleOutput",
 			"RecFormat");
-	int videoBitrate = config_get_uint(main->Config(), "SimpleOutput",
-			"VBitrate");
-	const char *streamEnc = config_get_string(main->Config(), "SimpleOutput",
-			"StreamEncoder");
-	int audioBitrate = config_get_uint(main->Config(), "SimpleOutput",
-			"ABitrate");
-	bool advanced = config_get_bool(main->Config(), "SimpleOutput",
-			"UseAdvanced");
-	bool enforceBitrate = config_get_bool(main->Config(), "SimpleOutput",
-			"EnforceBitrate");
-	const char *preset = config_get_string(main->Config(), "SimpleOutput",
-			"Preset");
-	const char *qsvPreset = config_get_string(main->Config(), "SimpleOutput",
-			"QSVPreset");
-	const char *nvPreset = config_get_string(main->Config(), "SimpleOutput",
-			"NVENCPreset");
-	const char* amdPreset = config_get_string(main->Config(), "SimpleOutput",
-			"AMDPreset");
-	const char *custom = config_get_string(main->Config(), "SimpleOutput",
-			"x264Settings");
+
+
+	int videoBitrate[NUMBER_OF_STREAM_SERVERS];
+	const char *streamEnc[NUMBER_OF_STREAM_SERVERS];
+	int audioBitrate[NUMBER_OF_STREAM_SERVERS];
+	bool advanced[NUMBER_OF_STREAM_SERVERS];
+	bool enforceBitrate[NUMBER_OF_STREAM_SERVERS];
+	const char *preset[NUMBER_OF_STREAM_SERVERS];
+	const char *qsvPreset[NUMBER_OF_STREAM_SERVERS];
+	const char *nvPreset[NUMBER_OF_STREAM_SERVERS];
+	const char* amdPreset[NUMBER_OF_STREAM_SERVERS];
+	const char *custom[NUMBER_OF_STREAM_SERVERS];
+
+	for (int i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
+	{
+		char id[20];
+
+		sprintf(id,"VBitrate_%d",i);
+		videoBitrate[i] = config_get_uint(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"StreamEncoder_%d",i);
+		streamEnc[i]= config_get_string(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"ABitrate_%d",i);
+		audioBitrate[i] = config_get_uint(main->Config(), "SimpleOutput", id);
+		audioBitrate[i] = FindClosestAvailableAACBitrate(audioBitrate[i]);
+
+		sprintf(id,"UseAdvanced_%d",i);
+		advanced[i] = config_get_bool(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"EnforceBitrate_%d",i);
+		enforceBitrate[i]= config_get_bool(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"Preset_%d",i);
+		preset[i] = config_get_string(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"QSVPreset_%d",i);
+		qsvPreset[i] = config_get_string(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"NVENCPreset_%d",i);
+		nvPreset[i] = config_get_string(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"AMDPreset_%d",i);
+		amdPreset[i]= config_get_string(main->Config(), "SimpleOutput", id);
+
+		sprintf(id,"x264Settings_%d",i);
+		custom[i] = config_get_string(main->Config(), "SimpleOutput", id);
+
+
+		curPreset[i] = preset[i];
+		curQSVPreset[i] = qsvPreset[i];
+		curNVENCPreset[i] = nvPreset[i];
+		curAMDPreset[i] = amdPreset[i];
+	}
 	const char *recQual = config_get_string(main->Config(), "SimpleOutput",
 			"RecQuality");
 	const char *recEnc = config_get_string(main->Config(), "SimpleOutput",
@@ -1485,34 +1527,52 @@ void OBSBasicSettings::LoadSimpleOutputSettings()
 	int rbSize = config_get_int(main->Config(), "SimpleOutput",
 			"RecRBSize");
 
-	curPreset = preset;
-	curQSVPreset = qsvPreset;
-	curNVENCPreset = nvPreset;
-	curAMDPreset = amdPreset;
 
-	audioBitrate = FindClosestAvailableAACBitrate(audioBitrate);
+
 
 	ui->simpleOutputPath->setText(path);
 	ui->simpleNoSpace->setChecked(noSpace);
-	ui->simpleOutputVBitrate->setValue(videoBitrate);
+	ui->simpleOutputVBitrate->setValue(videoBitrate[0]);
+	ui->simpleOutputVBitrate_3->setValue(videoBitrate[1]);
+	ui->simpleOutputVBitrate_4->setValue(videoBitrate[2]);
 
 	int idx = ui->simpleOutRecFormat->findText(format);
 	ui->simpleOutRecFormat->setCurrentIndex(idx);
 
 	SetComboByName(ui->simpleOutputABitrate,
-			std::to_string(audioBitrate).c_str());
+			std::to_string(audioBitrate[0]).c_str());
+	SetComboByName(ui->simpleOutputABitrate_3,
+			std::to_string(audioBitrate[1]).c_str());
+	SetComboByName(ui->simpleOutputABitrate_4,
+			std::to_string(audioBitrate[2]).c_str());
 
-	ui->simpleOutAdvanced->setChecked(advanced);
-	ui->simpleOutEnforce->setChecked(enforceBitrate);
-	ui->simpleOutCustom->setText(custom);
+	ui->simpleOutAdvanced->setChecked(advanced[0]);
+	ui->simpleOutAdvanced_3->setChecked(advanced[1]);
+	ui->simpleOutAdvanced_4->setChecked(advanced[2]);
+
+	ui->simpleOutEnforce->setChecked(enforceBitrate[0]);
+	ui->simpleOutEnforce_3->setChecked(enforceBitrate[1]);
+	ui->simpleOutEnforce_4->setChecked(enforceBitrate[2]);
+
+	ui->simpleOutCustom->setText(custom[0]);
+	ui->simpleOutCustom_3->setText(custom[1]);
+	ui->simpleOutCustom_4->setText(custom[2]);
 
 	idx = ui->simpleOutRecQuality->findData(QString(recQual));
 	if (idx == -1) idx = 0;
 	ui->simpleOutRecQuality->setCurrentIndex(idx);
 
-	idx = ui->simpleOutStrEncoder->findData(QString(streamEnc));
-	if (idx == -1) idx = 0;
-	ui->simpleOutStrEncoder->setCurrentIndex(idx);
+	int encoder_ids[NUMBER_OF_STREAM_SERVERS] = {0} ;
+	encoder_ids[0] = ui->simpleOutStrEncoder->findData(QString(streamEnc[0]));
+	encoder_ids[1] = ui->simpleOutStrEncoder_3->findData(QString(streamEnc[1]));
+	encoder_ids[2] = ui->simpleOutStrEncoder_4->findData(QString(streamEnc[2]));
+
+	if (encoder_ids[0] == -1) encoder_ids[0] = 0;
+	ui->simpleOutStrEncoder->setCurrentIndex(encoder_ids[0]);
+	if (encoder_ids[1] == -1) encoder_ids[1] = 0;
+	ui->simpleOutStrEncoder_3->setCurrentIndex(encoder_ids[0]);
+	if (encoder_ids[2] == -1) encoder_ids[2] = 0;
+	ui->simpleOutStrEncoder_4->setCurrentIndex(encoder_ids[0]);
 
 	idx = ui->simpleOutRecEncoder->findData(QString(recEnc));
 	if (idx == -1) idx = 0;
@@ -1525,6 +1585,8 @@ void OBSBasicSettings::LoadSimpleOutputSettings()
 	ui->simpleRBMegsMax->setValue(rbSize);
 
 	SimpleStreamingEncoderChanged();
+	SimpleStreamingEncoderChanged_2();
+	SimpleStreamingEncoderChanged_3();
 }
 
 void OBSBasicSettings::LoadAdvOutputStreamingSettings()
@@ -4100,13 +4162,13 @@ void OBSBasicSettings::SimpleStreamingEncoderChanged()
 		ui->simpleOutPreset->addItem("quality", "quality");
 
 		defaultPreset = "balanced";
-		preset = curQSVPreset;
+		preset = curQSVPreset[0];
 
 	} else if (encoder == SIMPLE_ENCODER_NVENC) {
 		obs_properties_t *props =
 			obs_get_encoder_properties("ffmpeg_nvenc");
 
-		obs_property_t *p = obs_properties_get(props, "preset");
+		obs_property_t *p = obs_properties_get(props, "preset_0");
 		size_t num = obs_property_list_item_count(p);
 		for (size_t i = 0; i < num; i++) {
 			const char *name = obs_property_list_item_name(p, i);
@@ -4126,7 +4188,7 @@ void OBSBasicSettings::SimpleStreamingEncoderChanged()
 		obs_properties_destroy(props);
 
 		defaultPreset = "default";
-		preset = curNVENCPreset;
+		preset = curNVENCPreset[0];
 
 	} else if (encoder == SIMPLE_ENCODER_AMD) {
 		ui->simpleOutPreset->addItem("Speed", "speed");
@@ -4134,7 +4196,7 @@ void OBSBasicSettings::SimpleStreamingEncoderChanged()
 		ui->simpleOutPreset->addItem("Quality", "quality");
 
 		defaultPreset = "balanced";
-		preset = curAMDPreset;
+		preset = curAMDPreset[0];
 	} else {
 		ui->simpleOutPreset->addItem("ultrafast", "ultrafast");
 		ui->simpleOutPreset->addItem("superfast", "superfast");
@@ -4146,7 +4208,7 @@ void OBSBasicSettings::SimpleStreamingEncoderChanged()
 		ui->simpleOutPreset->addItem("slower", "slower");
 
 		defaultPreset = "veryfast";
-		preset = curPreset;
+		preset = curPreset[0];
 	}
 
 	int idx = ui->simpleOutPreset->findData(QVariant(preset));
@@ -4156,6 +4218,145 @@ void OBSBasicSettings::SimpleStreamingEncoderChanged()
 	ui->simpleOutPreset->setCurrentIndex(idx);
 }
 
+void OBSBasicSettings::SimpleStreamingEncoderChanged_2()
+{
+	QString encoder = ui->simpleOutStrEncoder_3->currentData().toString();
+	QString preset;
+	const char *defaultPreset = nullptr;
+
+	ui->simpleOutPreset_3->clear();
+
+	if (encoder == SIMPLE_ENCODER_QSV) {
+		ui->simpleOutPreset_3->addItem("speed", "speed");
+		ui->simpleOutPreset_3->addItem("balanced", "balanced");
+		ui->simpleOutPreset_3->addItem("quality", "quality");
+
+		defaultPreset = "balanced";
+		preset = curQSVPreset[1];
+
+	} else if (encoder == SIMPLE_ENCODER_NVENC) {
+		obs_properties_t *props =
+			obs_get_encoder_properties("ffmpeg_nvenc");
+
+		obs_property_t *p = obs_properties_get(props, "preset_1");
+		size_t num = obs_property_list_item_count(p);
+		for (size_t i = 0; i < num; i++) {
+			const char *name = obs_property_list_item_name(p, i);
+			const char *val  = obs_property_list_item_string(p, i);
+
+			/* bluray is for ideal bluray disc recording settings,
+			 * not streaming */
+			if (strcmp(val, "bd") == 0)
+				continue;
+			/* lossless should of course not be used to stream */
+			if (astrcmp_n(val, "lossless", 8) == 0)
+				continue;
+
+			ui->simpleOutPreset_3->addItem(QT_UTF8(name), val);
+		}
+
+		obs_properties_destroy(props);
+
+		defaultPreset = "default";
+		preset = curNVENCPreset[1];
+
+	} else if (encoder == SIMPLE_ENCODER_AMD) {
+		ui->simpleOutPreset_3->addItem("Speed", "speed");
+		ui->simpleOutPreset_3->addItem("Balanced", "balanced");
+		ui->simpleOutPreset_3->addItem("Quality", "quality");
+
+		defaultPreset = "balanced";
+		preset = curAMDPreset[1];
+	} else {
+		ui->simpleOutPreset_3->addItem("ultrafast", "ultrafast");
+		ui->simpleOutPreset_3->addItem("superfast", "superfast");
+		ui->simpleOutPreset_3->addItem("veryfast", "veryfast");
+		ui->simpleOutPreset_3->addItem("faster", "faster");
+		ui->simpleOutPreset_3->addItem("fast", "fast");
+		ui->simpleOutPreset_3->addItem("medium", "medium");
+		ui->simpleOutPreset_3->addItem("slow", "slow");
+		ui->simpleOutPreset_3->addItem("slower", "slower");
+
+		defaultPreset = "veryfast";
+		preset = curPreset[1];
+	}
+
+	int idx = ui->simpleOutPreset_3->findData(QVariant(preset));
+	if (idx == -1)
+		idx = ui->simpleOutPreset_3->findData(QVariant(defaultPreset));
+
+	ui->simpleOutPreset_3->setCurrentIndex(idx);
+}
+
+void OBSBasicSettings::SimpleStreamingEncoderChanged_3()
+{
+	QString encoder = ui->simpleOutStrEncoder_4->currentData().toString();
+	QString preset;
+	const char *defaultPreset = nullptr;
+
+	ui->simpleOutPreset_4->clear();
+
+	if (encoder == SIMPLE_ENCODER_QSV) {
+		ui->simpleOutPreset_4->addItem("speed", "speed");
+		ui->simpleOutPreset_4->addItem("balanced", "balanced");
+		ui->simpleOutPreset_4->addItem("quality", "quality");
+
+		defaultPreset = "balanced";
+		preset = curQSVPreset[2];
+
+	} else if (encoder == SIMPLE_ENCODER_NVENC) {
+		obs_properties_t *props =
+			obs_get_encoder_properties("ffmpeg_nvenc");
+
+		obs_property_t *p = obs_properties_get(props, "preset_2");
+		size_t num = obs_property_list_item_count(p);
+		for (size_t i = 0; i < num; i++) {
+			const char *name = obs_property_list_item_name(p, i);
+			const char *val  = obs_property_list_item_string(p, i);
+
+			/* bluray is for ideal bluray disc recording settings,
+			 * not streaming */
+			if (strcmp(val, "bd") == 0)
+				continue;
+			/* lossless should of course not be used to stream */
+			if (astrcmp_n(val, "lossless", 8) == 0)
+				continue;
+
+			ui->simpleOutPreset_4->addItem(QT_UTF8(name), val);
+		}
+
+		obs_properties_destroy(props);
+
+		defaultPreset = "default";
+		preset = curNVENCPreset[2];
+
+	} else if (encoder == SIMPLE_ENCODER_AMD) {
+		ui->simpleOutPreset_4->addItem("Speed", "speed");
+		ui->simpleOutPreset_4->addItem("Balanced", "balanced");
+		ui->simpleOutPreset_4->addItem("Quality", "quality");
+
+		defaultPreset = "balanced";
+		preset = curAMDPreset[2];
+	} else {
+		ui->simpleOutPreset_4->addItem("ultrafast", "ultrafast");
+		ui->simpleOutPreset_4->addItem("superfast", "superfast");
+		ui->simpleOutPreset_4->addItem("veryfast", "veryfast");
+		ui->simpleOutPreset_4->addItem("faster", "faster");
+		ui->simpleOutPreset_4->addItem("fast", "fast");
+		ui->simpleOutPreset_4->addItem("medium", "medium");
+		ui->simpleOutPreset_4->addItem("slow", "slow");
+		ui->simpleOutPreset_4->addItem("slower", "slower");
+
+		defaultPreset = "veryfast";
+		preset = curPreset[2];
+	}
+
+	int idx = ui->simpleOutPreset_4->findData(QVariant(preset));
+	if (idx == -1)
+		idx = ui->simpleOutPreset_4->findData(QVariant(defaultPreset));
+
+	ui->simpleOutPreset_4->setCurrentIndex(idx);
+}
 #define ESTIMATE_STR "Basic.Settings.Output.ReplayBuffer.Estimate"
 #define ESTIMATE_UNKNOWN_STR \
 	"Basic.Settings.Output.ReplayBuffer.EstimateUnknown"

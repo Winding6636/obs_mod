@@ -14,7 +14,7 @@ struct BasicOutputHandler {
 	bool                   replayBufferActive = false;
 	OBSBasic               *main;
 
-	std::string            outputType;
+	std::string            outputType[3];
 
 	OBSSignal              startRecording;
 	OBSSignal              stopRecording;
@@ -31,7 +31,7 @@ struct BasicOutputHandler {
 
 	virtual ~BasicOutputHandler() {};
 
-	virtual bool StartStreaming(obs_service_t *service) = 0;
+	virtual bool StartStreaming(obs_service_t *service,int id) = 0;
 	virtual bool StartRecording() = 0;
 	virtual bool StartReplayBuffer() {return false;}
 	virtual void StopStreaming(bool force = false) = 0;

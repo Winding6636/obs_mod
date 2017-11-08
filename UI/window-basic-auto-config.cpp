@@ -253,6 +253,8 @@ AutoConfigStreamPage::AutoConfigStreamPage(QWidget *parent)
 			this, SLOT(UpdateCompleted()));
 	connect(ui->regionOther, SIGNAL(toggled(bool)),
 			this, SLOT(UpdateCompleted()));
+
+	ui->serverStackedWidget->setCurrentIndex(1);
 }
 
 AutoConfigStreamPage::~AutoConfigStreamPage()
@@ -642,7 +644,7 @@ AutoConfig::AutoConfig(QWidget *parent)
 	if (!key.empty())
 		streamPage->ui->key->setText(key.c_str());
 
-	int bitrate = config_get_int(main->Config(), "SimpleOutput", "VBitrate");
+	int bitrate = config_get_int(main->Config(), "SimpleOutput", "VBitrate_0");
 	streamPage->ui->bitrate->setValue(bitrate);
 	streamPage->ServiceChanged();
 
@@ -782,7 +784,11 @@ void AutoConfig::SaveStreamSettings()
 	/* ---------------------------------- */
 	/* save stream settings               */
 
-	config_set_int(main->Config(), "SimpleOutput", "VBitrate",
+	config_set_int(main->Config(), "SimpleOutput", "VBitrate_0",
+			idealBitrate);
+	config_set_int(main->Config(), "SimpleOutput", "VBitrate_1",
+			idealBitrate);
+	config_set_int(main->Config(), "SimpleOutput", "VBitrate_2",
 			idealBitrate);
 	config_set_string(main->Config(), "SimpleOutput", "StreamEncoder",
 			GetEncoderId(streamingEncoder));

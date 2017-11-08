@@ -374,6 +374,32 @@ public slots:
 	/*todo add this slot to button2/button3*/
 	void StreamingStop(int errorcode, QString last_error);
 
+#pragma region streamer2
+
+
+	void StreamDelayStarting2(int sec);
+	void StreamDelayStopping2(int sec);
+	/*todo add this slot to button2/button3*/
+	void StreamingStart2();
+	/*todo add this slot to button2/button3*/
+	void StreamStopping2();
+	/*todo add this slot to button2/button3*/
+	void StreamingStop2(int errorcode, QString last_error);
+
+
+#pragma endregion
+
+#pragma region Streamer3
+	void StreamDelayStarting3(int sec);
+	void StreamDelayStopping3(int sec);
+	/*todo add this slot to button2/button3*/
+	void StreamingStart3();
+	/*todo add this slot to button2/button3*/
+	void StreamStopping3();
+	/*todo add this slot to button2/button3*/
+	void StreamingStop3(int errorcode, QString last_error);
+#pragma endregion
+
 	void StartRecording(int id);
 	void StopRecording(int id);
 

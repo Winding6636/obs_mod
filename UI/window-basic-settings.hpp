@@ -109,10 +109,10 @@ private:
 	QPointer<QLabel> advOutRecWarning;
 	QPointer<QLabel> simpleOutRecWarning;
 
-	QString curPreset;
-	QString curQSVPreset;
-	QString curNVENCPreset;
-	QString curAMDPreset;
+	QString curPreset[NUMBER_OF_STREAM_SERVERS];
+	QString curQSVPreset[NUMBER_OF_STREAM_SERVERS];
+	QString curNVENCPreset[NUMBER_OF_STREAM_SERVERS];
+	QString curAMDPreset[NUMBER_OF_STREAM_SERVERS];
 
 	QString curAdvStreamEncoder[NUMBER_OF_STREAM_SERVERS];
 	QString curAdvRecordEncoder;
@@ -298,6 +298,8 @@ private slots:
 	void SimpleReplayBufferChanged();
 
 	void SimpleStreamingEncoderChanged();
+	void SimpleStreamingEncoderChanged_2();
+	void SimpleStreamingEncoderChanged_3();
 
     void on_advOutEncoder_2_currentIndexChanged(int index);
 

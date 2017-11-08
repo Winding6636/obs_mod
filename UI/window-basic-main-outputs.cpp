@@ -59,6 +59,113 @@ static void OBSStopStreaming(void *data, calldata_t *params)
 			"StreamingStop", Q_ARG(int, code), Q_ARG(QString, arg_last_error));
 }
 
+
+static void OBSStreamStarting2(void *data, calldata_t *params)
+{
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	obs_output_t *obj = (obs_output_t*)calldata_ptr(params, "output");
+
+	int sec = (int)obs_output_get_active_delay(obj);
+	if (sec == 0)
+		return;
+
+	output->delayActive = true;
+	QMetaObject::invokeMethod(output->main,
+		"StreamDelayStarting2", Q_ARG(int, sec));
+}
+
+static void OBSStreamStopping2(void *data, calldata_t *params)
+{
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	obs_output_t *obj = (obs_output_t*)calldata_ptr(params, "output");
+
+	int sec = (int)obs_output_get_active_delay(obj);
+	if (sec == 0)
+		QMetaObject::invokeMethod(output->main, "StreamStopping2");
+	else
+		QMetaObject::invokeMethod(output->main,
+			"StreamDelayStopping2", Q_ARG(int, sec));
+}
+
+static void OBSStartStreaming2(void *data, calldata_t *params)
+{
+	printf("**********************OBSStartStreaming********************* \n");
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	output->streamingActive = true;
+	QMetaObject::invokeMethod(output->main, "StreamingStart2");
+
+	UNUSED_PARAMETER(params);
+}
+
+static void OBSStopStreaming2(void *data, calldata_t *params)
+{
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	int code = (int)calldata_int(params, "code");
+	const char *last_error = calldata_string(params, "last_error");
+
+	QString arg_last_error = QString::fromUtf8(last_error);
+
+	output->streamingActive = false;
+	output->delayActive = false;
+	QMetaObject::invokeMethod(output->main,
+		"StreamingStop2", Q_ARG(int, code), Q_ARG(QString, arg_last_error));
+}
+
+
+
+static void OBSStreamStarting3(void *data, calldata_t *params)
+{
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	obs_output_t *obj = (obs_output_t*)calldata_ptr(params, "output");
+
+	int sec = (int)obs_output_get_active_delay(obj);
+	if (sec == 0)
+		return;
+
+	output->delayActive = true;
+	QMetaObject::invokeMethod(output->main,
+		"StreamDelayStarting3", Q_ARG(int, sec));
+}
+
+static void OBSStreamStopping3(void *data, calldata_t *params)
+{
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	obs_output_t *obj = (obs_output_t*)calldata_ptr(params, "output");
+
+	int sec = (int)obs_output_get_active_delay(obj);
+	if (sec == 0)
+		QMetaObject::invokeMethod(output->main, "StreamStopping3");
+	else
+		QMetaObject::invokeMethod(output->main,
+			"StreamDelayStopping3", Q_ARG(int, sec));
+}
+
+static void OBSStartStreaming3(void *data, calldata_t *params)
+{
+	printf("**********************OBSStartStreaming********************* \n");
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	output->streamingActive = true;
+	QMetaObject::invokeMethod(output->main, "StreamingStart3");
+
+	UNUSED_PARAMETER(params);
+}
+
+static void OBSStopStreaming3(void *data, calldata_t *params)
+{
+	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
+	int code = (int)calldata_int(params, "code");
+	const char *last_error = calldata_string(params, "last_error");
+
+	QString arg_last_error = QString::fromUtf8(last_error);
+
+	output->streamingActive = false;
+	output->delayActive = false;
+	QMetaObject::invokeMethod(output->main,
+		"StreamingStop3", Q_ARG(int, code), Q_ARG(QString, arg_last_error));
+}
+
+
+
 static void OBSStartRecording(void *data, calldata_t *params)
 {
 	BasicOutputHandler *output = static_cast<BasicOutputHandler*>(data);
@@ -68,6 +175,7 @@ static void OBSStartRecording(void *data, calldata_t *params)
 
 	UNUSED_PARAMETER(params);
 }
+
 
 static void OBSStopRecording(void *data, calldata_t *params)
 {
@@ -218,7 +326,7 @@ struct SimpleOutput : BasicOutputHandler {
 	void UpdateRecording();
 	bool ConfigureRecording(bool useReplayBuffer);
 
-	virtual bool StartStreaming(obs_service_t *service) override;
+	virtual bool StartStreaming(obs_service_t *service, int id) override;
 	virtual bool StartRecording() override;
 	virtual bool StartReplayBuffer() override;
 	virtual void StopStreaming(bool force) override;
@@ -673,7 +781,7 @@ const char *FindAudioEncoderFromCodec(const char *type)
 	return nullptr;
 }
 
-bool SimpleOutput::StartStreaming(obs_service_t *service)
+bool SimpleOutput::StartStreaming(obs_service_t *service,int id)
 {
 	printf("*******************SimpleOutput::StartStreaming******************* \n");
 	if (!Active())
@@ -686,7 +794,7 @@ bool SimpleOutput::StartStreaming(obs_service_t *service)
 		type = "rtmp_output";
 
 	/* XXX: this is messy and disgusting and should be refactored */
-	if (outputType != type) {
+	if (outputType[id] != type) {
 		streamDelayStarting.Disconnect();
 		streamStopping.Disconnect();
 		startStreaming.Disconnect();
@@ -694,27 +802,62 @@ bool SimpleOutput::StartStreaming(obs_service_t *service)
 
 		streamOutput = obs_output_create(type, "simple_stream",
 				nullptr, nullptr);
-		if (!streamOutput) {
-			blog(LOG_WARNING, "Creation of stream output type '%s' "
-					"failed!", type);
-			return false;
-		}
+				if (!streamOutput) {
+					blog(LOG_WARNING, "Creation of stream output type '%s' "
+							"failed!", type);
+					return false;
+				}
 		obs_output_release(streamOutput);
 
-		streamDelayStarting.Connect(
+		switch (id)
+		{
+		case 0 :
+			streamDelayStarting.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"starting", OBSStreamStarting, this);
-		streamStopping.Connect(
+			streamStopping.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"stopping", OBSStreamStopping, this);
 
-		startStreaming.Connect(
+			startStreaming.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"start", OBSStartStreaming, this);
-		stopStreaming.Connect(
+			stopStreaming.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"stop", OBSStopStreaming, this);
+			break;
+		case 1:
+			streamDelayStarting.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"starting", OBSStreamStarting2, this);
+			streamStopping.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stopping", OBSStreamStopping2, this);
 
+			startStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"start", OBSStartStreaming2, this);
+			stopStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stop", OBSStopStreaming2, this);
+			break;
+		case 2:
+			streamDelayStarting.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"starting", OBSStreamStarting3, this);
+			streamStopping.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stopping", OBSStreamStopping3, this);
+
+			startStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"start", OBSStartStreaming3, this);
+			stopStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stop", OBSStopStreaming3, this);
+			break;
+		}
+		
 		const char *codec =
 			obs_output_get_supported_audio_codecs(streamOutput);
 		if (!codec) {
@@ -739,7 +882,7 @@ bool SimpleOutput::StartStreaming(obs_service_t *service)
 			obs_data_release(settings);
 		}
 
-		outputType = type;
+		outputType[id] = type;
 	}
 
 	obs_output_set_video_encoder(streamOutput, h264Streaming);
@@ -1047,7 +1190,7 @@ struct AdvancedOutput : BasicOutputHandler {
 	void SetupOutputs();
 	int GetAudioBitrate(size_t i) const;
 
-	virtual bool StartStreaming(obs_service_t *service) override;
+	virtual bool StartStreaming(obs_service_t *service,int id) override;
 	virtual bool StartRecording() override;
 	virtual void StopStreaming(bool force) override;
 	virtual void StopRecording(bool force) override;
@@ -1425,7 +1568,7 @@ int AdvancedOutput::GetAudioBitrate(size_t i) const
 	return FindClosestAvailableAACBitrate(bitrate);
 }
 
-bool AdvancedOutput::StartStreaming(obs_service_t *service)
+bool AdvancedOutput::StartStreaming(obs_service_t *service,int id)
 {
 	printf("******************AdvancedOutput::StartStreaming()********************\n");
 	if (!useStreamEncoder ||
@@ -1448,7 +1591,7 @@ bool AdvancedOutput::StartStreaming(obs_service_t *service)
 		type = "rtmp_output";
 
 	/* XXX: this is messy and disgusting and should be refactored */
-	if (outputType != type) {
+	if (outputType[id] != type) {
 		streamDelayStarting.Disconnect();
 		streamStopping.Disconnect();
 		startStreaming.Disconnect();
@@ -1456,26 +1599,62 @@ bool AdvancedOutput::StartStreaming(obs_service_t *service)
 
 		streamOutput = obs_output_create(type, "adv_stream",
 				nullptr, nullptr);
-		if (!streamOutput) {
-			blog(LOG_WARNING, "Creation of stream output type '%s' "
-					"failed!", type);
-			return false;
-		}
+				if (!streamOutput) {
+					blog(LOG_WARNING, "Creation of stream output type '%s' "
+							"failed!", type);
+					return false;
+				}
 		obs_output_release(streamOutput);
 
-		streamDelayStarting.Connect(
+		switch (id)
+		{
+		case 0:
+			streamDelayStarting.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"starting", OBSStreamStarting, this);
-		streamStopping.Connect(
+			streamStopping.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"stopping", OBSStreamStopping, this);
 
-		startStreaming.Connect(
+			startStreaming.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"start", OBSStartStreaming, this);
-		stopStreaming.Connect(
+			stopStreaming.Connect(
 				obs_output_get_signal_handler(streamOutput),
 				"stop", OBSStopStreaming, this);
+			break;
+		case 1:
+			streamDelayStarting.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"starting", OBSStreamStarting2, this);
+			streamStopping.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stopping", OBSStreamStopping2, this);
+
+			startStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"start", OBSStartStreaming2, this);
+			stopStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stop", OBSStopStreaming2, this);
+			break;
+		case 2:
+			streamDelayStarting.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"starting", OBSStreamStarting3, this);
+			streamStopping.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stopping", OBSStreamStopping3, this);
+
+			startStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"start", OBSStartStreaming3, this);
+			stopStreaming.Connect(
+				obs_output_get_signal_handler(streamOutput),
+				"stop", OBSStopStreaming3, this);
+			break;
+		}
+
 
 		const char *codec =
 			obs_output_get_supported_audio_codecs(streamOutput);
@@ -1503,7 +1682,7 @@ bool AdvancedOutput::StartStreaming(obs_service_t *service)
 			obs_data_release(settings);
 		}
 
-		outputType = type;
+		outputType[id] = type;
 	}
 
 	obs_output_set_video_encoder(streamOutput, h264Streaming);

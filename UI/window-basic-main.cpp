@@ -1010,7 +1010,11 @@ bool OBSBasic::InitBasicConfigDefaults()
 			GetDefaultVideoSavePath().c_str());
 	config_set_default_string(basicConfig, "SimpleOutput", "RecFormat",
 			"flv");
-	config_set_default_uint  (basicConfig, "SimpleOutput", "VBitrate",
+	config_set_default_uint  (basicConfig, "SimpleOutput", "VBitrate_0",
+			2500);
+	config_set_default_uint  (basicConfig, "SimpleOutput", "VBitrate_1",
+			2500);
+	config_set_default_uint  (basicConfig, "SimpleOutput", "VBitrate_2",
 			2500);
 	config_set_default_string(basicConfig, "SimpleOutput", "StreamEncoder_0",
 			SIMPLE_ENCODER_X264);
@@ -2979,7 +2983,7 @@ int OBSBasic::ResetVideo()
 	ovi.range          = astrcmpi(colorRange, "Full") == 0 ?
 		VIDEO_RANGE_FULL : VIDEO_RANGE_PARTIAL;
 	ovi.adapter        = config_get_uint(App()->GlobalConfig(),
-			"Video", "AdapterIdx");
+		"Video", "AdapterIdx");
 	ovi.gpu_conversion = true;
 	ovi.scale_type     = GetScaleType(basicConfig);
 
@@ -4276,7 +4280,7 @@ void OBSBasic::StartStreaming(int id)
 
 
 
-	if (!outputHandler[id]->StartStreaming(service[id])) {
+	if (!outputHandler[id]->StartStreaming(service[id],id)) {
 		
 		switch (id)
 		{
@@ -4379,6 +4383,8 @@ inline void OBSBasic::OnDeactivate()
 	}
 }
 
+
+
 void OBSBasic::StopStreaming(int id)
 {
 	SaveProject();
@@ -4426,6 +4432,44 @@ void OBSBasic::ForceStopStreaming(int id)
 	if (replayBufferWhileStreaming && !keepReplayBufferStreamStops)
 		StopReplayBuffer(id);
 }
+
+
+void OBSBasic::StreamStopping()
+{
+	ui->streamButton->setText(QTStr("Basic.Main.StoppingStreaming"));
+
+	if (sysTrayStream)
+		sysTrayStream->setText(ui->streamButton->text());
+
+	streamingStopping = true;
+	if (api)
+		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STOPPING);
+}
+
+void OBSBasic::StreamStopping2()
+{
+	ui->streamButton_2->setText(QTStr("Basic.Main.StoppingStreaming"));
+
+	if (sysTrayStream)
+		sysTrayStream->setText(ui->streamButton_2->text());
+
+	streamingStopping = true;
+	if (api)
+		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STOPPING);
+}
+void OBSBasic::StreamStopping3()
+{
+	ui->streamButton_3->setText(QTStr("Basic.Main.StoppingStreaming"));
+
+	if (sysTrayStream)
+		sysTrayStream->setText(ui->streamButton_3->text());
+
+	streamingStopping = true;
+	if (api)
+		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STOPPING);
+}
+
+
 
 void OBSBasic::StreamDelayStarting(int sec)
 {
@@ -4494,23 +4538,7 @@ void OBSBasic::StreamingStart()
 
 	blog(LOG_INFO, STREAMING_START);
 }
-
-
 /*todo add this slot to button2/button3*/
-
-void OBSBasic::StreamStopping()
-{
-	ui->streamButton->setText(QTStr("Basic.Main.StoppingStreaming"));
-
-	if (sysTrayStream)
-		sysTrayStream->setText(ui->streamButton->text());
-
-	streamingStopping = true;
-	if (api)
-		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STOPPING);
-}
-
-
 void OBSBasic::StreamingStop(int code, QString last_error)
 {
 	const char *errorDescription;
@@ -4539,7 +4567,7 @@ void OBSBasic::StreamingStop(int code, QString last_error)
 
 	case OBS_OUTPUT_DISCONNECTED:
 		/* doesn't happen if output is set to reconnect.  note that
-		 * reconnects are handled in the output, not in the UI */
+		* reconnects are handled in the output, not in the UI */
 		use_last_error = true;
 		errorDescription = Str("Output.ConnectFail.Disconnected");
 	}
@@ -4570,9 +4598,10 @@ void OBSBasic::StreamingStop(int code, QString last_error)
 
 	if (code != OBS_OUTPUT_SUCCESS && isVisible()) {
 		OBSMessageBox::information(this,
-				QTStr("Output.ConnectFail.Title"),
-				QT_UTF8(errorMessage));
-	} else if (code != OBS_OUTPUT_SUCCESS && !isVisible()) {
+			QTStr("Output.ConnectFail.Title"),
+			QT_UTF8(errorMessage));
+	}
+	else if (code != OBS_OUTPUT_SUCCESS && !isVisible()) {
 		SysTrayNotify(QT_UTF8(errorDescription), QSystemTrayIcon::Warning);
 	}
 
@@ -4582,6 +4611,289 @@ void OBSBasic::StreamingStop(int code, QString last_error)
 		startStreamMenu = nullptr;
 	}
 }
+
+
+
+void OBSBasic::StreamDelayStarting2(int sec)
+{
+	ui->streamButton_2->setText(QTStr("Basic.Main.StopStreaming"));
+	ui->streamButton_2->setEnabled(true);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton_2->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	if (!startStreamMenu.isNull())
+		startStreamMenu->deleteLater();
+
+	startStreamMenu = new QMenu();
+	startStreamMenu->addAction(QTStr("Basic.Main.StopStreaming"),
+		this, SLOT(StopStreaming()));
+	startStreamMenu->addAction(QTStr("Basic.Main.ForceStopStreaming"),
+		this, SLOT(ForceStopStreaming()));
+	ui->streamButton_2->setMenu(startStreamMenu);
+
+	ui->statusbar->StreamDelayStarting(sec);
+
+	OnActivate();
+}
+void OBSBasic::StreamDelayStopping2(int sec)
+{
+	ui->streamButton_2->setText(QTStr("Basic.Main.StartStreaming"));
+	ui->streamButton_2->setEnabled(true);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton_2->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	if (!startStreamMenu.isNull())
+		startStreamMenu->deleteLater();
+
+	startStreamMenu = new QMenu();
+	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming"),
+		this, SLOT(StartStreaming()));
+	startStreamMenu->addAction(QTStr("Basic.Main.ForceStopStreaming"),
+		this, SLOT(ForceStopStreaming()));
+	ui->streamButton->setMenu(startStreamMenu);
+
+	ui->statusbar->StreamDelayStopping(sec);
+}
+/*todo add this slot to button2/button3*/
+void OBSBasic::StreamingStart2()
+{
+	ui->streamButton_2->setText(QTStr("Basic.Main.StopStreaming"));
+	ui->streamButton_2->setEnabled(true);
+	ui->statusbar->StreamStarted(outputHandler[0]->streamOutput);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton_2->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	if (api)
+		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STARTED);
+
+	OnActivate();
+
+	blog(LOG_INFO, STREAMING_START);
+}
+/*todo add this slot to button2/button3*/
+void OBSBasic::StreamingStop2(int code, QString last_error)
+{
+	const char *errorDescription;
+	DStr errorMessage;
+	bool use_last_error = false;
+
+	switch (code) {
+	case OBS_OUTPUT_BAD_PATH:
+		errorDescription = Str("Output.ConnectFail.BadPath");
+		break;
+
+	case OBS_OUTPUT_CONNECT_FAILED:
+		use_last_error = true;
+		errorDescription = Str("Output.ConnectFail.ConnectFailed");
+		break;
+
+	case OBS_OUTPUT_INVALID_STREAM:
+		errorDescription = Str("Output.ConnectFail.InvalidStream");
+		break;
+
+	default:
+	case OBS_OUTPUT_ERROR:
+		use_last_error = true;
+		errorDescription = Str("Output.ConnectFail.Error");
+		break;
+
+	case OBS_OUTPUT_DISCONNECTED:
+		/* doesn't happen if output is set to reconnect.  note that
+		* reconnects are handled in the output, not in the UI */
+		use_last_error = true;
+		errorDescription = Str("Output.ConnectFail.Disconnected");
+	}
+
+	if (use_last_error && !last_error.isEmpty())
+		dstr_printf(errorMessage, "%s\n\n%s", errorDescription,
+			QT_TO_UTF8(last_error));
+	else
+		dstr_copy(errorMessage, errorDescription);
+
+	ui->statusbar->StreamStopped();
+
+	ui->streamButton_2->setText(QTStr("Start Streaming Server 2"));
+	ui->streamButton_2->setEnabled(true);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	streamingStopping = false;
+	if (api)
+		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STOPPED);
+
+	OnDeactivate();
+
+	blog(LOG_INFO, STREAMING_STOP);
+
+	if (code != OBS_OUTPUT_SUCCESS && isVisible()) {
+		OBSMessageBox::information(this,
+			QTStr("Output.ConnectFail.Title"),
+			QT_UTF8(errorMessage));
+	}
+	else if (code != OBS_OUTPUT_SUCCESS && !isVisible()) {
+		SysTrayNotify(QT_UTF8(errorDescription), QSystemTrayIcon::Warning);
+	}
+
+	if (!startStreamMenu.isNull()) {
+		ui->streamButton_2->setMenu(nullptr);
+		startStreamMenu->deleteLater();
+		startStreamMenu = nullptr;
+	}
+}
+
+
+void OBSBasic::StreamDelayStarting3(int sec)
+{
+	ui->streamButton_3->setText(QTStr("Basic.Main.StopStreaming"));
+	ui->streamButton_3->setEnabled(true);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton_3->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	if (!startStreamMenu.isNull())
+		startStreamMenu->deleteLater();
+
+	startStreamMenu = new QMenu();
+	startStreamMenu->addAction(QTStr("Basic.Main.StopStreaming"),
+		this, SLOT(StopStreaming()));
+	startStreamMenu->addAction(QTStr("Basic.Main.ForceStopStreaming"),
+		this, SLOT(ForceStopStreaming()));
+	ui->streamButton->setMenu(startStreamMenu);
+
+	ui->statusbar->StreamDelayStarting(sec);
+
+	OnActivate();
+}
+void OBSBasic::StreamDelayStopping3(int sec)
+{
+	ui->streamButton_3->setText(QTStr("Basic.Main.StartStreaming"));
+	ui->streamButton_3->setEnabled(true);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton_3->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	if (!startStreamMenu.isNull())
+		startStreamMenu->deleteLater();
+
+	startStreamMenu = new QMenu();
+	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming"),
+		this, SLOT(StartStreaming()));
+	startStreamMenu->addAction(QTStr("Basic.Main.ForceStopStreaming"),
+		this, SLOT(ForceStopStreaming()));
+	ui->streamButton_3->setMenu(startStreamMenu);
+
+	ui->statusbar->StreamDelayStopping(sec);
+}
+/*todo add this slot to button2/button3*/
+void OBSBasic::StreamingStart3()
+{
+	ui->streamButton_3->setText(QTStr("Basic.Main.StopStreaming"));
+	ui->streamButton_3->setEnabled(true);
+	ui->statusbar->StreamStarted(outputHandler[0]->streamOutput);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton_3->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	if (api)
+		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STARTED);
+
+	OnActivate();
+
+	blog(LOG_INFO, STREAMING_START);
+}
+/*todo add this slot to button2/button3*/
+void OBSBasic::StreamingStop3(int code, QString last_error)
+{
+	const char *errorDescription;
+	DStr errorMessage;
+	bool use_last_error = false;
+
+	switch (code) {
+	case OBS_OUTPUT_BAD_PATH:
+		errorDescription = Str("Output.ConnectFail.BadPath");
+		break;
+
+	case OBS_OUTPUT_CONNECT_FAILED:
+		use_last_error = true;
+		errorDescription = Str("Output.ConnectFail.ConnectFailed");
+		break;
+
+	case OBS_OUTPUT_INVALID_STREAM:
+		errorDescription = Str("Output.ConnectFail.InvalidStream");
+		break;
+
+	default:
+	case OBS_OUTPUT_ERROR:
+		use_last_error = true;
+		errorDescription = Str("Output.ConnectFail.Error");
+		break;
+
+	case OBS_OUTPUT_DISCONNECTED:
+		/* doesn't happen if output is set to reconnect.  note that
+		* reconnects are handled in the output, not in the UI */
+		use_last_error = true;
+		errorDescription = Str("Output.ConnectFail.Disconnected");
+	}
+
+	if (use_last_error && !last_error.isEmpty())
+		dstr_printf(errorMessage, "%s\n\n%s", errorDescription,
+			QT_TO_UTF8(last_error));
+	else
+		dstr_copy(errorMessage, errorDescription);
+
+	ui->statusbar->StreamStopped();
+
+	ui->streamButton_3->setText(QTStr("Start Streaming Server 3"));
+	ui->streamButton_3->setEnabled(true);
+
+	if (sysTrayStream) {
+		sysTrayStream->setText(ui->streamButton_3->text());
+		sysTrayStream->setEnabled(true);
+	}
+
+	streamingStopping = false;
+	if (api)
+		api->on_event(OBS_FRONTEND_EVENT_STREAMING_STOPPED);
+
+	OnDeactivate();
+
+	blog(LOG_INFO, STREAMING_STOP);
+
+	if (code != OBS_OUTPUT_SUCCESS && isVisible()) {
+		OBSMessageBox::information(this,
+			QTStr("Output.ConnectFail.Title"),
+			QT_UTF8(errorMessage));
+	}
+	else if (code != OBS_OUTPUT_SUCCESS && !isVisible()) {
+		SysTrayNotify(QT_UTF8(errorDescription), QSystemTrayIcon::Warning);
+	}
+
+	if (!startStreamMenu.isNull()) {
+		ui->streamButton->setMenu(nullptr);
+		startStreamMenu->deleteLater();
+		startStreamMenu = nullptr;
+	}
+}
+
+
 
 
 void OBSBasic::StartRecording(int id)
