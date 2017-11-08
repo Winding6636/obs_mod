@@ -520,9 +520,6 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->bindToIP,             COMBO_CHANGED,  ADV_CHANGED);
 	HookWidget(ui->enableNewSocketLoop,  CHECK_CHANGED,  ADV_CHANGED);
 	HookWidget(ui->enableLowLatencyMode, CHECK_CHANGED,  ADV_CHANGED);
-	ui->streamType->setVisible(false);
-	ui->streamType->setCurrentIndex(1);
-	ui->label_21->setVisible(false);
 
 #if !defined(_WIN32) && !defined(__APPLE__) && !HAVE_PULSEAUDIO
 	delete ui->enableAutoUpdates;
@@ -1151,8 +1148,7 @@ void OBSBasicSettings::LoadStream1Settings()
 	for(int i = 0; i < NUMBER_OF_STREAM_SERVERS; i++)
 	{
 
-//		const char *type = obs_service_get_type(service[i]);
-		const char type[] = "rtmp_custom";//"rtmp_common"
+		const char *type = obs_service_get_type(service[i]);
 		obs_data_t *settings = obs_service_get_settings(service[i]);
 		delete streamProperties[i];
 		streamProperties[i] = new OBSPropertiesView(settings, type,
