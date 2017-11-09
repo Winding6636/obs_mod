@@ -1738,9 +1738,9 @@ void OBSBasicSettings::LoadAdvOutputStreamingEncoderProperties()
 		case 0:
 		{
 			const char *type = config_get_string(main->Config(), "AdvOut","Encoder_0");
-			streamEncoderProps[i] = CreateEncoderPropertyView(type,
+			streamEncoderProps[0] = CreateEncoderPropertyView(type,
 							"streamEncoder_0.json");
-			ui->advOutputStreamTab->layout()->addWidget(streamEncoderProps[i]);
+			ui->advOutputStreamTab->layout()->addWidget(streamEncoderProps[0]);
 			if (!SetComboByValue(ui->advOutEncoder, type)) {
 				uint32_t caps = obs_get_encoder_caps(type);
 				if ((caps & OBS_ENCODER_CAP_DEPRECATED) != 0) {
@@ -1751,7 +1751,7 @@ void OBSBasicSettings::LoadAdvOutputStreamingEncoderProperties()
 					SetComboByValue(ui->advOutEncoder, type);
 				}
 			}
-			curAdvStreamEncoder[i] = type;
+			curAdvStreamEncoder[0] = type;
 		}
 			break;
 
@@ -1759,9 +1759,9 @@ void OBSBasicSettings::LoadAdvOutputStreamingEncoderProperties()
 		{
 
 			const char *type = config_get_string(main->Config(), "AdvOut","Encoder_1");
-			streamEncoderProps[i] = CreateEncoderPropertyView(type,
+			streamEncoderProps[1] = CreateEncoderPropertyView(type,
 							"streamEncoder_1.json");
-			ui->advOutputStreamTab_2->layout()->addWidget(streamEncoderProps[i]);
+			ui->advOutputStreamTab_2->layout()->addWidget(streamEncoderProps[1]);
 			if (!SetComboByValue(ui->advOutEncoder_2, type)) {
 				uint32_t caps = obs_get_encoder_caps(type);
 				if ((caps & OBS_ENCODER_CAP_DEPRECATED) != 0) {
@@ -1772,16 +1772,16 @@ void OBSBasicSettings::LoadAdvOutputStreamingEncoderProperties()
 					SetComboByValue(ui->advOutEncoder_2, type);
 				}
 			}
-			curAdvStreamEncoder[i] = type;
+			curAdvStreamEncoder[1] = type;
 		}
 			break;
 		case 2:
 		{
 
 			const char *type = config_get_string(main->Config(), "AdvOut","Encoder_2");
-			streamEncoderProps[i] = CreateEncoderPropertyView(type,
+			streamEncoderProps[2] = CreateEncoderPropertyView(type,
 							"streamEncoder_2.json");
-			ui->advOutputStreamTab_3->layout()->addWidget(streamEncoderProps[i]);
+			ui->advOutputStreamTab_3->layout()->addWidget(streamEncoderProps[2]);
 			if (!SetComboByValue(ui->advOutEncoder_3, type)) {
 				uint32_t caps = obs_get_encoder_caps(type);
 				if ((caps & OBS_ENCODER_CAP_DEPRECATED) != 0) {
@@ -1792,7 +1792,7 @@ void OBSBasicSettings::LoadAdvOutputStreamingEncoderProperties()
 					SetComboByValue(ui->advOutEncoder_3, type);
 				}
 			}
-			curAdvStreamEncoder[i] = type;
+			curAdvStreamEncoder[2] = type;
 		}
 			break;
 		default:
@@ -3682,12 +3682,12 @@ void OBSBasicSettings::on_advOutEncoder_currentIndexChanged(int idx)
 	QString encoder = GetComboData(ui->advOutEncoder);
 	bool loadSettings = encoder == curAdvStreamEncoder[0];
 
-	delete streamEncoderProps[idx];
-	streamEncoderProps[idx] = CreateEncoderPropertyView(QT_TO_UTF8(encoder),
+	delete streamEncoderProps[0];
+	streamEncoderProps[0] = CreateEncoderPropertyView(QT_TO_UTF8(encoder),
 			loadSettings ? "streamEncoder_0.json" : nullptr, true);
-	ui->advOutputStreamTab->layout()->addWidget(streamEncoderProps[idx]);
+	ui->advOutputStreamTab->layout()->addWidget(streamEncoderProps[0]);
 
-	UNUSED_PARAMETER(idx);
+	UNUSED_PARAMETER(0);
 }
 
 void OBSBasicSettings::on_advOutEncoder_2_currentIndexChanged(int index)
@@ -3698,12 +3698,12 @@ void OBSBasicSettings::on_advOutEncoder_2_currentIndexChanged(int index)
 	QString encoder = GetComboData(ui->advOutEncoder_2);
 	bool loadSettings = encoder == curAdvStreamEncoder[1];
 
-	delete streamEncoderProps[index];
-	streamEncoderProps[index] = CreateEncoderPropertyView(QT_TO_UTF8(encoder),
+	delete streamEncoderProps[1];
+	streamEncoderProps[1] = CreateEncoderPropertyView(QT_TO_UTF8(encoder),
 			loadSettings ? "streamEncoder_1.json" : nullptr, true);
-	ui->advOutputStreamTab_2->layout()->addWidget(streamEncoderProps[index]);
+	ui->advOutputStreamTab_2->layout()->addWidget(streamEncoderProps[1]);
 
-	UNUSED_PARAMETER(index);
+	UNUSED_PARAMETER(1);
 }
 
 
@@ -3715,12 +3715,12 @@ void OBSBasicSettings::on_advOutEncoder_3_currentIndexChanged(int index)
 	QString encoder = GetComboData(ui->advOutEncoder_3);
 	bool loadSettings = encoder == curAdvStreamEncoder[2];
 
-	delete streamEncoderProps[index];
-	streamEncoderProps[index] = CreateEncoderPropertyView(QT_TO_UTF8(encoder),
+	delete streamEncoderProps[2];
+	streamEncoderProps[2] = CreateEncoderPropertyView(QT_TO_UTF8(encoder),
 			loadSettings ? "streamEncoder_2.json" : nullptr, true);
-	ui->advOutputStreamTab_3->layout()->addWidget(streamEncoderProps[index]);
+	ui->advOutputStreamTab_3->layout()->addWidget(streamEncoderProps[2]);
 
-	UNUSED_PARAMETER(index);
+	UNUSED_PARAMETER(2);
 }
 void OBSBasicSettings::on_advOutRecEncoder_currentIndexChanged(int idx)
 {
