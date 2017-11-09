@@ -4721,7 +4721,7 @@ void OBSBasic::StreamingStop2(int code, QString last_error)
 
 	ui->statusbar->StreamStopped();
 
-	ui->streamButton_2->setText(QTStr("Basic.Main.StartStreaming1"));
+	ui->streamButton_2->setText(QTStr("Basic.Main.StartStreaming2"));
 	ui->streamButton_2->setEnabled(true);
 
 	if (sysTrayStream) {
