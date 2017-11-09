@@ -41,6 +41,7 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${CXX11_FLAGS}")
 if(${CMAKE_C_COMPILER_ID} MATCHES "Clang" OR ${CMAKE_CXX_COMPILER_ID} MATCHES "Clang")
 	set(CMAKE_COMPILER_IS_CLANG TRUE)
 endif()
+#Fix mac test
 
 if(CMAKE_COMPILER_IS_GNUCC OR CMAKE_COMPILER_IS_GNUCXX OR CMAKE_COMPILER_IS_CLANG)
 	set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wno-unused-function -Werror-implicit-function-declaration -Wno-c++11-narrowing -Wno-missing-field-initializers ${CMAKE_CXX_FLAGS} -fno-strict-aliasing")
