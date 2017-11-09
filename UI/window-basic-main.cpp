@@ -4245,16 +4245,16 @@ void OBSBasic::StartStreaming(int id)
 	{
 	case 0:
 		ui->streamButton->setEnabled(false);
-		ui->streamButton->setText(QTStr("Server#1 Connecting"));
+		ui->streamButton->setText(QTStr("Basic.Main.Connecting1"));
 		break;
 	case 1:
 		ui->streamButton_2->setEnabled(false);
-		ui->streamButton_2->setText(QTStr("Server#2 Connecting"));
+		ui->streamButton_2->setText(QTStr("Basic.Main.Connecting2"));
 
 		break;
 	case 2:
 		ui->streamButton_3->setEnabled(false);
-		ui->streamButton_3->setText(QTStr("Server#3 Connecting"));
+		ui->streamButton_3->setText(QTStr("Basic.Main.Connecting3"));
 
 		break;
 	default:
@@ -4285,15 +4285,15 @@ void OBSBasic::StartStreaming(int id)
 		switch (id)
 		{
 		case 0:
-			ui->streamButton->setText(QTStr("Start Streaming Server 1"));
+			ui->streamButton->setText(QTStr("Basic.Main.StartStreaming1"));
 			ui->streamButton->setEnabled(true);
 			break;
 		case 1:
-			ui->streamButton_2->setText(QTStr("Start Streaming Server 2"));
+			ui->streamButton_2->setText(QTStr("Basic.Main.StartStreaming2"));
 			ui->streamButton_2->setEnabled(true);
 			break;
 		case 2:
-			ui->streamButton_3->setText(QTStr("Start Streaming Server 3"));
+			ui->streamButton_3->setText(QTStr("Basic.Main.StartStreaming3"));
 			ui->streamButton_3->setEnabled(true);
 			break;
 		default:
@@ -4510,7 +4510,7 @@ void OBSBasic::StreamDelayStopping(int sec)
 		startStreamMenu->deleteLater();
 
 	startStreamMenu = new QMenu();
-	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming1"),
+	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming"),
 			this, SLOT(StartStreaming()));
 	startStreamMenu->addAction(QTStr("Basic.Main.ForceStopStreaming"),
 			this, SLOT(ForceStopStreaming()));
@@ -4580,7 +4580,7 @@ void OBSBasic::StreamingStop(int code, QString last_error)
 
 	ui->statusbar->StreamStopped();
 
-	ui->streamButton->setText(QTStr("Start Streaming Server 1"));
+	ui->streamButton->setText(QTStr("Basic.Main.StartStreaming1"));
 	ui->streamButton->setEnabled(true);
 
 	if (sysTrayStream) {
@@ -4652,7 +4652,7 @@ void OBSBasic::StreamDelayStopping2(int sec)
 		startStreamMenu->deleteLater();
 
 	startStreamMenu = new QMenu();
-	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming2"),
+	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming"),
 		this, SLOT(StartStreaming()));
 	startStreamMenu->addAction(QTStr("Basic.Main.ForceStopStreaming"),
 		this, SLOT(ForceStopStreaming()));
@@ -4721,7 +4721,7 @@ void OBSBasic::StreamingStop2(int code, QString last_error)
 
 	ui->statusbar->StreamStopped();
 
-	ui->streamButton_2->setText(QTStr("Start Streaming Server 2"));
+	ui->streamButton_2->setText(QTStr("Basic.Main.StartStreaming1"));
 	ui->streamButton_2->setEnabled(true);
 
 	if (sysTrayStream) {
@@ -4792,7 +4792,7 @@ void OBSBasic::StreamDelayStopping3(int sec)
 		startStreamMenu->deleteLater();
 
 	startStreamMenu = new QMenu();
-	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming3"),
+	startStreamMenu->addAction(QTStr("Basic.Main.StartStreaming"),
 		this, SLOT(StartStreaming()));
 	startStreamMenu->addAction(QTStr("Basic.Main.ForceStopStreaming"),
 		this, SLOT(ForceStopStreaming()));
@@ -4861,7 +4861,7 @@ void OBSBasic::StreamingStop3(int code, QString last_error)
 
 	ui->statusbar->StreamStopped();
 
-	ui->streamButton_3->setText(QTStr("Start Streaming Server 3"));
+	ui->streamButton_3->setText(QTStr("Basic.Main.StartStreaming3"));
 	ui->streamButton_3->setEnabled(true);
 
 	if (sysTrayStream) {
@@ -6154,7 +6154,7 @@ void OBSBasic::SystemTrayInit()
 
 	showHide = new QAction(QTStr("Basic.SystemTray.Show"),
 			trayIcon);
-	sysTrayStream = new QAction(QTStr("Basic.Main.StartStreaming1"),
+	sysTrayStream = new QAction(QTStr("Basic.Main.StartStreaming"),
 			trayIcon);
 	sysTrayRecord = new QAction(QTStr("Basic.Main.StartRecording"),
 			trayIcon);
