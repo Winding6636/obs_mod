@@ -282,7 +282,13 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	PopulateAACBitrates({ui->simpleOutputABitrate,
 			ui->advOutTrack1Bitrate, ui->advOutTrack2Bitrate,
 			ui->advOutTrack3Bitrate, ui->advOutTrack4Bitrate,
-			ui->advOutTrack5Bitrate, ui->advOutTrack6Bitrate});
+			ui->advOutTrack5Bitrate, ui->advOutTrack6Bitrate,
+			ui->advOutTrack1Bitrate_2, ui->advOutTrack2Bitrate_2,
+			ui->advOutTrack3Bitrate_2, ui->advOutTrack4Bitrate_2,
+			ui->advOutTrack5Bitrate_2, ui->advOutTrack6Bitrate_2,
+			ui->advOutTrack1Bitrate_3, ui->advOutTrack2Bitrate_3,
+			ui->advOutTrack3Bitrate_3, ui->advOutTrack4Bitrate_3,
+			ui->advOutTrack5Bitrate_3, ui->advOutTrack6Bitrate_3});
 
 	ui->listWidget->setAttribute(Qt::WA_MacShowFocusRect, false);
 
@@ -614,6 +620,32 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	connect(ui->advOutTrack5Bitrate, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(UpdateStreamDelayEstimate()));
 	connect(ui->advOutTrack6Bitrate, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+
+	connect(ui->advOutTrack1Bitrate_2, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack2Bitrate_2, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack3Bitrate_2, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack4Bitrate_2, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack5Bitrate_2, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack6Bitrate_2, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+
+	connect(ui->advOutTrack1Bitrate_3, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack2Bitrate_3, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack3Bitrate_3, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack4Bitrate_3, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack5Bitrate_3, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->advOutTrack6Bitrate_3, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(UpdateStreamDelayEstimate()));
 
 	//Apply button disabled until change.
