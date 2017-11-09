@@ -936,7 +936,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Start Streaming Server 1</string>
+        <string>Basic.Main.StartStreaming1</string>
        </property>
        <property name="checkable">
         <bool>false</bool>
@@ -955,7 +955,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Start Streaming Server 2</string>
+        <string>Basic.Main.StartStreaming2</string>
        </property>
        <property name="checkable">
         <bool>false</bool>
@@ -974,7 +974,7 @@
         </sizepolicy>
        </property>
        <property name="text">
-        <string>Start Streaming Server 3</string>
+        <string>Basic.Main.StartStreaming3</string>
        </property>
        <property name="checkable">
         <bool>false</bool>
