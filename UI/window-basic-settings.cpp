@@ -1941,57 +1941,173 @@ void OBSBasicSettings::LoadAdvOutputFFmpegSettings()
 
 void OBSBasicSettings::LoadAdvOutputAudioSettings()
 {
-	int track1Bitrate = config_get_uint(main->Config(), "AdvOut",
-			"Track1Bitrate");
-	int track2Bitrate = config_get_uint(main->Config(), "AdvOut",
-			"Track2Bitrate");
-	int track3Bitrate = config_get_uint(main->Config(), "AdvOut",
-			"Track3Bitrate");
-	int track4Bitrate = config_get_uint(main->Config(), "AdvOut",
-			"Track4Bitrate");
-	int track5Bitrate = config_get_uint(main->Config(), "AdvOut",
-			"Track5Bitrate");
-	int track6Bitrate = config_get_uint(main->Config(), "AdvOut",
-			"Track6Bitrate");
-	const char *name1 = config_get_string(main->Config(), "AdvOut",
-			"Track1Name");
-	const char *name2 = config_get_string(main->Config(), "AdvOut",
-			"Track2Name");
-	const char *name3 = config_get_string(main->Config(), "AdvOut",
-			"Track3Name");
-	const char *name4 = config_get_string(main->Config(), "AdvOut",
-			"Track4Name");
-	const char *name5 = config_get_string(main->Config(), "AdvOut",
-			"Track5Name");
-	const char *name6 = config_get_string(main->Config(), "AdvOut",
-			"Track6Name");
+	//Server1
+	int track1Bitrate_0 = config_get_uint(main->Config(), "AdvOut",
+			"Track1Bitrate_0");
+	int track2Bitrate_0 = config_get_uint(main->Config(), "AdvOut",
+			"Track2Bitrate_0");
+	int track3Bitrate_0 = config_get_uint(main->Config(), "AdvOut",
+			"Track3Bitrate_0");
+	int track4Bitrate_0 = config_get_uint(main->Config(), "AdvOut",
+			"Track4Bitrate_0");
+	int track5Bitrate_0 = config_get_uint(main->Config(), "AdvOut",
+			"Track5Bitrate_0");
+	int track6Bitrate_0 = config_get_uint(main->Config(), "AdvOut",
+			"Track6Bitrate_0");
+	const char *name1_0 = config_get_string(main->Config(), "AdvOut",
+			"Track1Name_0");
+	const char *name2_0 = config_get_string(main->Config(), "AdvOut",
+			"Track2Name_0");
+	const char *name3_0 = config_get_string(main->Config(), "AdvOut",
+			"Track3Name_0");
+	const char *name4_0 = config_get_string(main->Config(), "AdvOut",
+			"Track4Name_0");
+	const char *name5_0 = config_get_string(main->Config(), "AdvOut",
+			"Track5Name_0");
+	const char *name6_0 = config_get_string(main->Config(), "AdvOut",
+			"Track6Name_0");
+	
+	//Server2
+	int track1Bitrate_1 = config_get_uint(main->Config(), "AdvOut",
+			"Track1Bitrate_1");
+	int track2Bitrate_1 = config_get_uint(main->Config(), "AdvOut",
+			"Track2Bitrate_1");
+	int track3Bitrate_1 = config_get_uint(main->Config(), "AdvOut",
+			"Track3Bitrate_1");
+	int track4Bitrate_1 = config_get_uint(main->Config(), "AdvOut",
+			"Track4Bitrate_1");
+	int track5Bitrate_1 = config_get_uint(main->Config(), "AdvOut",
+			"Track5Bitrate_1");
+	int track6Bitrate_1 = config_get_uint(main->Config(), "AdvOut",
+			"Track6Bitrate_1");
+	const char *name1_1 = config_get_string(main->Config(), "AdvOut",
+			"Track1Name_1");
+	const char *name2_1 = config_get_string(main->Config(), "AdvOut",
+			"Track2Name_1");
+	const char *name3_1 = config_get_string(main->Config(), "AdvOut",
+			"Track3Name_1");
+	const char *name4_1 = config_get_string(main->Config(), "AdvOut",
+			"Track4Name_1");
+	const char *name5_1 = config_get_string(main->Config(), "AdvOut",
+			"Track5Name_1");
+	const char *name6_1 = config_get_string(main->Config(), "AdvOut",
+			"Track6Name_1");
 
-	track1Bitrate = FindClosestAvailableAACBitrate(track1Bitrate);
-	track2Bitrate = FindClosestAvailableAACBitrate(track2Bitrate);
-	track3Bitrate = FindClosestAvailableAACBitrate(track3Bitrate);
-	track4Bitrate = FindClosestAvailableAACBitrate(track4Bitrate);
-	track5Bitrate = FindClosestAvailableAACBitrate(track5Bitrate);
-	track6Bitrate = FindClosestAvailableAACBitrate(track6Bitrate);
+	//Server3
+	int track1Bitrate_2 = config_get_uint(main->Config(), "AdvOut",
+			"Track1Bitrate_2");
+	int track2Bitrate_2 = config_get_uint(main->Config(), "AdvOut",
+			"Track2Bitrate_2");
+	int track3Bitrate_2 = config_get_uint(main->Config(), "AdvOut",
+			"Track3Bitrate_2");
+	int track4Bitrate_2 = config_get_uint(main->Config(), "AdvOut",
+			"Track4Bitrate_2");
+	int track5Bitrate_2 = config_get_uint(main->Config(), "AdvOut",
+			"Track5Bitrate_2");
+	int track6Bitrate_2 = config_get_uint(main->Config(), "AdvOut",
+			"Track6Bitrate_2");
+	const char *name1_2 = config_get_string(main->Config(), "AdvOut",
+			"Track1Name_2");
+	const char *name2_2 = config_get_string(main->Config(), "AdvOut",
+			"Track2Name_2");
+	const char *name3_2 = config_get_string(main->Config(), "AdvOut",
+			"Track3Name_2");
+	const char *name4_2 = config_get_string(main->Config(), "AdvOut",
+			"Track4Name_2");
+	const char *name5_2 = config_get_string(main->Config(), "AdvOut",
+			"Track5Name_2");
+	const char *name6_2 = config_get_string(main->Config(), "AdvOut",
+			"Track6Name_2");
 
+	//Server1
+	track1Bitrate_0 = FindClosestAvailableAACBitrate(track1Bitrate_0);
+	track2Bitrate_0 = FindClosestAvailableAACBitrate(track2Bitrate_0);
+	track3Bitrate_0 = FindClosestAvailableAACBitrate(track3Bitrate_0);
+	track4Bitrate_0 = FindClosestAvailableAACBitrate(track4Bitrate_0);
+	track5Bitrate_0 = FindClosestAvailableAACBitrate(track5Bitrate_0);
+	track6Bitrate_0 = FindClosestAvailableAACBitrate(track6Bitrate_0);
+
+	//Server2
+	track1Bitrate_1 = FindClosestAvailableAACBitrate(track1Bitrate_1);
+	track2Bitrate_1 = FindClosestAvailableAACBitrate(track2Bitrate_1);
+	track3Bitrate_1 = FindClosestAvailableAACBitrate(track3Bitrate_1);
+	track4Bitrate_1 = FindClosestAvailableAACBitrate(track4Bitrate_1);
+	track5Bitrate_1 = FindClosestAvailableAACBitrate(track5Bitrate_1);
+	track6Bitrate_1 = FindClosestAvailableAACBitrate(track6Bitrate_1);
+
+	//Server3
+	track1Bitrate_2 = FindClosestAvailableAACBitrate(track1Bitrate_2);
+	track2Bitrate_2 = FindClosestAvailableAACBitrate(track2Bitrate_2);
+	track3Bitrate_2 = FindClosestAvailableAACBitrate(track3Bitrate_2);
+	track4Bitrate_2 = FindClosestAvailableAACBitrate(track4Bitrate_2);
+	track5Bitrate_2 = FindClosestAvailableAACBitrate(track5Bitrate_2);
+	track6Bitrate_2 = FindClosestAvailableAACBitrate(track6Bitrate_2);
+
+	//Server1
 	SetComboByName(ui->advOutTrack1Bitrate,
-			std::to_string(track1Bitrate).c_str());
+			std::to_string(track1Bitrate_0).c_str());
 	SetComboByName(ui->advOutTrack2Bitrate,
-			std::to_string(track2Bitrate).c_str());
+			std::to_string(track2Bitrate_0).c_str());
 	SetComboByName(ui->advOutTrack3Bitrate,
-			std::to_string(track3Bitrate).c_str());
+			std::to_string(track3Bitrate_0).c_str());
 	SetComboByName(ui->advOutTrack4Bitrate,
-			std::to_string(track4Bitrate).c_str());
+			std::to_string(track4Bitrate_0).c_str());
 	SetComboByName(ui->advOutTrack5Bitrate,
-			std::to_string(track5Bitrate).c_str());
+			std::to_string(track5Bitrate_0).c_str());
 	SetComboByName(ui->advOutTrack6Bitrate,
-			std::to_string(track6Bitrate).c_str());
+			std::to_string(track6Bitrate_0).c_str());
 
-	ui->advOutTrack1Name->setText(name1);
-	ui->advOutTrack2Name->setText(name2);
-	ui->advOutTrack3Name->setText(name3);
-	ui->advOutTrack4Name->setText(name4);
-	ui->advOutTrack5Name->setText(name5);
-	ui->advOutTrack6Name->setText(name6);
+	//Server2
+	SetComboByName(ui->advOutTrack1Bitrate_2,
+			std::to_string(track1Bitrate_1).c_str());
+	SetComboByName(ui->advOutTrack2Bitrate_2,
+			std::to_string(track2Bitrate_1).c_str());
+	SetComboByName(ui->advOutTrack3Bitrate_2,
+			std::to_string(track3Bitrate_1).c_str());
+	SetComboByName(ui->advOutTrack4Bitrate_2,
+			std::to_string(track4Bitrate_1).c_str());
+	SetComboByName(ui->advOutTrack5Bitrate_2,
+			std::to_string(track5Bitrate_1).c_str());
+	SetComboByName(ui->advOutTrack6Bitrate_2,
+			std::to_string(track6Bitrate_1).c_str());
+
+	//Server3
+	SetComboByName(ui->advOutTrack1Bitrate_3,
+			std::to_string(track1Bitrate_2).c_str());
+	SetComboByName(ui->advOutTrack2Bitrate_3,
+			std::to_string(track2Bitrate_2).c_str());
+	SetComboByName(ui->advOutTrack3Bitrate_3,
+			std::to_string(track3Bitrate_2).c_str());
+	SetComboByName(ui->advOutTrack4Bitrate_3,
+			std::to_string(track4Bitrate_2).c_str());
+	SetComboByName(ui->advOutTrack5Bitrate_3,
+			std::to_string(track5Bitrate_2).c_str());
+	SetComboByName(ui->advOutTrack6Bitrate_3,
+			std::to_string(track6Bitrate_2).c_str());
+
+	//Server1
+	ui->advOutTrack1Name->setText(name1_0);
+	ui->advOutTrack2Name->setText(name2_0);
+	ui->advOutTrack3Name->setText(name3_0);
+	ui->advOutTrack4Name->setText(name4_0);
+	ui->advOutTrack5Name->setText(name5_0);
+	ui->advOutTrack6Name->setText(name6_0);
+
+	//Server2
+	ui->advOutTrack1Name_2->setText(name1_1);
+	ui->advOutTrack2Name_2->setText(name2_1);
+	ui->advOutTrack3Name_2->setText(name3_1);
+	ui->advOutTrack4Name_2->setText(name4_1);
+	ui->advOutTrack5Name_2->setText(name5_1);
+	ui->advOutTrack6Name_2->setText(name6_1);
+
+	//Server3
+	ui->advOutTrack1Name_3->setText(name1_2);
+	ui->advOutTrack2Name_3->setText(name2_2);
+	ui->advOutTrack3Name_3->setText(name3_2);
+	ui->advOutTrack4Name_3->setText(name4_2);
+	ui->advOutTrack5Name_3->setText(name5_2);
+	ui->advOutTrack6Name_3->setText(name6_2);
 }
 
 void OBSBasicSettings::LoadOutputSettings()
