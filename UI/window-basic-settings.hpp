@@ -99,6 +99,7 @@ private:
 	std::string savedTheme;
 
 	int lastSimpleRecQualityIdx = 0;
+	int lastChannelSetupIdx = 0;
 
 	OBSFFFormatDesc formats;
 
@@ -275,6 +276,8 @@ private slots:
 	void AudioChanged();
 	void AudioChangedRestart();
 	void ReloadAudioSources();
+	void SurroundWarning(int idx);
+	void SpeakerLayoutChanged(int idx);
 	void OutputsChanged();
 	void Stream1Changed();
 	void VideoChanged();

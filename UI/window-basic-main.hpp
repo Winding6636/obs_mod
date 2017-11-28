@@ -114,6 +114,7 @@ private:
 	std::vector<OBSSignal> signalHandlers;
 
 	std::vector<std::string> projectorArray;
+	std::vector<std::string> studioProgramProjectorArray;
 	std::vector<int> previewProjectorArray;
 
 	char Service_Path[NUMBER_OF_STREAM_SERVERS][512];
@@ -243,7 +244,7 @@ private:
 
 	void Nudge(int dist, MoveDir dir);
 	void OpenProjector(obs_source_t *source, int monitor, bool window,
-			QString title = nullptr);
+			QString title = nullptr, bool studioProgram = false);
 
 	void GetAudioSourceFilters();
 	void GetAudioSourceProperties();
@@ -302,7 +303,8 @@ private:
 
 	void SetPreviewProgramMode(bool enabled);
 	void ResizeProgram(uint32_t cx, uint32_t cy);
-	void SetCurrentScene(obs_scene_t *scene, bool force = false);
+	void SetCurrentScene(obs_scene_t *scene, bool force = false,
+			bool direct = false);
 	static void RenderProgram(void *data, uint32_t cx, uint32_t cy);
 
 	std::vector<QuickTransition> quickTransitions;
@@ -360,6 +362,10 @@ private:
 	void LoadSavedPreviewProjectors(
 		obs_data_array_t *savedPreviewProjectors);
 
+	obs_data_array_t *SaveStudioProgramProjectors();
+	void LoadSavedStudioProgramProjectors(
+		obs_data_array_t *savedStudioProgramProjectors);
+
 public slots:
 	void StartStreaming(int id);
 	void StopStreaming(int id);
@@ -411,6 +417,7 @@ public slots:
 	void StopReplayBuffer(int id);
 
 	void ReplayBufferStart();
+	void ReplayBufferSave();
 	void ReplayBufferStopping();
 	void ReplayBufferStop(int code);
 
@@ -418,9 +425,12 @@ public slots:
 	void SaveProject();
 
 	void SetTransition(OBSSource transition);
-	void TransitionToScene(OBSScene scene, bool force = false);
-	void TransitionToScene(OBSSource scene, bool force = false);
-	void SetCurrentScene(OBSSource scene, bool force = false);
+	void TransitionToScene(OBSScene scene, bool force = false,
+			bool direct = false);
+	void TransitionToScene(OBSSource scene, bool force = false,
+			bool direct = false);
+	void SetCurrentScene(OBSSource scene, bool force = false,
+			bool direct = false);
 
 private slots:
 	void AddSceneItem(OBSSceneItem item);
@@ -463,6 +473,8 @@ private slots:
 	void HideAudioControl();
 	void UnhideAllAudioControls();
 	void ToggleHideMixer();
+
+	void MixerRenameSource();
 
 	void on_mixerScrollArea_customContextMenuRequested();
 
@@ -606,6 +618,7 @@ private slots:
 	void on_sources_itemSelectionChanged();
 	void on_sources_customContextMenuRequested(const QPoint &pos);
 	void on_sources_itemDoubleClicked(QListWidgetItem *item);
+	void on_scenes_itemDoubleClicked(QListWidgetItem *item);
 	void on_actionAddSource_triggered();
 	void on_actionRemoveSource_triggered();
 	void on_actionInteract_triggered();
@@ -632,6 +645,7 @@ private slots:
 	void on_actionWebsite_triggered();
 
 	void on_preview_customContextMenuRequested(const QPoint &pos);
+	void on_program_customContextMenuRequested(const QPoint &pos);
 	void on_previewDisabledLabel_customContextMenuRequested(
 			const QPoint &pos);
 
@@ -698,10 +712,12 @@ private slots:
 	void NudgeLeft();
 	void NudgeRight();
 
+	void OpenStudioProgramProjector();
 	void OpenPreviewProjector();
 	void OpenSourceProjector();
 	void OpenSceneProjector();
 
+	void OpenStudioProgramWindow();
 	void OpenPreviewWindow();
 	void OpenSourceWindow();
 	void OpenSceneWindow();
