@@ -5219,9 +5219,7 @@ void OBSBasic::ReplayBufferStart()
 void OBSBasic::ReplayBufferSave()
 {
 
-	calldata_t cd = {0};
-	proc_handler_call(ph, "save", &cd);
-	calldata_free(&cd);
+	return;
 }
 
 void OBSBasic::ReplayBufferStop(int code)
