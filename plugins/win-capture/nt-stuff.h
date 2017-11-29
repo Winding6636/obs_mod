@@ -1,10 +1,11 @@
 #pragma once
 
 #include <winternl.h>
+#undef _SYSTEM_THREAD_INFORMATION
+#undef SYSTEM_THREAD_INFORMATION
 
 #define THREAD_STATE_WAITING 5
 #define THREAD_WAIT_REASON_SUSPENDED 5
-#undef _SYSTEM_THREAD_INFORMATION
 
 typedef struct _SYSTEM_PROCESS_INFORMATION2 {
     ULONG NextEntryOffset;
