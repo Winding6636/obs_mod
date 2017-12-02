@@ -67,6 +67,13 @@ enum class QtDataRole {
 	OBSSignals,
 };
 
+enum class ProjectorType {
+	Source,
+	Preview,
+	StudioProgram,
+	Multiview
+};
+
 struct QuickTransition {
 	QPushButton *button = nullptr;
 	OBSSource source;
@@ -114,7 +121,8 @@ private:
 	std::vector<OBSSignal> signalHandlers;
 
 	std::vector<std::string> projectorArray;
-	std::vector<std::string> studioProgramProjectorArray;
+	std::vector<int> studioProgramProjectorArray;
+	std::vector<int> multiviewProjectorArray;
 	std::vector<int> previewProjectorArray;
 
 	char Service_Path[NUMBER_OF_STREAM_SERVERS][512];
@@ -244,7 +252,8 @@ private:
 
 	void Nudge(int dist, MoveDir dir);
 	void OpenProjector(obs_source_t *source, int monitor, bool window,
-			QString title = nullptr, bool studioProgram = false);
+			QString title = nullptr,
+			ProjectorType type = ProjectorType::Source);
 
 	void GetAudioSourceFilters();
 	void GetAudioSourceProperties();
@@ -292,6 +301,8 @@ private:
 	void RefreshQuickTransitions();
 	void CreateDefaultQuickTransitions();
 
+	QMenu *CreatePerSceneTransitionMenu();
+
 	QuickTransition *GetQuickTransition(int id);
 	int GetQuickTransitionIdx(int id);
 	QMenu *CreateTransitionMenu(QWidget *parent, QuickTransition *qt);
@@ -320,17 +331,13 @@ private:
 	obs_hotkey_id togglePreviewProgramHotkey = 0;
 	obs_hotkey_id transitionHotkey = 0;
 	int quickTransitionIdCounter = 1;
+	bool overridingTransition = false;
 
 	int   programX = 0,  programY = 0;
 	int   programCX = 0, programCY = 0;
 	float programScale = 0.0f;
 
 	int disableOutputsRef = 0;
-
-	inline bool IsPreviewProgramMode() const
-	{
-		return os_atomic_load_bool(&previewProgramMode);
-	}
 
 	inline void OnActivate();
 	inline void OnDeactivate();
@@ -365,6 +372,10 @@ private:
 	obs_data_array_t *SaveStudioProgramProjectors();
 	void LoadSavedStudioProgramProjectors(
 		obs_data_array_t *savedStudioProgramProjectors);
+
+	obs_data_array_t *SaveMultiviewProjectors();
+	void LoadSavedMultiviewProjectors(
+		obs_data_array_t *savedMultiviewProjectors);
 
 public slots:
 	void StartStreaming(int id);
@@ -428,7 +439,7 @@ public slots:
 	void TransitionToScene(OBSScene scene, bool force = false,
 			bool direct = false);
 	void TransitionToScene(OBSSource scene, bool force = false,
-			bool direct = false);
+			bool direct = false, bool quickTransition = false);
 	void SetCurrentScene(OBSSource scene, bool force = false,
 			bool direct = false);
 
@@ -437,7 +448,7 @@ private slots:
 	void RemoveSceneItem(OBSSceneItem item);
 	void AddScene(OBSSource source);
 	void RemoveScene(OBSSource source);
-	void RenameSources(QString newName, QString prevName);
+	void RenameSources(OBSSource source, QString newName, QString prevName);
 
 	void SelectSceneItem(OBSScene scene, OBSSceneItem item, bool select);
 
@@ -458,6 +469,7 @@ private slots:
 	void RenameTransition();
 	void TransitionClicked();
 	void TransitionStopped();
+	void TransitionFullyStopped();
 	void TriggerQuickTransition(int id);
 
 	void SetDeinterlacingMode();
@@ -509,7 +521,8 @@ private:
 	static void HotkeyTriggered(void *data, obs_hotkey_id id, bool pressed);
 
 public:
-	OBSScene      GetCurrentScene();
+	OBSSource GetProgramSource();
+	OBSScene GetCurrentScene();
 
 	void SysTrayNotify(const QString &text, QSystemTrayIcon::MessageIcon n);
 
@@ -522,9 +535,15 @@ public:
 	obs_service_t **GetService();
 	void          SetService(obs_service_t *service, unsigned char id);
 
+	inline bool IsPreviewProgramMode() const
+	{
+		return os_atomic_load_bool(&previewProgramMode);
+	}
+
 	bool StreamingActive() const;
 	bool Active() const;
 
+	void ResetUI();
 	int  ResetVideo();
 	bool ResetAudio();
 
@@ -715,11 +734,13 @@ private slots:
 	void OpenStudioProgramProjector();
 	void OpenPreviewProjector();
 	void OpenSourceProjector();
+	void OpenMultiviewProjector();
 	void OpenSceneProjector();
 
 	void OpenStudioProgramWindow();
 	void OpenPreviewWindow();
 	void OpenSourceWindow();
+	void OpenMultiviewWindow();
 	void OpenSceneWindow();
 
 

@@ -581,6 +581,13 @@
                      </property>
                     </spacer>
                    </item>
+                   <item row="1" column="1">
+                    <widget class="QCheckBox" name="studioPortraitLayout">
+                     <property name="text">
+                      <string>Basic.Settings.General.StudioPortraitLayout</string>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </widget>
                 </item>

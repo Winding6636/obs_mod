@@ -322,6 +322,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->sourceSnapping,       CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->snapDistance,         DSCROLL_CHANGED,GENERAL_CHANGED);
 	HookWidget(ui->doubleClickSwitch,    CHECK_CHANGED,  GENERAL_CHANGED);
+	HookWidget(ui->studioPortraitLayout, CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->outputMode,           COMBO_CHANGED,  OUTPUTS_CHANGED);
 	HookWidget(ui->streamType,           COMBO_CHANGED,  STREAM1_CHANGED);
 	HookWidget(ui->outputMode,           COMBO_CHANGED,  OUTPUTS_CHANGED);
@@ -1177,6 +1178,10 @@ void OBSBasicSettings::LoadGeneralSettings()
 	bool doubleClickSwitch = config_get_bool(GetGlobalConfig(),
 			"BasicWindow", "TransitionOnDoubleClick");
 	ui->doubleClickSwitch->setChecked(doubleClickSwitch);
+
+	bool studioPortraitLayout = config_get_bool(GetGlobalConfig(),
+			"BasicWindow", "StudioPortraitLayout");
+	ui->studioPortraitLayout->setChecked(studioPortraitLayout);
 
 	loading = false;
 }
@@ -2999,6 +3004,14 @@ void OBSBasicSettings::SaveGeneralSettings()
 		config_set_bool(GetGlobalConfig(), "BasicWindow",
 				"SaveProjectors",
 				ui->saveProjectors->isChecked());
+
+	if (WidgetChanged(ui->studioPortraitLayout)) {
+		config_set_bool(GetGlobalConfig(), "BasicWindow",
+				"StudioPortraitLayout",
+				ui->studioPortraitLayout->isChecked());
+
+		main->ResetUI();
+	}
 }
 
 void OBSBasicSettings::SaveStream1Settings()
