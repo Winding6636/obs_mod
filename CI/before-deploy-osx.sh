@@ -47,6 +47,8 @@ security unlock-keychain -p mysecretpassword build.keychain
 security set-keychain-settings -t 3600 -u build.keychain
 hr "Importing certs into keychain"
 security import ./Certificates.p12 -k build.keychain -T /usr/bin/productsign -P ""
+# macOS 10.12+
+security set-key-partition-list -S apple-tool:,apple: -s -k mysecretpassword build.keychain
 hr "Signing Package"
 productsign --sign 2MMRE5MTB8 ./OBS.pkg ./$FILENAME
 
