@@ -7,7 +7,7 @@
 #define THREAD_STATE_WAITING 5
 #define THREAD_WAIT_REASON_SUSPENDED 5
 
-typedef struct _SYSTEM_PROCESS_INFORMATION2 {
+typedef struct _OBS_SYSTEM_PROCESS_INFORMATION2 {
     ULONG NextEntryOffset;
     ULONG ThreadCount;
     BYTE Reserved1[48];
@@ -20,9 +20,9 @@ typedef struct _SYSTEM_PROCESS_INFORMATION2 {
     SIZE_T PeakPagefileUsage;
     SIZE_T PrivatePageCount;
     LARGE_INTEGER Reserved6[6];
-} SYSTEM_PROCESS_INFORMATION2;
+} OBS_SYSTEM_PROCESS_INFORMATION2;
 
-typedef struct _SYSTEM_THREAD_INFORMATION {
+typedef struct _OBS_SYSTEM_THREAD_INFORMATION {
 	FILETIME KernelTime;
 	FILETIME UserTime;
 	FILETIME CreateTime;
@@ -36,7 +36,7 @@ typedef struct _SYSTEM_THREAD_INFORMATION {
 	DWORD ThreadState;
 	DWORD WaitReason;
 	DWORD Reserved1;
-} SYSTEM_THREAD_INFORMATION;
+} OBS_SYSTEM_THREAD_INFORMATION;
 
 #ifndef NT_SUCCESS
 #define NT_SUCCESS(status) ((NTSTATUS)(status) >= 0)
@@ -139,7 +139,7 @@ static bool thread_is_suspended(DWORD process_id, DWORD thread_id)
 		data = malloc(size);
 	}
 
-	SYSTEM_PROCESS_INFORMATION2 *spi = data;
+	OBS_SYSTEM_PROCESS_INFORMATION2 *spi = data;
 
 	for (;;) {
 		if (spi->UniqueProcessId == (HANDLE)process_id) {
@@ -150,12 +150,12 @@ static bool thread_is_suspended(DWORD process_id, DWORD thread_id)
 		if (!offset)
 			goto fail;
 
-		spi = (SYSTEM_PROCESS_INFORMATION2*)((BYTE*)spi + offset);
+		spi = (OBS_SYSTEM_PROCESS_INFORMATION2*)((BYTE*)spi + offset);
 	}
 
-	SYSTEM_THREAD_INFORMATION *sti;
-	SYSTEM_THREAD_INFORMATION *info = NULL;
-	sti = (SYSTEM_THREAD_INFORMATION*)((BYTE*)spi + sizeof(*spi));
+	OBS_SYSTEM_THREAD_INFORMATION *sti;
+	OBS_SYSTEM_THREAD_INFORMATION *info = NULL;
+	sti = (OBS_SYSTEM_THREAD_INFORMATION*)((BYTE*)spi + sizeof(*spi));
 
 	for (ULONG i = 0; i < spi->ThreadCount; i++) {
 		if (sti[i].UniqueThreadId == (HANDLE)thread_id) {
