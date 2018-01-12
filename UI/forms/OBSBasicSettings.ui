@@ -154,13 +154,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-<<<<<<< HEAD
               <width>804</width>
               <height>744</height>
-=======
-              <width>801</width>
-              <height>1044</height>
->>>>>>> e7de41fc0115f141492b54ec2489fd4f8dde3602
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_19">
