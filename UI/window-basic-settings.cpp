@@ -45,6 +45,7 @@
 #include "window-basic-main.hpp"
 #include "window-basic-settings.hpp"
 #include "window-basic-main-outputs.hpp"
+#include "window-projector.hpp"
 
 #include <util/platform.h>
 
@@ -323,6 +324,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->snapDistance,         DSCROLL_CHANGED,GENERAL_CHANGED);
 	HookWidget(ui->doubleClickSwitch,    CHECK_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->studioPortraitLayout, CHECK_CHANGED,  GENERAL_CHANGED);
+	HookWidget(ui->multiviewLayout,      COMBO_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->outputMode,           COMBO_CHANGED,  OUTPUTS_CHANGED);
 	HookWidget(ui->streamType,           COMBO_CHANGED,  STREAM1_CHANGED);
 	HookWidget(ui->outputMode,           COMBO_CHANGED,  OUTPUTS_CHANGED);
@@ -1183,6 +1185,31 @@ void OBSBasicSettings::LoadGeneralSettings()
 			"BasicWindow", "StudioPortraitLayout");
 	ui->studioPortraitLayout->setChecked(studioPortraitLayout);
 
+	ui->multiviewLayout->addItem(QTStr(
+			"Basic.Settings.General.MultiviewLayout.Horizontal.Top"),
+			QT_UTF8("horizontaltop"));
+	ui->multiviewLayout->addItem(QTStr(
+			"Basic.Settings.General.MultiviewLayout.Horizontal.Bottom"),
+			QT_UTF8("horizontalbottom"));
+	ui->multiviewLayout->addItem(QTStr(
+			"Basic.Settings.General.MultiviewLayout.Vertical.Left"),
+			QT_UTF8("verticalleft"));
+	ui->multiviewLayout->addItem(QTStr(
+			"Basic.Settings.General.MultiviewLayout.Vertical.Right"),
+			QT_UTF8("verticalright"));
+
+	const char *multiviewLayoutText = config_get_string(GetGlobalConfig(),
+			"BasicWindow", "MultiviewLayout");
+
+	if (astrcmpi(multiviewLayoutText, "horizontalbottom") == 0)
+		ui->multiviewLayout->setCurrentIndex(1);
+	else if (astrcmpi(multiviewLayoutText, "verticalleft") == 0)
+		ui->multiviewLayout->setCurrentIndex(2);
+	else if (astrcmpi(multiviewLayoutText, "verticalright") == 0)
+		ui->multiviewLayout->setCurrentIndex(3);
+	else
+		ui->multiviewLayout->setCurrentIndex(0);
+
 	loading = false;
 }
 
@@ -1503,7 +1530,7 @@ static inline bool IsSurround(const char *speakers)
 {
 	static const char *surroundLayouts[] = {
 		"2.1",
-		"4.0 Quad",
+		"4.0",
 		"4.1",
 		"5.1",
 		"7.1",
@@ -2476,7 +2503,7 @@ void OBSBasicSettings::LoadAudioSettings()
 		ui->channelSetup->setCurrentIndex(0);
 	else if (strcmp(speakers, "2.1") == 0)
 		ui->channelSetup->setCurrentIndex(2);
-	else if (strcmp(speakers, "4.0 Quad") == 0)
+	else if (strcmp(speakers, "4.0") == 0)
 		ui->channelSetup->setCurrentIndex(3);
 	else if (strcmp(speakers, "4.1") == 0)
 		ui->channelSetup->setCurrentIndex(4);
@@ -3012,6 +3039,14 @@ void OBSBasicSettings::SaveGeneralSettings()
 
 		main->ResetUI();
 	}
+
+	if (WidgetChanged(ui->multiviewLayout)) {
+		config_set_string(GetGlobalConfig(), "BasicWindow",
+				"MultiviewLayout",
+				QT_TO_UTF8(GetComboData(ui->multiviewLayout)));
+
+		OBSProjector::UpdateMultiviewProjectors();
+	}
 }
 
 void OBSBasicSettings::SaveStream1Settings()
@@ -3470,7 +3505,7 @@ void OBSBasicSettings::SaveAudioSettings()
 		channelSetup = "2.1";
 		break;
 	case 3:
-		channelSetup = "4.0 Quad";
+		channelSetup = "4.0";
 		break;
 	case 4:
 		channelSetup = "4.1";

@@ -341,7 +341,7 @@ void OBSBasic::TransitionToScene(OBSSource source, bool force, bool direct,
 			TransitionFullyStopped();
 	}
 
-	if (usingPreviewProgram && sceneDuplicationMode && !direct)
+	if (usingPreviewProgram && sceneDuplicationMode)
 		obs_scene_release(scene);
 }
 
@@ -1222,7 +1222,7 @@ void OBSBasic::RenderProgram(void *data, uint32_t cx, uint32_t cy)
 
 	window->DrawBackdrop(float(ovi.base_width), float(ovi.base_height));
 
-	obs_render_main_view();
+	obs_render_main_texture();
 	gs_load_vertexbuffer(nullptr);
 
 	/* --------------------------------------- */

@@ -84,7 +84,7 @@ static enum speaker_layout pulse_channels_to_obs_speakers(
 	case 1:   return SPEAKERS_MONO;
 	case 2:   return SPEAKERS_STEREO;
 	case 3:   return SPEAKERS_2POINT1;
-	case 4:   return SPEAKERS_QUAD;
+	case 4:   return SPEAKERS_4POINT0;
 	case 5:   return SPEAKERS_4POINT1;
 	case 6:   return SPEAKERS_5POINT1;
 	case 8:   return SPEAKERS_7POINT1;
@@ -220,7 +220,7 @@ static void pulse_source_info(pa_context *c, const pa_source_info *i, int eol,
 
 	pa_sample_format_t format = i->sample_spec.format;
 	if (pulse_to_obs_audio_format(format) == AUDIO_FORMAT_UNKNOWN) {
-		format = PA_SAMPLE_S16LE;
+		format = PA_SAMPLE_FLOAT32LE;
 
 		blog(LOG_INFO, "Sample format %s not supported by OBS,"
 			"using %s instead for recording",

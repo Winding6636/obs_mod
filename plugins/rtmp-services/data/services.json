@@ -42,6 +42,10 @@
                     "url": "rtmp://live-fra.twitch.tv/app"
                 },
                 {
+                    "name": "EU: Helsinki, FI",
+                    "url": "rtmp://live-hel.twitch.tv/app"
+                },
+                {
                     "name": "EU: Lisbon, Portugal",
                     "url": "rtmp://live-lis.twitch.tv/app"
                 },
@@ -128,6 +132,10 @@
                 {
                     "name": "US Central: Houston, TX",
                     "url": "rtmp://live-hou.twitch.tv/app"
+                },
+                {
+                    "name": "US Central: Salt Lake City, UT",
+                    "url": "rtmp://live-slc.twitch.tv/app"
                 },
                 {
                     "name": "US East: Ashburn, VA",
