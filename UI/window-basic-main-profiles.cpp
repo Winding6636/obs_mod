@@ -195,8 +195,8 @@ bool OBSBasic::AddProfile(bool create_new, const char *title, const char *text,
 	std::string curDir = config_get_string(App()->GlobalConfig(),
 			"Basic", "ProfileDir");
 
-	char newPath[512];
-	int ret = GetConfigPath(newPath, 512, "obs-studio-vtf/basic/profiles/");
+	char baseDir[512];
+	int ret = GetConfigPath(baseDir, sizeof(baseDir), "obs-studio-vtf/basic/profiles/");
 	if (ret <= 0) {
 		blog(LOG_WARNING, "Failed to get profiles config path");
 		return false;
