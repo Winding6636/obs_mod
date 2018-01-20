@@ -37,6 +37,11 @@ class OBSHotkeyWidget;
 
 #include "ui_OBSBasicSettings.h"
 #define NUMBER_OF_STREAM_SERVERS 3
+
+#define VOLUME_METER_DECAY_FAST        23.53
+#define VOLUME_METER_DECAY_MEDIUM      11.76
+#define VOLUME_METER_DECAY_SLOW        8.57
+
 class SilentUpdateCheckBox : public QCheckBox {
 	Q_OBJECT
 

@@ -196,6 +196,7 @@ private:
 	void          CreateFirstRunSources();
 	void          CreateDefaultScene(bool firstStart);
 
+	void          UpdateVolumeControlsDecayRate();
 	void          ClearVolumeControls();
 
 	void          UploadLog(const char *file);
