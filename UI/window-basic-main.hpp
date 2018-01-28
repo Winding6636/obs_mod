@@ -272,7 +272,6 @@ private:
 	void DeleteProfile(const char *profile_name, const char *profile_dir);
 	void RefreshProfiles();
 	void ChangeProfile();
-	void CheckForSimpleModeX264Fallback();
 
 	void SaveProjectNow();
 
