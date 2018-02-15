@@ -2910,8 +2910,6 @@ void OBSBasic::SceneItemSelected(void *data, calldata_t *params)
 	QMetaObject::invokeMethod(window, "SelectSceneItem",
 			Q_ARG(OBSScene, scene), Q_ARG(OBSSceneItem, item),
 			Q_ARG(bool, true));
-
-	window->ui->actionCopySource->setEnabled(true);
 }
 
 void OBSBasic::SceneItemDeselected(void *data, calldata_t *params)
@@ -2925,7 +2923,6 @@ void OBSBasic::SceneItemDeselected(void *data, calldata_t *params)
 			Q_ARG(OBSScene, scene), Q_ARG(OBSSceneItem, item),
 			Q_ARG(bool, false));
 
-	window->ui->actionCopySource->setEnabled(false);
 }
 
 void OBSBasic::SourceLoaded(void *data, obs_source_t *source)
@@ -3947,6 +3944,7 @@ void OBSBasic::CreateSourcePopupMenu(QListWidgetItem *item, bool preview)
 		popup.addMenu(addSourceMenu);
 
 	ui->actionCopyFilters->setEnabled(false);
+	ui->actionCopySource->setEnabled(false);
 
 	popup.addSeparator();
 	popup.addAction(ui->actionCopySource);
@@ -4025,6 +4023,7 @@ void OBSBasic::CreateSourcePopupMenu(QListWidgetItem *item, bool preview)
 				SLOT(on_actionSourceProperties_triggered()));
 
 		ui->actionCopyFilters->setEnabled(true);
+		ui->actionCopySource->setEnabled(true);
 	}
 
 	popup.exec(QCursor::pos());
