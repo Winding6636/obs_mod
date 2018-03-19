@@ -189,6 +189,9 @@ private:
 	QPointer<QAction>         exit;
 	QPointer<QMenu>           trayMenu;
 
+	QPointer<QMenu> multiviewProjectorMenu;
+	void          UpdateMultiviewProjectorMenu();
+
 	void          DrawBackdrop(float cx, float cy);
 
 	void          SetupEncoders();
@@ -199,7 +202,7 @@ private:
 	void          UpdateVolumeControlsDecayRate();
 	void          ClearVolumeControls();
 
-	void          UploadLog(const char *file);
+	void          UploadLog(const char *subdir, const char *file);
 
 	void          Save(const char *file);
 	void          Load(const char *file);
@@ -615,6 +618,9 @@ private slots:
 	void on_actionUploadLastLog_triggered();
 	void on_actionViewCurrentLog_triggered();
 	void on_actionCheckForUpdates_triggered();
+
+	void on_actionShowCrashLogs_triggered();
+	void on_actionUploadLastCrashLog_triggered();
 
 	void on_actionEditTransform_triggered();
 	void on_actionCopyTransform_triggered();
