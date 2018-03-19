@@ -1,12 +1,12 @@
 [submodule "plugins/win-dshow/libdshowcapture"]
 	path = plugins/win-dshow/libdshowcapture
-	url = https://github.com/jp9000/libdshowcapture.git
+	url = git://github.com/jp9000/libdshowcapture.git
 [submodule "plugins/mac-syphon/syphon-framework"]
 	path = plugins/mac-syphon/syphon-framework
-	url = https://github.com/palana/Syphon-Framework.git
+	url = git://github.com/palana/Syphon-Framework.git
 [submodule "plugins/obs-browser"]
 	path = plugins/obs-browser
-	url = https://github.com/kc5nra/obs-browser.git
+	url = git://github.com/kc5nra/obs-browser.git
 [submodule "plugins/obs-vst"]
 	path = plugins/obs-vst
-	url = https://github.com/DDRBoxman/obs-vst.git
+	url = git://github.com/DDRBoxman/obs-vst.git
