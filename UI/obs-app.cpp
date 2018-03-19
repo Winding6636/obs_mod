@@ -1272,7 +1272,7 @@ static void create_log_file(fstream &logFile)
 #endif
 
 	if (logFile.is_open()) {
-		delete_oldest_file("obs-studio-vtf/logs");
+		delete_oldest_file(false,"obs-studio-vtf/logs");
 		base_set_log_handler(do_log, &logFile);
 	} else {
 		blog(LOG_ERROR, "Failed to open log file");
@@ -1368,7 +1368,7 @@ static int run_program(fstream &logFile, int argc, char *argv[])
 		OBSTranslator translator;
 
 		create_log_file(logFile);
-		delete_oldest_file("obs-studio-vtf/profiler_data");
+		delete_oldest_file(false,"obs-studio-vtf/profiler_data");
 
 		program.installTranslator(&translator);
 
@@ -1455,7 +1455,7 @@ static void main_crash_handler(const char *format, va_list args, void *param)
 	vsnprintf(text, MAX_CRASH_REPORT_SIZE, format, args);
 	text[MAX_CRASH_REPORT_SIZE - 1] = 0;
 
-	delete_oldest_file("obs-studio-vtf/crashes");
+	delete_oldest_file(true,"obs-studio-vtf/crashes");
 
 	string name = "obs-studio-vtf/crashes/Crash ";
 	name += GenerateTimeDateFilename("txt");
