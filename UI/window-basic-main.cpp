@@ -1663,6 +1663,10 @@ void OBSBasic::OBSInit()
 		}
 	}
 
+	bool vertical = config_get_bool(App()->GlobalConfig(), "BasicWindow",
+			"VerticalVolControl");
+	ui->stackedMixerArea->setCurrentIndex(vertical);
+
 	if (config_get_bool(basicConfig, "General", "OpenStatsOnStartup"))
 		on_stats_triggered();
 
@@ -2566,6 +2570,11 @@ void OBSBasic::VolControlContextMenu()
 	QAction propertiesAction(QTStr("Properties"), this);
 	QAction advPropAction(QTStr("Basic.MainMenu.Edit.AdvAudio"), this);
 
+	QAction toggleControlLayoutAction(QTStr("VerticalLayout"), this);
+	toggleControlLayoutAction.setCheckable(true);
+	toggleControlLayoutAction.setChecked(config_get_bool(GetGlobalConfig(),
+			"BasicWindow", "VerticalVolControl"));
+
 	/* ------------------- */
 
 	connect(&hideAction, &QAction::triggered,
@@ -2589,6 +2598,12 @@ void OBSBasic::VolControlContextMenu()
 			Qt::DirectConnection);
 
 	/* ------------------- */
+	
+	connect(&toggleControlLayoutAction, &QAction::changed, this,
+			&OBSBasic::ToggleVolControlLayout,
+			Qt::DirectConnection);
+
+	/* ------------------- */
 
 	hideAction.setProperty("volControl",
 			QVariant::fromValue<VolControl*>(vol));
@@ -2607,22 +2622,74 @@ void OBSBasic::VolControlContextMenu()
 	popup.addAction(&hideAction);
 	popup.addAction(&mixerRenameAction);
 	popup.addSeparator();
+	popup.addAction(&toggleControlLayoutAction);
+	popup.addSeparator();
 	popup.addAction(&filtersAction);
 	popup.addAction(&propertiesAction);
 	popup.addAction(&advPropAction);
 	popup.exec(QCursor::pos());
 }
 
-void OBSBasic::on_mixerScrollArea_customContextMenuRequested()
+void OBSBasic::on_hMixerScrollArea_customContextMenuRequested()
+{
+	StackedMixerAreaContextMenuRequested();
+}
+
+void OBSBasic::on_vMixerScrollArea_customContextMenuRequested()
+{
+	StackedMixerAreaContextMenuRequested();
+}
+
+void OBSBasic::StackedMixerAreaContextMenuRequested()
 {
 	QAction unhideAllAction(QTStr("UnhideAll"), this);
+	
+	QAction advPropAction(QTStr("Basic.MainMenu.Edit.AdvAudio"), this);
+	
+	QAction toggleControlLayoutAction(QTStr("VerticalLayout"), this);
+	toggleControlLayoutAction.setCheckable(true);
+	toggleControlLayoutAction.setChecked(config_get_bool(GetGlobalConfig(),
+			"BasicWindow", "VerticalVolControl"));
+
+ 	/* ------------------- */
 	connect(&unhideAllAction, &QAction::triggered,
 			this, &OBSBasic::UnhideAllAudioControls,
 			Qt::DirectConnection);
+	
+	connect(&toggleControlLayoutAction, &QAction::changed, this,
+			&OBSBasic::ToggleVolControlLayout,
+			Qt::DirectConnection);
 
-	QMenu popup(this);
-	popup.addAction(&unhideAllAction);
-	popup.exec(QCursor::pos());
+	/* ------------------- */
+
+
+ 	QMenu popup(this);
+ 	popup.addAction(&unhideAllAction);
+ 	popup.addSeparator();
+	popup.addAction(&toggleControlLayoutAction);
+	popup.addSeparator();
+ 	popup.addAction(&advPropAction);
+ 	popup.exec(QCursor::pos());
+}
+
+void OBSBasic::ToggleVolControlLayout()
+{
+	bool vertical = !config_get_bool(GetGlobalConfig(), "BasicWindow",
+			"VerticalVolControl");
+	config_set_bool(GetGlobalConfig(), "BasicWindow", "VerticalVolControl",
+			vertical);
+	ui->stackedMixerArea->setCurrentIndex(vertical);
+
+	// We need to store it so we can delete current and then add
+	// at the right order
+	vector<OBSSource> sources;
+	for (size_t i = 0; i != volumes.size(); i++)
+		sources.emplace_back(volumes[i]->GetSource());
+
+	ClearVolumeControls();
+
+	for (const auto &source : sources)
+		ActivateAudioSource(source);
 }
 
 void OBSBasic::ActivateAudioSource(OBSSource source)
@@ -2630,7 +2697,9 @@ void OBSBasic::ActivateAudioSource(OBSSource source)
 	if (SourceMixerHidden(source))
 		return;
 
-	VolControl *vol = new VolControl(source, true);
+	bool vertical = config_get_bool(GetGlobalConfig(), "BasicWindow",
+			"VerticalVolControl");
+	VolControl *vol = new VolControl(source, true, vertical);
 
 	double meterDecayRate = config_get_double(basicConfig, "Audio",
 			"MeterDecayRate");
@@ -2643,7 +2712,10 @@ void OBSBasic::ActivateAudioSource(OBSSource source)
 			this, &OBSBasic::VolControlContextMenu);
 
 	volumes.push_back(vol);
-	ui->volumeWidgets->layout()->addWidget(vol);
+	if (vertical)
+		ui->vVolControlLayout->addWidget(vol);
+	else
+		ui->hVolControlLayout->addWidget(vol);
 }
 
 void OBSBasic::DeactivateAudioSource(OBSSource source)
