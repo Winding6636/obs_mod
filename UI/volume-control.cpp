@@ -9,6 +9,7 @@
 #include <QSlider>
 #include <QLabel>
 #include <QPainter>
+#include <utility>
 
 using namespace std;
 
@@ -107,7 +108,7 @@ void VolControl::SetMeterDecayRate(qreal q)
 }
 
 VolControl::VolControl(OBSSource source_, bool showConfig)
-	: source        (source_),
+	: source        (std::move(source_)),
 	  levelTotal    (0.0f),
 	  levelCount    (0.0f),
 	  obs_fader     (obs_fader_create(OBS_FADER_CUBIC)),
@@ -221,7 +222,7 @@ QColor VolumeMeter::getBackgroundNominalColor() const
 
 void VolumeMeter::setBackgroundNominalColor(QColor c)
 {
-	backgroundNominalColor = c;
+	backgroundNominalColor = std::move(c);
 }
 
 QColor VolumeMeter::getBackgroundWarningColor() const
@@ -231,7 +232,7 @@ QColor VolumeMeter::getBackgroundWarningColor() const
 
 void VolumeMeter::setBackgroundWarningColor(QColor c)
 {
-	backgroundWarningColor = c;
+	backgroundWarningColor = std::move(c);
 }
 
 QColor VolumeMeter::getBackgroundErrorColor() const
@@ -241,7 +242,7 @@ QColor VolumeMeter::getBackgroundErrorColor() const
 
 void VolumeMeter::setBackgroundErrorColor(QColor c)
 {
-	backgroundErrorColor = c;
+	backgroundErrorColor = std::move(c);
 }
 
 QColor VolumeMeter::getForegroundNominalColor() const
@@ -251,7 +252,7 @@ QColor VolumeMeter::getForegroundNominalColor() const
 
 void VolumeMeter::setForegroundNominalColor(QColor c)
 {
-	foregroundNominalColor = c;
+	foregroundNominalColor = std::move(c);
 }
 
 QColor VolumeMeter::getForegroundWarningColor() const
@@ -261,7 +262,7 @@ QColor VolumeMeter::getForegroundWarningColor() const
 
 void VolumeMeter::setForegroundWarningColor(QColor c)
 {
-	foregroundWarningColor = c;
+	foregroundWarningColor = std::move(c);
 }
 
 QColor VolumeMeter::getForegroundErrorColor() const
@@ -271,7 +272,7 @@ QColor VolumeMeter::getForegroundErrorColor() const
 
 void VolumeMeter::setForegroundErrorColor(QColor c)
 {
-	foregroundErrorColor = c;
+	foregroundErrorColor = std::move(c);
 }
 
 QColor VolumeMeter::getClipColor() const
@@ -281,7 +282,7 @@ QColor VolumeMeter::getClipColor() const
 
 void VolumeMeter::setClipColor(QColor c)
 {
-	clipColor = c;
+	clipColor = std::move(c);
 }
 
 QColor VolumeMeter::getMagnitudeColor() const
@@ -291,7 +292,7 @@ QColor VolumeMeter::getMagnitudeColor() const
 
 void VolumeMeter::setMagnitudeColor(QColor c)
 {
-	magnitudeColor = c;
+	magnitudeColor = std::move(c);
 }
 
 QColor VolumeMeter::getMajorTickColor() const
@@ -301,7 +302,7 @@ QColor VolumeMeter::getMajorTickColor() const
 
 void VolumeMeter::setMajorTickColor(QColor c)
 {
-	majorTickColor = c;
+	majorTickColor = std::move(c);
 }
 
 QColor VolumeMeter::getMinorTickColor() const
@@ -311,7 +312,7 @@ QColor VolumeMeter::getMinorTickColor() const
 
 void VolumeMeter::setMinorTickColor(QColor c)
 {
-	minorTickColor = c;
+	minorTickColor = std::move(c);
 }
 
 qreal VolumeMeter::getMinimumLevel() const
