@@ -262,6 +262,7 @@ private:
 	void GetAudioSourceFilters();
 	void GetAudioSourceProperties();
 	void VolControlContextMenu();
+	void ToggleVolControlLayout();
 
 	void AddSceneCollection(bool create_new);
 	void RefreshSceneCollections();
@@ -492,7 +493,8 @@ private slots:
 
 	void MixerRenameSource();
 
-	void on_mixerScrollArea_customContextMenuRequested();
+	void on_vMixerScrollArea_customContextMenuRequested();
+	void on_hMixerScrollArea_customContextMenuRequested();
 
 	void on_actionCopySource_triggered();
 	void on_actionPasteRef_triggered();
@@ -750,11 +752,12 @@ private slots:
 	void OpenSourceWindow();
 	void OpenMultiviewWindow();
 	void OpenSceneWindow();
+	
+	void StackedMixerAreaContextMenuRequested();
 
+	void on_streamButton_2_clicked();
 
-    void on_streamButton_2_clicked();
-
-    void on_streamButton_3_clicked();
+	void on_streamButton_3_clicked();
 
 public slots:
 	void on_actionResetTransform_triggered();
