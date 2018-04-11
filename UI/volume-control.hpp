@@ -93,12 +93,15 @@ private:
 	inline void calculateBallisticsForChannel(int channelNr,
 		uint64_t ts, qreal timeSinceLastRedraw);
 
-	void paintInputMeter(QPainter &painter, int x, int y,
-		int width, int height, float peakHold);
-	void paintMeter(QPainter &painter, int x, int y,
-		int width, int height,
-		float magnitude, float peak, float peakHold);
-	void paintTicks(QPainter &painter, int x, int y, int width, int height);
+	void paintInputMeter(QPainter &painter, int x, int y, int width,
+			int height, float peakHold);
+	void paintHMeter(QPainter &painter, int x, int y, int width, int height,
+			float magnitude, float peak, float peakHold);
+	void paintHTicks(QPainter &painter, int x, int y, int width,
+			int height);
+	void paintVMeter(QPainter &painter, int x, int y, int width, int height,
+			float magnitude, float peak, float peakHold);
+	void paintVTicks(QPainter &painter, int x, int y, int height);
 
 	QMutex dataMutex;
 
@@ -138,10 +141,12 @@ private:
 	qreal inputPeakHoldDuration;
 
 	uint64_t lastRedrawTime = 0;
+	bool vertical;
 
 public:
 	explicit VolumeMeter(QWidget *parent = nullptr,
-		obs_volmeter_t *obs_volmeter = nullptr);
+			obs_volmeter_t *obs_volmeter = nullptr,
+			bool vertical = false);
 	~VolumeMeter() override;
 
 	void setLevels(
@@ -225,6 +230,7 @@ private:
 	float           levelCount;
 	obs_fader_t     *obs_fader;
 	obs_volmeter_t  *obs_volmeter;
+	bool            vertical;
 
 	static void OBSVolumeChanged(void *param, float db);
 	static void OBSVolumeLevel(void *data,
@@ -247,7 +253,8 @@ signals:
 	void ConfigClicked();
 
 public:
-	explicit VolControl(OBSSource source, bool showConfig = false);
+	explicit VolControl(OBSSource source, bool showConfig = false,
+			bool vertical = false);
 	~VolControl() override;
 
 	inline obs_source_t *GetSource() const {return source;}
