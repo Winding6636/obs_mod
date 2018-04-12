@@ -1128,9 +1128,25 @@ void OBSBasicSettings::LoadGeneralSettings()
 		"BasicWindow", "KeepReplayBufferStreamStops");
 	ui->keepReplayStreamStops->setChecked(keepReplayStreamStops);
 
-	bool systemTrayEnabled = config_get_bool(GetGlobalConfig(),
-			"BasicWindow", "SysTrayEnabled");
-	ui->systemTrayEnabled->setChecked(systemTrayEnabled);
+	/*bool systemTrayEnabled = config_get_bool(GetGlobalConfig(),
+			"BasicWindow", "SysTrayEnabled");*/
+			//ui->systemTrayEnabled->setChecked(systemTrayEnabled);
+
+#pragma region Hiding controls
+	bool systemTrayEnabled = true;
+	ui->systemTrayWhenStarted->setVisible(false);
+	ui->systemTrayAlways->setVisible(false);
+	ui->systemTrayEnabled->setVisible(false);
+	ui->groupBox_13->setVisible(false);
+	ui->groupBox_15->setVisible(false);
+	ui->groupBox_16->setVisible(false);
+	ui->groupBox_10->setVisible(false);
+	//ui->groupBox_14->setVisible(false);
+	ui->groupBox_13->setVisible(false);
+	ui->listWidget->item(0)->setHidden(true);//Hide General Item in the setting list
+	ui->listWidget->item(6)->setHidden(true);//Hide HotKeys Item in the setting list  
+	ui->listWidget->item(7)->setHidden(true);//Hide Advanced Item in the setting list  
+#pragma endregion
 
 	bool systemTrayWhenStarted = config_get_bool(GetGlobalConfig(),
 			"BasicWindow", "SysTrayWhenStarted");
@@ -1894,19 +1910,19 @@ void OBSBasicSettings::LoadAdvOutputStreamingEncoderProperties()
 void OBSBasicSettings::LoadAdvOutputRecordingSettings()
 {
 	const char *type = config_get_string(main->Config(), "AdvOut",
-			"RecType");
+		"RecType");
 	const char *format = config_get_string(main->Config(), "AdvOut",
-			"RecFormat");
+		"RecFormat");
 	const char *path = config_get_string(main->Config(), "AdvOut",
-			"RecFilePath");
+		"RecFilePath");
 	bool noSpace = config_get_bool(main->Config(), "AdvOut",
-			"RecFileNameWithoutSpace");
+		"RecFileNameWithoutSpace");
 	bool rescale = config_get_bool(main->Config(), "AdvOut",
-			"RecRescale");
+		"RecRescale");
 	const char *rescaleRes = config_get_string(main->Config(), "AdvOut",
-			"RecRescaleRes");
+		"RecRescaleRes");
 	const char *muxCustom = config_get_string(main->Config(), "AdvOut",
-			"RecMuxerCustom");
+		"RecMuxerCustom");
 	int tracks = config_get_int(main->Config(), "AdvOut", "RecTracks");
 
 	int typeIndex = (astrcmpi(type, "FFmpeg") == 0) ? 1 : 0;
@@ -1920,25 +1936,25 @@ void OBSBasicSettings::LoadAdvOutputRecordingSettings()
 	int idx = ui->advOutRecFormat->findText(format);
 	ui->advOutRecFormat->setCurrentIndex(idx);
 
-	ui->advOutRecTrack1->setChecked(tracks & (1<<0));
-	ui->advOutRecTrack2->setChecked(tracks & (1<<1));
-	ui->advOutRecTrack3->setChecked(tracks & (1<<2));
-	ui->advOutRecTrack4->setChecked(tracks & (1<<3));
-	ui->advOutRecTrack5->setChecked(tracks & (1<<4));
-	ui->advOutRecTrack6->setChecked(tracks & (1<<5));
+	ui->advOutRecTrack1->setChecked(tracks & (1 << 0));
+	ui->advOutRecTrack2->setChecked(tracks & (1 << 1));
+	ui->advOutRecTrack3->setChecked(tracks & (1 << 2));
+	ui->advOutRecTrack4->setChecked(tracks & (1 << 3));
+	ui->advOutRecTrack5->setChecked(tracks & (1 << 4));
+	ui->advOutRecTrack6->setChecked(tracks & (1 << 5));
 }
 
 void OBSBasicSettings::LoadAdvOutputRecordingEncoderProperties()
 {
 	const char *type = config_get_string(main->Config(), "AdvOut",
-			"RecEncoder");
+		"RecEncoder");
 
 	delete recordEncoderProps;
 	recordEncoderProps = nullptr;
 
 	if (astrcmpi(type, "none") != 0) {
 		recordEncoderProps = CreateEncoderPropertyView(type,
-				"recordEncoder.json");
+			"recordEncoder.json");
 		ui->advOutRecStandard->layout()->addWidget(recordEncoderProps);
 	}
 
@@ -1950,7 +1966,7 @@ void OBSBasicSettings::LoadAdvOutputRecordingEncoderProperties()
 			const char *name = obs_encoder_get_display_name(type);
 
 			ui->advOutRecEncoder->insertItem(1, QT_UTF8(name),
-					QT_UTF8(type));
+				QT_UTF8(type));
 			SetComboByValue(ui->advOutRecEncoder, type);
 		}
 	}
@@ -3008,12 +3024,12 @@ void OBSBasicSettings::SaveGeneralSettings()
 
 	if (WidgetChanged(ui->recordWhenStreaming))
 		config_set_bool(GetGlobalConfig(), "BasicWindow",
-				"RecordWhenStreaming",
-				ui->recordWhenStreaming->isChecked());
+			"RecordWhenStreaming",
+			ui->recordWhenStreaming->isChecked());
 	if (WidgetChanged(ui->keepRecordStreamStops))
 		config_set_bool(GetGlobalConfig(), "BasicWindow",
-				"KeepRecordingWhenStreamStops",
-				ui->keepRecordStreamStops->isChecked());
+			"KeepRecordingWhenStreamStops",
+			ui->keepRecordStreamStops->isChecked());
 
 	if (WidgetChanged(ui->replayWhileStreaming))
 		config_set_bool(GetGlobalConfig(), "BasicWindow",
@@ -3024,10 +3040,10 @@ void OBSBasicSettings::SaveGeneralSettings()
 			"KeepReplayBufferStreamStops",
 			ui->keepReplayStreamStops->isChecked());
 
-	if (WidgetChanged(ui->systemTrayEnabled))
+	/*if (WidgetChanged(ui->systemTrayEnabled))
 		config_set_bool(GetGlobalConfig(), "BasicWindow",
-				"SysTrayEnabled",
-				ui->systemTrayEnabled->isChecked());
+			"SysTrayEnabled",
+			ui->systemTrayEnabled->isChecked());*/
 
 	if (WidgetChanged(ui->systemTrayWhenStarted))
 		config_set_bool(GetGlobalConfig(), "BasicWindow",
@@ -3906,9 +3922,9 @@ void OBSBasicSettings::on_advOutRecEncoder_currentIndexChanged(int idx)
 		bool loadSettings = encoder == curAdvRecordEncoder;
 
 		recordEncoderProps = CreateEncoderPropertyView(
-				QT_TO_UTF8(encoder),
-				loadSettings ? "recordEncoder.json" : nullptr,
-				true);
+			QT_TO_UTF8(encoder),
+			loadSettings ? "recordEncoder.json" : nullptr,
+			true);
 		ui->advOutRecStandard->layout()->addWidget(recordEncoderProps);
 	}
 }
@@ -4275,7 +4291,8 @@ void OBSBasicSettings::AdvOutRecCheckWarnings()
 	if (tracks == 0) {
 		errorMsg = QTStr("OutputWarnings.NoTracksSelected");
 
-	} else if (tracks > 1) {
+	}
+	else if (tracks > 1) {
 		warningMsg = QTStr("OutputWarnings.MultiTrackRecording");
 	}
 
@@ -4289,15 +4306,15 @@ void OBSBasicSettings::AdvOutRecCheckWarnings()
 
 	if (!errorMsg.isEmpty() || !warningMsg.isEmpty()) {
 		advOutRecWarning = new QLabel(
-				errorMsg.isEmpty() ? warningMsg : errorMsg,
-				this);
+			errorMsg.isEmpty() ? warningMsg : errorMsg,
+			this);
 		advOutRecWarning->setObjectName(
-				errorMsg.isEmpty() ? "warningLabel" :
-					"errorLabel");
+			errorMsg.isEmpty() ? "warningLabel" :
+			"errorLabel");
 		advOutRecWarning->setWordWrap(true);
 
 		QFormLayout *formLayout = reinterpret_cast<QFormLayout*>(
-				ui->advOutRecTopContainer->layout());
+			ui->advOutRecTopContainer->layout());
 
 		formLayout->addRow(nullptr, advOutRecWarning);
 	}
@@ -4431,23 +4448,23 @@ void OBSBasicSettings::FillSimpleRecordingValues()
 	ADD_QUALITY("Lossless");
 
 	ui->simpleOutRecEncoder->addItem(
-			ENCODER_STR("Software"),
-			QString(SIMPLE_ENCODER_X264));
+		ENCODER_STR("Software"),
+		QString(SIMPLE_ENCODER_X264));
 	ui->simpleOutRecEncoder->addItem(
-			ENCODER_STR("SoftwareLowCPU"),
-			QString(SIMPLE_ENCODER_X264_LOWCPU));
+		ENCODER_STR("SoftwareLowCPU"),
+		QString(SIMPLE_ENCODER_X264_LOWCPU));
 	if (EncoderAvailable("obs_qsv11"))
 		ui->simpleOutRecEncoder->addItem(
-				ENCODER_STR("Hardware.QSV"),
-				QString(SIMPLE_ENCODER_QSV));
+			ENCODER_STR("Hardware.QSV"),
+			QString(SIMPLE_ENCODER_QSV));
 	if (EncoderAvailable("ffmpeg_nvenc"))
 		ui->simpleOutRecEncoder->addItem(
-				ENCODER_STR("Hardware.NVENC"),
-				QString(SIMPLE_ENCODER_NVENC));
+			ENCODER_STR("Hardware.NVENC"),
+			QString(SIMPLE_ENCODER_NVENC));
 	if (EncoderAvailable("amd_amf_h264"))
 		ui->simpleOutRecEncoder->addItem(
-				ENCODER_STR("Hardware.AMD"),
-				QString(SIMPLE_ENCODER_AMD));
+			ENCODER_STR("Hardware.AMD"),
+			QString(SIMPLE_ENCODER_AMD));
 #undef ADD_QUALITY
 }
 
@@ -4807,10 +4824,11 @@ void OBSBasicSettings::SimpleRecordingEncoderChanged()
 	if (stream1Changed) {
 		QString streamType = GetComboData(ui->streamType);
 		service = obs_service_create_private(
-				QT_TO_UTF8(streamType), nullptr,
-				streamProperties[0]->GetSettings());
+			QT_TO_UTF8(streamType), nullptr,
+			streamProperties[0]->GetSettings());
 		obs_service_release(service);
-	} else {
+	}
+	else {
 		service = main->GetService()[0];
 	}
 
@@ -4825,14 +4843,14 @@ void OBSBasicSettings::SimpleRecordingEncoderChanged()
 		obs_data_set_int(audioSettings, "bitrate", oldABitrate);
 
 		obs_service_apply_encoder_settings(service, videoSettings,
-				audioSettings);
+			audioSettings);
 
 		int newVBitrate = obs_data_get_int(videoSettings, "bitrate");
 		int newABitrate = obs_data_get_int(audioSettings, "bitrate");
 
 		if (newVBitrate < oldVBitrate)
 			warning = SIMPLE_OUTPUT_WARNING("VideoBitrate")
-				.arg(newVBitrate);
+			.arg(newVBitrate);
 		if (newABitrate < oldABitrate) {
 			if (!warning.isEmpty())
 				warning += "\n\n";
@@ -4853,12 +4871,13 @@ void OBSBasicSettings::SimpleRecordingEncoderChanged()
 		warning += SIMPLE_OUTPUT_WARNING("Encoder_1");
 		warning += SIMPLE_OUTPUT_WARNING("Encoder_2");
 
-	} else if (qual != "Stream") {
+	}
+	else if (qual != "Stream") {
 		QString enc = ui->simpleOutRecEncoder->currentData().toString();
 		QString streamEnc =
 			ui->simpleOutStrEncoder->currentData().toString();
 		bool x264RecEnc = (enc == SIMPLE_ENCODER_X264 ||
-		                   enc == SIMPLE_ENCODER_X264_LOWCPU);
+			enc == SIMPLE_ENCODER_X264_LOWCPU);
 
 		if (streamEnc == SIMPLE_ENCODER_X264 && x264RecEnc) {
 			if (!warning.isEmpty())
@@ -4953,13 +4972,13 @@ void OBSBasicSettings::SimpleRecordingQualityLosslessWarning(int idx)
 			SIMPLE_OUTPUT_WARNING("Lossless.Msg");
 
 		button = OBSMessageBox::question(this,
-				SIMPLE_OUTPUT_WARNING("Lossless.Title"),
-				warningString);
+			SIMPLE_OUTPUT_WARNING("Lossless.Title"),
+			warningString);
 
 		if (button == QMessageBox::No) {
 			QMetaObject::invokeMethod(ui->simpleOutRecQuality,
-					"setCurrentIndex", Qt::QueuedConnection,
-					Q_ARG(int, lastSimpleRecQualityIdx));
+				"setCurrentIndex", Qt::QueuedConnection,
+				Q_ARG(int, lastSimpleRecQualityIdx));
 			return;
 		}
 	}

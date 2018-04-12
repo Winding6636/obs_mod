@@ -75,7 +75,7 @@
         </property>
         <property name="icon">
          <iconset resource="obs.qrc">
-          <normaloff>:/settings/images/settings/1033-512.png</normaloff>:/settings/images/settings/1033-512.png</iconset>
+          <normaloff>:/settings/images/settings/rec.png</normaloff>:/settings/images/settings/1033-512.png</iconset>
         </property>
        </item>
        <item>
@@ -128,7 +128,7 @@
      <item>
       <widget class="QStackedWidget" name="settingsPages">
        <property name="currentIndex">
-        <number>3</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="generalPage">
         <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -154,8 +154,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>804</width>
-              <height>744</height>
+              <width>573</width>
+              <height>640</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -440,58 +440,6 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QGroupBox" name="groupBox_14">
-                  <property name="title">
-                   <string>Basic.Settings.General.Projectors</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_28">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <property name="topMargin">
-                    <number>2</number>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QCheckBox" name="hideProjectorCursor">
-                     <property name="text">
-                      <string>Basic.Settings.General.HideProjectorCursor</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QCheckBox" name="projectorAlwaysOnTop">
-                     <property name="text">
-                      <string>Basic.Settings.General.ProjectorAlwaysOnTop</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QCheckBox" name="saveProjectors">
-                     <property name="text">
-                      <string>Basic.Settings.General.SaveProjectors</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <spacer name="horizontalSpacer">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeType">
-                      <enum>QSizePolicy::Fixed</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>170</width>
-                       <height>5</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
                  <widget class="QGroupBox" name="groupBox_13">
                   <property name="title">
                    <string>Basic.Settings.General.SysTray</string>
@@ -549,64 +497,6 @@
                   </layout>
                  </widget>
                 </item>
-                <item>
-                 <widget class="QGroupBox" name="groupBox_11">
-                  <property name="title">
-                   <string>Basic.TogglePreviewProgramMode</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_31">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <property name="labelAlignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                   <property name="topMargin">
-                    <number>2</number>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QCheckBox" name="doubleClickSwitch">
-                     <property name="text">
-                      <string>Basic.Settings.General.SwitchOnDoubleClick</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="0">
-                    <spacer name="horizontalSpacer_6">
-                     <property name="orientation">
-                      <enum>Qt::Horizontal</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
-                      <size>
-                       <width>170</width>
-                       <height>5</height>
-                      </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QCheckBox" name="studioPortraitLayout">
-                     <property name="text">
-                      <string>Basic.Settings.General.StudioPortraitLayout</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QComboBox" name="multiviewLayout"/>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_64">
-                     <property name="text">
-                      <string>Basic.Settings.General.MultiviewLayout</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>multiviewLayout</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </item>
@@ -638,75 +528,225 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <layout class="QVBoxLayout" name="verticalLayout_6">
-            <property name="leftMargin">
-             <number>0</number>
-            </property>
-            <property name="topMargin">
-             <number>0</number>
-            </property>
-            <property name="rightMargin">
-             <number>0</number>
-            </property>
-            <property name="bottomMargin">
-             <number>0</number>
-            </property>
-            <item alignment="Qt::AlignTop">
-             <widget class="QWidget" name="widget_5" native="true">
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
+           <layout class="QVBoxLayout" name="verticalLayout_4">
+            <item>
+             <widget class="QGroupBox" name="groupBox_5">
+              <property name="title">
+               <string>Basic.Settings.Advanced.StreamDelay</string>
               </property>
-              <layout class="QVBoxLayout" name="verticalLayout_7">
-               <property name="leftMargin">
-                <number>0</number>
+              <layout class="QFormLayout" name="formLayout_18">
+               <property name="fieldGrowthPolicy">
+                <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
                </property>
                <property name="topMargin">
-                <number>0</number>
+                <number>2</number>
                </property>
-               <property name="rightMargin">
-                <number>0</number>
-               </property>
-               <property name="bottomMargin">
-                <number>0</number>
-               </property>
-               <item>
-                <widget class="QWidget" name="widget_6" native="true">
-                 <layout class="QFormLayout" name="formLayout_8">
-                  <property name="fieldGrowthPolicy">
-                   <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_56">
+                 <property name="text">
+                  <string>Basic.Settings.Advanced.StreamDelay.Duration</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>streamDelaySec</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QWidget" name="widget_12" native="true">
+                 <property name="enabled">
+                  <bool>true</bool>
+                 </property>
+                 <layout class="QHBoxLayout" name="horizontalLayout_13">
+                  <property name="spacing">
+                   <number>5</number>
                   </property>
-                  <item row="0" column="0">
-                   <widget class="QLabel" name="label_21">
+                  <property name="leftMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="topMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="rightMargin">
+                   <number>0</number>
+                  </property>
+                  <property name="bottomMargin">
+                   <number>0</number>
+                  </property>
+                  <item>
+                   <widget class="QSpinBox" name="streamDelaySec">
+                    <property name="enabled">
+                     <bool>true</bool>
+                    </property>
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
                     <property name="minimumSize">
                      <size>
-                      <width>170</width>
+                      <width>80</width>
                       <height>0</height>
                      </size>
                     </property>
-                    <property name="text">
-                     <string>Basic.Settings.Stream.StreamType</string>
+                    <property name="suffix">
+                     <string notr="true">s</string>
                     </property>
-                    <property name="alignment">
-                     <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                    <property name="minimum">
+                     <number>1</number>
                     </property>
-                    <property name="buddy">
-                     <cstring>streamType</cstring>
+                    <property name="maximum">
+                     <number>1800</number>
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="1">
-                   <widget class="QComboBox" name="streamType"/>
+                  <item>
+                   <widget class="QLabel" name="streamDelayInfo">
+                    <property name="text">
+                     <string notr="true">Estimated RAM goes here</string>
+                    </property>
+                   </widget>
                   </item>
                  </layout>
                 </widget>
                </item>
-               <item>
-                <widget class="Line" name="line">
-                 <property name="orientation">
-                  <enum>Qt::Horizontal</enum>
+               <item row="2" column="1">
+                <widget class="QCheckBox" name="streamDelayPreserve">
+                 <property name="text">
+                  <string>Basic.Settings.Advanced.StreamDelay.Preserve</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QCheckBox" name="streamDelayEnable">
+                 <property name="text">
+                  <string>Enable</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="groupBox_7">
+              <property name="title">
+               <string>Basic.Settings.Output.Reconnect</string>
+              </property>
+              <layout class="QFormLayout" name="formLayout_19">
+               <property name="fieldGrowthPolicy">
+                <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+               </property>
+               <item row="0" column="1">
+                <widget class="QCheckBox" name="reconnectEnable">
+                 <property name="text">
+                  <string>Enable</string>
+                 </property>
+                 <property name="checked">
+                  <bool>true</bool>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_19">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QSpinBox" name="reconnectRetryDelay">
+                   <property name="maximum">
+                    <number>30</number>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_22">
+                   <property name="sizePolicy">
+                    <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                     <horstretch>0</horstretch>
+                     <verstretch>0</verstretch>
+                    </sizepolicy>
+                   </property>
+                   <property name="text">
+                    <string>Basic.Settings.Output.MaxRetries</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>reconnectMaxRetries</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QSpinBox" name="reconnectMaxRetries">
+                   <property name="minimum">
+                    <number>1</number>
+                   </property>
+                   <property name="maximum">
+                    <number>10000</number>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_17">
+                 <property name="text">
+                  <string>Basic.Settings.Output.RetryDelay</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>reconnectRetryDelay</cstring>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <widget class="QGroupBox" name="advNetworkGroupBox">
+              <property name="title">
+               <string>Basic.Settings.Advanced.Network</string>
+              </property>
+              <layout class="QFormLayout" name="formLayout_23">
+               <property name="fieldGrowthPolicy">
+                <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+               </property>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="bindToIP"/>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_27">
+                 <property name="text">
+                  <string>Basic.Settings.Advanced.Network.BindToIP</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>bindToIP</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QCheckBox" name="enableNewSocketLoop">
+                 <property name="text">
+                  <string>Basic.Settings.Advanced.Network.EnableNewSocketLoop</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QCheckBox" name="enableLowLatencyMode">
+                 <property name="enabled">
+                  <bool>false</bool>
+                 </property>
+                 <property name="text">
+                  <string>Basic.Settings.Advanced.Network.EnableLowLatencyMode</string>
                  </property>
                 </widget>
                </item>
@@ -714,6 +754,74 @@
              </widget>
             </item>
            </layout>
+           <widget class="QWidget" name="widget_5" native="true">
+            <property name="geometry">
+             <rect>
+              <x>0</x>
+              <y>317</y>
+              <width>301</width>
+              <height>54</height>
+             </rect>
+            </property>
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <layout class="QVBoxLayout" name="verticalLayout_7">
+             <property name="leftMargin">
+              <number>0</number>
+             </property>
+             <property name="topMargin">
+              <number>0</number>
+             </property>
+             <property name="rightMargin">
+              <number>0</number>
+             </property>
+             <property name="bottomMargin">
+              <number>0</number>
+             </property>
+             <item>
+              <widget class="QWidget" name="widget_6" native="true">
+               <layout class="QFormLayout" name="formLayout_8">
+                <property name="fieldGrowthPolicy">
+                 <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+                </property>
+                <item row="0" column="0">
+                 <widget class="QLabel" name="label_21">
+                  <property name="minimumSize">
+                   <size>
+                    <width>170</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string>Basic.Settings.Stream.StreamType</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="buddy">
+                   <cstring>streamType</cstring>
+                  </property>
+                 </widget>
+                </item>
+                <item row="0" column="1">
+                 <widget class="QComboBox" name="streamType"/>
+                </item>
+               </layout>
+              </widget>
+             </item>
+             <item>
+              <widget class="Line" name="line">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+              </widget>
+             </item>
+            </layout>
+           </widget>
           </widget>
          </item>
         </layout>
@@ -728,56 +836,137 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
-           <layout class="QGridLayout" name="gridLayout">
-            <item row="0" column="0">
-             <widget class="QLabel" name="outputModeLabel_2">
-              <property name="minimumSize">
-               <size>
-                <width>170</width>
-                <height>0</height>
-               </size>
+           <layout class="QVBoxLayout" name="verticalLayout_30">
+            <item>
+             <widget class="QGroupBox" name="groupBox_6">
+              <property name="title">
+               <string>Basic.Settings.Output.Adv.Recording</string>
               </property>
-              <property name="text">
-               <string>Basic.Settings.Recording.Mode</string>
-              </property>
-              <property name="alignment">
-               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-              </property>
-              <property name="buddy">
-               <cstring>outputMode</cstring>
-              </property>
+              <layout class="QFormLayout" name="formLayout_17">
+               <property name="fieldGrowthPolicy">
+                <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+               </property>
+               <property name="labelAlignment">
+                <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+               </property>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_7">
+                 <property name="text">
+                  <string>Basic.Settings.Output.Adv.Recording.Filename</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>filenameFormatting</cstring>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="filenameFormatting"/>
+               </item>
+               <item row="1" column="1">
+                <widget class="QCheckBox" name="overwriteIfExists">
+                 <property name="text">
+                  <string>Basic.Settings.Output.Adv.Recording.OverwriteIfExists</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <layout class="QHBoxLayout" name="horizontalLayout_14">
+                 <property name="leftMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="rightMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <widget class="QLineEdit" name="simpleRBPrefix"/>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_58">
+                   <property name="text">
+                    <string>Basic.Settings.Output.ReplayBuffer.Suffix</string>
+                   </property>
+                   <property name="buddy">
+                    <cstring>simpleRBSuffix</cstring>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLineEdit" name="simpleRBSuffix"/>
+                 </item>
+                </layout>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_57">
+                 <property name="text">
+                  <string>Basic.Settings.Output.ReplayBuffer.Prefix</string>
+                 </property>
+                 <property name="buddy">
+                  <cstring>simpleRBPrefix</cstring>
+                 </property>
+                </widget>
+               </item>
+              </layout>
              </widget>
             </item>
-            <item row="0" column="1">
-             <widget class="QComboBox" name="recordingMode">
-              <property name="enabled">
-               <bool>true</bool>
-              </property>
-              <property name="sizePolicy">
-               <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-               </sizepolicy>
-              </property>
-              <property name="currentIndex">
-               <number>0</number>
-              </property>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_17">
               <item>
-               <property name="text">
-                <string>Basic.Settings.Recording.Mode.Simple</string>
-               </property>
+               <widget class="QLabel" name="outputModeLabel_2">
+                <property name="minimumSize">
+                 <size>
+                  <width>170</width>
+                  <height>0</height>
+                 </size>
+                </property>
+                <property name="text">
+                 <string>Basic.Settings.Recording.Mode</string>
+                </property>
+                <property name="alignment">
+                 <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                </property>
+                <property name="buddy">
+                 <cstring>outputMode</cstring>
+                </property>
+               </widget>
               </item>
               <item>
-               <property name="text">
-                <string>Basic.Settings.Recording.Mode.Adv</string>
-               </property>
+               <widget class="QComboBox" name="recordingMode">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="currentIndex">
+                 <number>0</number>
+                </property>
+                <item>
+                 <property name="text">
+                  <string>Basic.Settings.Recording.Mode.Simple</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>Basic.Settings.Recording.Mode.Adv</string>
+                 </property>
+                </item>
+               </widget>
               </item>
-             </widget>
+             </layout>
             </item>
-            <item row="1" column="0" colspan="2">
+            <item>
              <widget class="QStackedWidget" name="recordingPages">
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="basicRecording">
                <layout class="QGridLayout" name="gridLayout_2">
@@ -1034,7 +1223,77 @@
               </widget>
               <widget class="QWidget" name="advancedRecording">
                <layout class="QGridLayout" name="gridLayout_3">
+                <item row="0" column="0">
+                 <widget class="QWidget" name="advOutRecTypeContainer" native="true">
+                  <layout class="QFormLayout" name="formLayout_9">
+                   <property name="fieldGrowthPolicy">
+                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+                   </property>
+                   <property name="labelAlignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                   <property name="topMargin">
+                    <number>0</number>
+                   </property>
+                   <property name="bottomMargin">
+                    <number>0</number>
+                   </property>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_31">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="minimumSize">
+                      <size>
+                       <width>170</width>
+                       <height>0</height>
+                      </size>
+                     </property>
+                     <property name="text">
+                      <string>Basic.Settings.Output.Adv.Recording.Type</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                     </property>
+                     <property name="buddy">
+                      <cstring>advOutRecType</cstring>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QComboBox" name="advOutRecType">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <item>
+                      <property name="text">
+                       <string>Basic.Settings.Output.Adv.Recording.Type.Standard</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
+                       <string>Basic.Settings.Output.Adv.Recording.Type.FFmpegOutput</string>
+                      </property>
+                     </item>
+                    </widget>
+                   </item>
+                  </layout>
+                 </widget>
+                </item>
                 <item row="1" column="0">
+                 <widget class="Line" name="line_3">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item row="2" column="0">
                  <widget class="QStackedWidget" name="stackedWidget">
                   <property name="currentIndex">
                    <number>1</number>
@@ -1373,7 +1632,7 @@
                     <item row="1" column="1">
                      <widget class="QStackedWidget" name="stackedWidget_2">
                       <property name="currentIndex">
-                       <number>0</number>
+                       <number>1</number>
                       </property>
                       <widget class="QWidget" name="page_5">
                        <layout class="QHBoxLayout" name="horizontalLayout_12">
@@ -1759,76 +2018,6 @@
                   </widget>
                  </widget>
                 </item>
-                <item row="1" column="0">
-                 <widget class="Line" name="line_3">
-                  <property name="orientation">
-                   <enum>Qt::Horizontal</enum>
-                  </property>
-                 </widget>
-                </item>
-                <item row="0" column="0">
-                 <widget class="QWidget" name="advOutRecTypeContainer" native="true">
-                  <layout class="QFormLayout" name="formLayout_9">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <property name="labelAlignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                   <property name="topMargin">
-                    <number>0</number>
-                   </property>
-                   <property name="bottomMargin">
-                    <number>0</number>
-                   </property>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_31">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="minimumSize">
-                      <size>
-                       <width>170</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Basic.Settings.Output.Adv.Recording.Type</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="buddy">
-                      <cstring>advOutRecType</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QComboBox" name="advOutRecType">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <item>
-                      <property name="text">
-                       <string>Basic.Settings.Output.Adv.Recording.Type.Standard</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>Basic.Settings.Output.Adv.Recording.Type.FFmpegOutput</string>
-                      </property>
-                     </item>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
                </layout>
               </widget>
              </widget>
@@ -1862,8 +2051,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>804</width>
-              <height>796</height>
+              <width>598</width>
+              <height>822</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_21">
@@ -1952,7 +2141,7 @@
              <item>
               <widget class="QStackedWidget" name="outputModePages">
                <property name="currentIndex">
-                <number>0</number>
+                <number>1</number>
                </property>
                <widget class="QWidget" name="easyOutputsPage">
                 <layout class="QVBoxLayout" name="verticalLayout_3">
@@ -2550,7 +2739,7 @@
                  <item>
                   <widget class="QTabWidget" name="tabWidget">
                    <property name="currentIndex">
-                    <number>0</number>
+                    <number>2</number>
                    </property>
                    <widget class="QWidget" name="Server_1">
                     <attribute name="title">
@@ -3490,7 +3679,7 @@
                      <item row="0" column="0">
                       <widget class="QTabWidget" name="advOutTabs_2">
                        <property name="currentIndex">
-                        <number>0</number>
+                        <number>1</number>
                        </property>
                        <property name="usesScrollButtons">
                         <bool>true</bool>
@@ -4420,7 +4609,7 @@
                      <item row="0" column="0">
                       <widget class="QTabWidget" name="advOutTabs_3">
                        <property name="currentIndex">
-                        <number>0</number>
+                        <number>1</number>
                        </property>
                        <property name="usesScrollButtons">
                         <bool>true</bool>
@@ -5420,31 +5609,6 @@
              <string>Stereo</string>
             </property>
            </item>
-           <item>
-            <property name="text">
-             <string>2.1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>4.0</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>4.1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>5.1</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>7.1</string>
-            </property>
-           </item>
           </widget>
          </item>
          <item row="2" column="0">
@@ -5544,7 +5708,7 @@
            </property>
           </widget>
          </item>
-         <item row="8" column="0" colspan="2">
+         <item row="7" column="0" colspan="2">
           <widget class="QScrollArea" name="audioSourceScrollArea">
            <property name="widgetResizable">
             <bool>true</bool>
@@ -5554,14 +5718,15 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>98</width>
-              <height>28</height>
+              <width>55</width>
+              <height>22</height>
              </rect>
             </property>
+            <layout class="QVBoxLayout" name="verticalLayout_6"/>
            </widget>
           </widget>
          </item>
-         <item row="9" column="1">
+         <item row="8" column="1">
           <widget class="QLabel" name="audioMsg">
            <property name="styleSheet">
             <string notr="true">color: rgb(255, 0, 4);</string>
@@ -5574,69 +5739,47 @@
            </property>
           </widget>
          </item>
-         <item row="10" column="1">
-          <widget class="QLabel" name="audioMsg_2">
-           <property name="text">
-            <string notr="true"/>
+         <item row="9" column="0" colspan="2">
+          <widget class="QGroupBox" name="advAudioGroupBox">
+           <property name="title">
+            <string>Basic.Settings.Audio</string>
            </property>
-           <property name="wordWrap">
-            <bool>true</bool>
-           </property>
-           <property name="themeID" stdset="0">
-            <string notr="true">warning</string>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="0">
-          <widget class="QLabel" name="label_65">
-           <property name="text">
-            <string>Basic.Settings.Audio.MeterDecayRate</string>
-           </property>
-           <property name="buddy">
-            <cstring>meterDecayRate</cstring>
-           </property>
-          </widget>
-         </item>
-         <item row="7" column="1">
-          <widget class="QComboBox" name="meterDecayRate">
-           <property name="currentText">
-            <string>Basic.Settings.Audio.MeterDecayRate.Fast</string>
-           </property>
-           <property name="currentIndex">
-            <number>0</number>
-           </property>
-           <item>
-            <property name="text">
-             <string>Basic.Settings.Audio.MeterDecayRate.Fast</string>
+           <layout class="QFormLayout" name="formLayout_48">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
             </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Basic.Settings.Audio.MeterDecayRate.Medium</string>
-            </property>
-           </item>
-           <item>
-            <property name="text">
-             <string>Basic.Settings.Audio.MeterDecayRate.Slow</string>
-            </property>
-           </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="monitoringDeviceLabel">
+              <property name="text">
+               <string>Basic.Settings.Advanced.Audio.MonitoringDevice</string>
+              </property>
+              <property name="buddy">
+               <cstring>monitoringDevice</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="monitoringDevice"/>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="disableAudioDucking">
+              <property name="text">
+               <string>Basic.Settings.Advanced.Audio.DisableAudioDucking</string>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
        </widget>
        <widget class="QWidget" name="videoPage">
         <layout class="QFormLayout" name="formLayout_3">
-         <property name="fieldGrowthPolicy">
-          <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-         </property>
-         <property name="labelAlignment">
-          <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-         </property>
          <item row="0" column="0">
           <widget class="QLabel" name="label_8">
            <property name="minimumSize">
             <size>
-             <width>170</width>
+             <width>0</width>
              <height>0</height>
             </size>
            </property>
@@ -5896,7 +6039,59 @@
            </widget>
           </widget>
          </item>
-         <item row="4" column="1">
+         <item row="4" column="0" colspan="2">
+          <widget class="QGroupBox" name="groupBox_14">
+           <property name="title">
+            <string>Basic.Settings.General.Projectors</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout_28">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
+            <property name="topMargin">
+             <number>2</number>
+            </property>
+            <item row="0" column="1">
+             <widget class="QCheckBox" name="hideProjectorCursor">
+              <property name="text">
+               <string>Basic.Settings.General.HideProjectorCursor</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="projectorAlwaysOnTop">
+              <property name="text">
+               <string>Basic.Settings.General.ProjectorAlwaysOnTop</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="saveProjectors">
+              <property name="text">
+               <string>Basic.Settings.General.SaveProjectors</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Horizontal</enum>
+              </property>
+              <property name="sizeType">
+               <enum>QSizePolicy::Fixed</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>170</width>
+                <height>5</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="5" column="1">
           <widget class="QLabel" name="videoMsg">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
@@ -5913,6 +6108,218 @@
            <property name="wordWrap">
             <bool>true</bool>
            </property>
+          </widget>
+         </item>
+         <item row="6" column="0" colspan="2">
+          <widget class="QGroupBox" name="advancedGeneralGroupBox">
+           <property name="title">
+            <string>Basic.Settings.General</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout_22">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="processPriorityLabel">
+              <property name="text">
+               <string>Basic.Settings.Advanced.General.ProcessPriority</string>
+              </property>
+              <property name="buddy">
+               <cstring>processPriority</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="processPriority"/>
+            </item>
+           </layout>
+          </widget>
+         </item>
+         <item row="7" column="0" colspan="2">
+          <widget class="QGroupBox" name="advancedVideoContainer">
+           <property name="title">
+            <string>Basic.Settings.Video</string>
+           </property>
+           <layout class="QFormLayout" name="formLayout_14">
+            <property name="fieldGrowthPolicy">
+             <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
+            </property>
+            <property name="labelAlignment">
+             <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+            </property>
+            <item row="0" column="0">
+             <widget class="QLabel" name="rendererLabel">
+              <property name="text">
+               <string>Basic.Settings.Video.Renderer</string>
+              </property>
+              <property name="buddy">
+               <cstring>renderer</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="1">
+             <widget class="QComboBox" name="renderer">
+              <property name="currentText">
+               <string notr="true"/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="adapterLabel">
+              <property name="text">
+               <string>Basic.Settings.Video.Adapter</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="buddy">
+               <cstring>adapter</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QComboBox" name="adapter">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="currentText">
+               <string notr="true"/>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_30">
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>0</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Basic.Settings.Advanced.Video.ColorFormat</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+              </property>
+              <property name="buddy">
+               <cstring>colorFormat</cstring>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="colorFormat">
+              <item>
+               <property name="text">
+                <string notr="true">NV12</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true">I420</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>I444</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string notr="true">RGB</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="4" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_18">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QCheckBox" name="disableOSXVSync">
+                <property name="text">
+                 <string>DisableOSXVSync</string>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QCheckBox" name="resetOSXVSync">
+                <property name="text">
+                 <string>ResetOSXVSyncOnExit</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="1">
+             <layout class="QHBoxLayout" name="horizontalLayout_20">
+              <property name="leftMargin">
+               <number>0</number>
+              </property>
+              <property name="topMargin">
+               <number>0</number>
+              </property>
+              <property name="rightMargin">
+               <number>0</number>
+              </property>
+              <property name="bottomMargin">
+               <number>0</number>
+              </property>
+              <item>
+               <widget class="QComboBox" name="colorSpace">
+                <item>
+                 <property name="text">
+                  <string notr="true">709</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string notr="true">601</string>
+                 </property>
+                </item>
+               </widget>
+              </item>
+              <item>
+               <widget class="QLabel" name="label_34">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
+                <property name="text">
+                 <string>Basic.Settings.Advanced.Video.ColorRange</string>
+                </property>
+                <property name="buddy">
+                 <cstring>colorRange</cstring>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QComboBox" name="colorRange"/>
+              </item>
+             </layout>
+            </item>
+            <item row="3" column="0">
+             <widget class="QLabel" name="label_33">
+              <property name="text">
+               <string>Basic.Settings.Advanced.Video.ColorSpace</string>
+              </property>
+              <property name="buddy">
+               <cstring>colorSpace</cstring>
+              </property>
+             </widget>
+            </item>
+           </layout>
           </widget>
          </item>
         </layout>
@@ -5973,8 +6380,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>717</width>
-              <height>867</height>
+              <width>79</width>
+              <height>70</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_16">
@@ -5993,551 +6400,6 @@
              <item alignment="Qt::AlignTop">
               <widget class="QWidget" name="widget_11" native="true">
                <layout class="QVBoxLayout" name="verticalLayout_17">
-                <item>
-                 <widget class="QGroupBox" name="advancedGeneralGroupBox">
-                  <property name="title">
-                   <string>Basic.Settings.General</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_22">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="processPriorityLabel">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.General.ProcessPriority</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>processPriority</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QComboBox" name="processPriority"/>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QGroupBox" name="advancedVideoContainer">
-                  <property name="title">
-                   <string>Basic.Settings.Video</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_14">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <property name="labelAlignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="rendererLabel">
-                     <property name="text">
-                      <string>Basic.Settings.Video.Renderer</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>renderer</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QComboBox" name="renderer">
-                     <property name="currentText">
-                      <string notr="true"/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="adapterLabel">
-                     <property name="text">
-                      <string>Basic.Settings.Video.Adapter</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="buddy">
-                      <cstring>adapter</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QComboBox" name="adapter">
-                     <property name="enabled">
-                      <bool>false</bool>
-                     </property>
-                     <property name="currentText">
-                      <string notr="true"/>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_30">
-                     <property name="minimumSize">
-                      <size>
-                       <width>0</width>
-                       <height>0</height>
-                      </size>
-                     </property>
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.Video.ColorFormat</string>
-                     </property>
-                     <property name="alignment">
-                      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                     </property>
-                     <property name="buddy">
-                      <cstring>colorFormat</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QComboBox" name="colorFormat">
-                     <item>
-                      <property name="text">
-                       <string notr="true">NV12</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">I420</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string>I444</string>
-                      </property>
-                     </item>
-                     <item>
-                      <property name="text">
-                       <string notr="true">RGB</string>
-                      </property>
-                     </item>
-                    </widget>
-                   </item>
-                   <item row="4" column="1">
-                    <layout class="QHBoxLayout" name="horizontalLayout_18">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QCheckBox" name="disableOSXVSync">
-                       <property name="text">
-                        <string>DisableOSXVSync</string>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QCheckBox" name="resetOSXVSync">
-                       <property name="text">
-                        <string>ResetOSXVSyncOnExit</string>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="3" column="1">
-                    <layout class="QHBoxLayout" name="horizontalLayout_20">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QComboBox" name="colorSpace">
-                       <item>
-                        <property name="text">
-                         <string notr="true">709</string>
-                        </property>
-                       </item>
-                       <item>
-                        <property name="text">
-                         <string notr="true">601</string>
-                        </property>
-                       </item>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLabel" name="label_34">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Basic.Settings.Advanced.Video.ColorRange</string>
-                       </property>
-                       <property name="buddy">
-                        <cstring>colorRange</cstring>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QComboBox" name="colorRange"/>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="3" column="0">
-                    <widget class="QLabel" name="label_33">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.Video.ColorSpace</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>colorSpace</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QGroupBox" name="advAudioGroupBox">
-                  <property name="title">
-                   <string>Basic.Settings.Audio</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_27">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="monitoringDeviceLabel">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.Audio.MonitoringDevice</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>monitoringDevice</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QComboBox" name="monitoringDevice"/>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QCheckBox" name="disableAudioDucking">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.Audio.DisableAudioDucking</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QGroupBox" name="groupBox_6">
-                  <property name="title">
-                   <string>Basic.Settings.Output.Adv.Recording</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_17">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <property name="labelAlignment">
-                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
-                   </property>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_7">
-                     <property name="text">
-                      <string>Basic.Settings.Output.Adv.Recording.Filename</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>filenameFormatting</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QLineEdit" name="filenameFormatting"/>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QCheckBox" name="overwriteIfExists">
-                     <property name="text">
-                      <string>Basic.Settings.Output.Adv.Recording.OverwriteIfExists</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <layout class="QHBoxLayout" name="horizontalLayout_14">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QLineEdit" name="simpleRBPrefix"/>
-                     </item>
-                     <item>
-                      <widget class="QLabel" name="label_58">
-                       <property name="text">
-                        <string>Basic.Settings.Output.ReplayBuffer.Suffix</string>
-                       </property>
-                       <property name="buddy">
-                        <cstring>simpleRBSuffix</cstring>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLineEdit" name="simpleRBSuffix"/>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="2" column="0">
-                    <widget class="QLabel" name="label_57">
-                     <property name="text">
-                      <string>Basic.Settings.Output.ReplayBuffer.Prefix</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>simpleRBPrefix</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QGroupBox" name="groupBox_5">
-                  <property name="title">
-                   <string>Basic.Settings.Advanced.StreamDelay</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_18">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <property name="topMargin">
-                    <number>2</number>
-                   </property>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_56">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.StreamDelay.Duration</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>streamDelaySec</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QWidget" name="widget_12" native="true">
-                     <property name="enabled">
-                      <bool>true</bool>
-                     </property>
-                     <layout class="QHBoxLayout" name="horizontalLayout_13">
-                      <property name="spacing">
-                       <number>5</number>
-                      </property>
-                      <property name="leftMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="topMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="rightMargin">
-                       <number>0</number>
-                      </property>
-                      <property name="bottomMargin">
-                       <number>0</number>
-                      </property>
-                      <item>
-                       <widget class="QSpinBox" name="streamDelaySec">
-                        <property name="enabled">
-                         <bool>true</bool>
-                        </property>
-                        <property name="sizePolicy">
-                         <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-                          <horstretch>0</horstretch>
-                          <verstretch>0</verstretch>
-                         </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                         <size>
-                          <width>80</width>
-                          <height>0</height>
-                         </size>
-                        </property>
-                        <property name="suffix">
-                         <string notr="true">s</string>
-                        </property>
-                        <property name="minimum">
-                         <number>1</number>
-                        </property>
-                        <property name="maximum">
-                         <number>1800</number>
-                        </property>
-                       </widget>
-                      </item>
-                      <item>
-                       <widget class="QLabel" name="streamDelayInfo">
-                        <property name="text">
-                         <string notr="true">Estimated RAM goes here</string>
-                        </property>
-                       </widget>
-                      </item>
-                     </layout>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QCheckBox" name="streamDelayPreserve">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.StreamDelay.Preserve</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="1">
-                    <widget class="QCheckBox" name="streamDelayEnable">
-                     <property name="text">
-                      <string>Enable</string>
-                     </property>
-                     <property name="checked">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QGroupBox" name="groupBox_7">
-                  <property name="title">
-                   <string>Basic.Settings.Output.Reconnect</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_19">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QCheckBox" name="reconnectEnable">
-                     <property name="text">
-                      <string>Enable</string>
-                     </property>
-                     <property name="checked">
-                      <bool>true</bool>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <layout class="QHBoxLayout" name="horizontalLayout_19">
-                     <property name="leftMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="topMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="rightMargin">
-                      <number>0</number>
-                     </property>
-                     <property name="bottomMargin">
-                      <number>0</number>
-                     </property>
-                     <item>
-                      <widget class="QSpinBox" name="reconnectRetryDelay">
-                       <property name="maximum">
-                        <number>30</number>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QLabel" name="label_22">
-                       <property name="sizePolicy">
-                        <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-                         <horstretch>0</horstretch>
-                         <verstretch>0</verstretch>
-                        </sizepolicy>
-                       </property>
-                       <property name="text">
-                        <string>Basic.Settings.Output.MaxRetries</string>
-                       </property>
-                       <property name="buddy">
-                        <cstring>reconnectMaxRetries</cstring>
-                       </property>
-                      </widget>
-                     </item>
-                     <item>
-                      <widget class="QSpinBox" name="reconnectMaxRetries">
-                       <property name="minimum">
-                        <number>1</number>
-                       </property>
-                       <property name="maximum">
-                        <number>10000</number>
-                       </property>
-                      </widget>
-                     </item>
-                    </layout>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_17">
-                     <property name="text">
-                      <string>Basic.Settings.Output.RetryDelay</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>reconnectRetryDelay</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
-                <item>
-                 <widget class="QGroupBox" name="advNetworkGroupBox">
-                  <property name="title">
-                   <string>Basic.Settings.Advanced.Network</string>
-                  </property>
-                  <layout class="QFormLayout" name="formLayout_23">
-                   <property name="fieldGrowthPolicy">
-                    <enum>QFormLayout::AllNonFixedFieldsGrow</enum>
-                   </property>
-                   <item row="0" column="1">
-                    <widget class="QComboBox" name="bindToIP"/>
-                   </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_27">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.Network.BindToIP</string>
-                     </property>
-                     <property name="buddy">
-                      <cstring>bindToIP</cstring>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="1">
-                    <widget class="QCheckBox" name="enableNewSocketLoop">
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.Network.EnableNewSocketLoop</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1">
-                    <widget class="QCheckBox" name="enableLowLatencyMode">
-                     <property name="enabled">
-                      <bool>false</bool>
-                     </property>
-                     <property name="text">
-                      <string>Basic.Settings.Advanced.Network.EnableLowLatencyMode</string>
-                     </property>
-                    </widget>
-                   </item>
-                  </layout>
-                 </widget>
-                </item>
                 <item>
                  <widget class="QLabel" name="advancedMsg">
                   <property name="styleSheet">
@@ -6614,28 +6476,6 @@
   <tabstop>fpsNumerator</tabstop>
   <tabstop>fpsDenominator</tabstop>
   <tabstop>scrollArea</tabstop>
-  <tabstop>processPriority</tabstop>
-  <tabstop>renderer</tabstop>
-  <tabstop>adapter</tabstop>
-  <tabstop>colorFormat</tabstop>
-  <tabstop>colorSpace</tabstop>
-  <tabstop>colorRange</tabstop>
-  <tabstop>disableOSXVSync</tabstop>
-  <tabstop>resetOSXVSync</tabstop>
-  <tabstop>monitoringDevice</tabstop>
-  <tabstop>filenameFormatting</tabstop>
-  <tabstop>overwriteIfExists</tabstop>
-  <tabstop>simpleRBPrefix</tabstop>
-  <tabstop>simpleRBSuffix</tabstop>
-  <tabstop>streamDelayEnable</tabstop>
-  <tabstop>streamDelaySec</tabstop>
-  <tabstop>streamDelayPreserve</tabstop>
-  <tabstop>reconnectEnable</tabstop>
-  <tabstop>reconnectRetryDelay</tabstop>
-  <tabstop>reconnectMaxRetries</tabstop>
-  <tabstop>bindToIP</tabstop>
-  <tabstop>enableNewSocketLoop</tabstop>
-  <tabstop>enableLowLatencyMode</tabstop>
   <tabstop>warnBeforeStreamStop</tabstop>
   <tabstop>recordWhenStreaming</tabstop>
   <tabstop>keepRecordStreamStops</tabstop>
@@ -6646,9 +6486,6 @@
   <tabstop>centerSnapping</tabstop>
   <tabstop>sourceSnapping</tabstop>
   <tabstop>snapDistance</tabstop>
-  <tabstop>hideProjectorCursor</tabstop>
-  <tabstop>projectorAlwaysOnTop</tabstop>
-  <tabstop>saveProjectors</tabstop>
   <tabstop>systemTrayEnabled</tabstop>
   <tabstop>systemTrayWhenStarted</tabstop>
   <tabstop>systemTrayAlways</tabstop>
@@ -6662,6 +6499,22 @@
   <include location="obs.qrc"/>
  </resources>
  <connections>
+  <connection>
+   <sender>fpsType</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>fpsTypes</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>310</x>
+     <y>29</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>241</x>
+     <y>30</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>listWidget</sender>
    <signal>currentRowChanged(int)</signal>
@@ -6679,18 +6532,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>fpsType</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>fpsTypes</receiver>
-   <slot>setCurrentIndex(int)</slot>
+   <sender>snappingEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>snapDistance</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>310</x>
-     <y>29</y>
+     <x>950</x>
+     <y>340</y>
     </hint>
     <hint type="destinationlabel">
-     <x>241</x>
-     <y>30</y>
+     <x>950</x>
+     <y>366</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>snappingEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>sourceSnapping</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>950</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>950</x>
+     <y>412</y>
     </hint>
    </hints>
   </connection>
@@ -6711,6 +6580,38 @@
    </hints>
   </connection>
   <connection>
+   <sender>snappingEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>screenSnapping</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>950</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>950</x>
+     <y>389</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>replayWhileStreaming</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>keepReplayStreamStops</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>950</x>
+     <y>268</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>950</x>
+     <y>291</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
    <sender>systemTrayEnabled</sender>
    <signal>toggled(bool)</signal>
    <receiver>systemTrayWhenStarted</receiver>
@@ -6723,6 +6624,134 @@
     <hint type="destinationlabel">
      <x>950</x>
      <y>602</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_70</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>441</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>341</x>
+     <y>494</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutEnforce_4</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>684</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>612</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutCustom_3</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>441</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>522</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutEnforce_3</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>441</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>467</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced_3</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_71</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>441</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>522</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_23</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>snappingEnabled</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>centerSnapping</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>950</x>
+     <y>340</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>950</x>
+     <y>435</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>recordingMode</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>recordingPages</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>669</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>373</y>
     </hint>
    </hints>
   </connection>
@@ -6743,10 +6772,10 @@
    </hints>
   </connection>
   <connection>
-   <sender>enableNewSocketLoop</sender>
+   <sender>simpleOutAdvanced</sender>
    <signal>toggled(bool)</signal>
-   <receiver>enableLowLatencyMode</receiver>
-   <slot>setEnabled(bool)</slot>
+   <receiver>label_24</receiver>
+   <slot>setVisible(bool)</slot>
    <hints>
     <hint type="sourcelabel">
      <x>250</x>
@@ -6771,214 +6800,6 @@
     <hint type="destinationlabel">
      <x>347</x>
      <y>366</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>snappingEnabled</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>snapDistance</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>340</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>950</x>
-     <y>366</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>snappingEnabled</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>screenSnapping</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>340</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>950</x>
-     <y>389</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>snappingEnabled</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>sourceSnapping</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>340</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>950</x>
-     <y>412</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>snappingEnabled</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>centerSnapping</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>340</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>950</x>
-     <y>435</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>recordWhenStreaming</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>keepRecordStreamStops</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>222</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>950</x>
-     <y>245</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>replayWhileStreaming</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>keepReplayStreamStops</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>950</x>
-     <y>268</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>950</x>
-     <y>291</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>streamDelayEnable</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_56</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>streamDelayEnable</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>streamDelaySec</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>streamDelayEnable</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>streamDelayInfo</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>streamDelayEnable</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>streamDelayPreserve</receiver>
-   <slot>setEnabled(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>simpleOutPreset</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_23</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_24</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>250</x>
-     <y>39</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>250</x>
-     <y>39</y>
     </hint>
    </hints>
   </connection>
@@ -7015,18 +6836,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>recordingMode</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>recordingPages</receiver>
-   <slot>setCurrentIndex(int)</slot>
+   <sender>recordWhenStreaming</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>keepRecordStreamStops</receiver>
+   <slot>setEnabled(bool)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>669</x>
-     <y>40</y>
+     <x>950</x>
+     <y>222</y>
     </hint>
     <hint type="destinationlabel">
-     <x>560</x>
-     <y>373</y>
+     <x>950</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutPreset</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
     </hint>
    </hints>
   </connection>
@@ -7043,102 +6880,6 @@
     <hint type="destinationlabel">
      <x>696</x>
      <y>494</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced_3</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_70</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>441</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>341</x>
-     <y>494</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced_3</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>simpleOutCustom_3</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>441</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>696</x>
-     <y>522</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced_3</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>label_71</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>441</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>522</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced_3</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>simpleOutEnforce_3</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>441</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>696</x>
-     <y>467</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced_4</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>simpleOutPreset_4</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>684</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>696</x>
-     <y>639</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced_4</sender>
-   <signal>toggled(bool)</signal>
-   <receiver>simpleOutEnforce_4</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>684</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>696</x>
-     <y>612</y>
     </hint>
    </hints>
   </connection>
@@ -7161,22 +6902,6 @@
   <connection>
    <sender>simpleOutAdvanced_4</sender>
    <signal>toggled(bool)</signal>
-   <receiver>label_75</receiver>
-   <slot>setVisible(bool)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>696</x>
-     <y>684</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>312</x>
-     <y>667</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>simpleOutAdvanced_4</sender>
-   <signal>toggled(bool)</signal>
    <receiver>label_74</receiver>
    <slot>setVisible(bool)</slot>
    <hints>
@@ -7187,6 +6912,38 @@
     <hint type="destinationlabel">
      <x>341</x>
      <y>639</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutPreset_4</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>684</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>696</x>
+     <y>639</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced_4</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_75</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>684</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>312</x>
+     <y>667</y>
     </hint>
    </hints>
   </connection>
