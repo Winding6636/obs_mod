@@ -1261,7 +1261,7 @@ void OBSBasicSettings::LoadStream1Settings()
 	printf("**************OBSBasicSettings::LoadStream1Settings()**************** \n");
 	printf("****	here is where the stream properties widgets are created****** \n");
 	printf("********************************************************************* \n");
-	QLayout *layout = ui->streamContainer->layout();
+	QLayout *layout = ui->streamType1group->layout();
 	obs_service_t ** service = main->GetService();
 	loading = true;
 
@@ -1280,7 +1280,7 @@ void OBSBasicSettings::LoadStream1Settings()
 
 	if (main->StreamingActive()) {
 		ui->streamType1->setEnabled(false);
-		ui->streamContainer->setEnabled(false);
+		ui->streamType1group->setEnabled(false);
 	}
 }
 
@@ -1289,7 +1289,7 @@ void OBSBasicSettings::LoadStream2Settings()
 	printf("**************OBSBasicSettings::LoadStream2Settings()**************** \n");
 	printf("****	here is where the stream properties widgets are created****** \n");
 	printf("********************************************************************* \n");
-	QLayout *layout = ui->streamContainer->layout();
+	QLayout *layout = ui->streamType2group->layout();
 	obs_service_t ** service = main->GetService();
 	loading = true;
 
@@ -1308,7 +1308,7 @@ void OBSBasicSettings::LoadStream2Settings()
 
 	if (main->StreamingActive()) {
 		ui->streamType2->setEnabled(false);
-		ui->streamContainer->setEnabled(false);
+		ui->streamType2group->setEnabled(false);
 	}
 }
 
@@ -1317,7 +1317,7 @@ void OBSBasicSettings::LoadStream3Settings()
 	printf("**************OBSBasicSettings::LoadStream3Settings()**************** \n");
 	printf("****	here is where the stream properties widgets are created****** \n");
 	printf("********************************************************************* \n");
-	QLayout *layout = ui->streamContainer->layout();
+	QLayout *layout = ui->streamType3group->layout();
 	obs_service_t ** service = main->GetService();
 	loading = true;
 
@@ -1336,7 +1336,7 @@ void OBSBasicSettings::LoadStream3Settings()
 
 	if (main->StreamingActive()) {
 		ui->streamType3->setEnabled(false);
-		ui->streamContainer->setEnabled(false);
+		ui->streamType3group->setEnabled(false);
 	}
 }
 
@@ -3939,7 +3939,7 @@ void OBSBasicSettings::on_streamType1_currentIndexChanged(int idx)
 	if (loading)
 		return;
 
-	QLayout *layout = ui->streamContainer->layout();
+	QLayout *layout = ui->streamType1group->layout();
 	QString streamType = ui->streamType1->itemData(idx).toString();
 	obs_data_t *settings = obs_service_defaults(QT_TO_UTF8(streamType));
 
@@ -3959,7 +3959,7 @@ void OBSBasicSettings::on_streamType2_currentIndexChanged(int idx)
 	if (loading)
 		return;
 
-	QLayout *layout = ui->streamContainer->layout();
+	QLayout *layout = ui->streamType2group->layout();
 	QString streamType = ui->streamType2->itemData(idx).toString();
 	obs_data_t *settings = obs_service_defaults(QT_TO_UTF8(streamType));
 
@@ -3979,7 +3979,7 @@ void OBSBasicSettings::on_streamType3_currentIndexChanged(int idx)
 	if (loading)
 		return;
 
-	QLayout *layout = ui->streamContainer->layout();
+	QLayout *layout = ui->streamType3group->layout();
 	QString streamType = ui->streamType3->itemData(idx).toString();
 	obs_data_t *settings = obs_service_defaults(QT_TO_UTF8(streamType));
 
