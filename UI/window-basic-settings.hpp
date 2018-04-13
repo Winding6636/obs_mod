@@ -94,6 +94,8 @@ private:
 
 	bool generalChanged = false;
 	bool stream1Changed = false;
+	bool stream2Changed = false;
+	bool stream3Changed = false;
 	bool outputsChanged = false;
 	bool audioChanged = false;
 	bool videoChanged = false;
@@ -257,7 +259,9 @@ private slots:
 	void on_listWidget_itemSelectionChanged();
 	void on_buttonBox_clicked(QAbstractButton *button);
 
-	void on_streamType_currentIndexChanged(int idx);
+	void on_streamType1_currentIndexChanged(int idx);
+	void on_streamType2_currentIndexChanged(int idx);
+	void on_streamType3_currentIndexChanged(int idx);
 	void on_simpleOutputBrowse_clicked();
 	void on_advOutRecPathBrowse_clicked();
 	void on_advOutFFPathBrowse_clicked();

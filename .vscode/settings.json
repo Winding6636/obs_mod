@@ -5,6 +5,16 @@
         "system_error": "cpp",
         "xfunctional": "cpp",
         "xlocmon": "cpp",
-        "xtr1common": "cpp"
+        "xtr1common": "cpp",
+        "chrono": "cpp",
+        "functional": "cpp",
+        "future": "cpp",
+        "memory": "cpp",
+        "ratio": "cpp",
+        "tuple": "cpp",
+        "type_traits": "cpp",
+        "utility": "cpp",
+        "xmemory0": "cpp",
+        "xutility": "cpp"
     }
 }
