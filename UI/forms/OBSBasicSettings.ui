@@ -759,8 +759,11 @@
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="currentText">
+                  <string>Basic.Settings.Recording.Mode.Simple</string>
+              </property>
               <property name="currentIndex">
-               <number>0</number>
+                  <number>0</number>
               </property>
               <item>
                <property name="text">
@@ -6782,6 +6785,22 @@
     </hint>
    </hints>
   </connection>
+    <connection>
+   <sender>recordingMode</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>recordingPages</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>669</x>
+     <y>40</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>560</x>
+     <y>373</y>
+    </hint>
+   </hints>
+  </connection>
   <connection>
    <sender>simpleOutAdvanced</sender>
    <signal>toggled(bool)</signal>
@@ -7339,22 +7358,6 @@
     <hint type="destinationlabel">
      <x>250</x>
      <y>39</y>
-    </hint>
-   </hints>
-  </connection>
-  <connection>
-   <sender>recordingMode</sender>
-   <signal>currentIndexChanged(int)</signal>
-   <receiver>recordingPages</receiver>
-   <slot>setCurrentIndex(int)</slot>
-   <hints>
-    <hint type="sourcelabel">
-     <x>669</x>
-     <y>40</y>
-    </hint>
-    <hint type="destinationlabel">
-     <x>560</x>
-     <y>373</y>
     </hint>
    </hints>
   </connection>
