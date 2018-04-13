@@ -2233,7 +2233,7 @@ void OBSBasicSettings::LoadOutputSettings()
 
 	int modeIdx = astrcmpi(mode, "Advanced") == 0 ? 1 : 0;
 	int recmodeIdx = astrcmpi(recmode, "Advanced") == 0 ? 1 : 0;
-	ui->outputMode->setCurrentIndex(modeIddx);
+	ui->outputMode->setCurrentIndex(modeIdx);
 	ui->recordingMode->setCurrentIndex(recmodeIdx);
 
 	LoadSimpleOutputSettings();
