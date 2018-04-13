@@ -2229,10 +2229,12 @@ void OBSBasicSettings::LoadOutputSettings()
 	loading = true;
 
 	const char *mode = config_get_string(main->Config(), "Output", "Mode");
+	const char *recmode = config_get_string(main->Config(), "Output", "RecMode");
 
 	int modeIdx = astrcmpi(mode, "Advanced") == 0 ? 1 : 0;
-	ui->outputMode->setCurrentIndex(modeIdx);
-	ui->recordingMode->setCurrentIndex(modeIdx);
+	int recmodeIdx = astrcmpi(recmode, "Advanced") == 0 ? 1 : 0;
+	ui->outputMode->setCurrentIndex(modeIddx);
+	ui->recordingMode->setCurrentIndex(recmodeIdx);
 
 	LoadSimpleOutputSettings();
 	LoadAdvOutputStreamingSettings();
@@ -3304,8 +3306,8 @@ void OBSBasicSettings::SaveEncoder(QComboBox *combo, const char *section,
 
 void OBSBasicSettings::SaveOutputSettings()
 {
-	config_set_string(main->Config(), "Output", "Mode",
-			OutputModeFromIdx(ui->outputMode->currentIndex()));
+	config_set_string(main->Config(), "Output", "Mode",OutputModeFromIdx(ui->outputMode->currentIndex()));
+	config_set_string(main->Config(), "Output", "RecMode",OutputModeFromIdx(ui->recordingMode->currentIndex()));
 	QString encoder[NUMBER_OF_STREAM_SERVERS];
 	char presetType[NUMBER_OF_STREAM_SERVERS][20];
 

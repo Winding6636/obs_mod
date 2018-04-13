@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "xiosbase": "cpp"
+        "xiosbase": "cpp",
+        "regex": "cpp",
+        "system_error": "cpp",
+        "xfunctional": "cpp",
+        "xlocmon": "cpp",
+        "xtr1common": "cpp"
     }
 }
