@@ -3,12 +3,15 @@
  <author>Jim</author>
  <class>OBSBasic</class>
  <widget class="QMainWindow" name="OBSBasic">
+  <property name="enabled">
+   <bool>true</bool>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
     <width>1104</width>
-    <height>644</height>
+    <height>387</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -36,7 +39,17 @@
   <property name="dockOptions">
    <set>QMainWindow::AllowNestedDocks|QMainWindow::AllowTabbedDocks|QMainWindow::AnimatedDocks</set>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="layoutDirection">
+    <enum>Qt::LeftToRight</enum>
+   </property>
+   <property name="autoFillBackground">
+    <bool>false</bool>
+   </property>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -229,6 +242,7 @@
      <addaction name="toggleMixer"/>
      <addaction name="toggleTransitions"/>
      <addaction name="toggleControls"/>
+     <addaction name="togglePreview"/>
     </widget>
     <action name="actionFullscreenInterface">
      <property name="text">
@@ -583,7 +597,7 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>234</width>
+           <width>251</width>
            <height>16</height>
           </rect>
          </property>
@@ -1694,6 +1708,17 @@
   <action name="actionUploadLastCrashLog">
    <property name="text">
     <string>Basic.MainMenu.Help.CrashLogs.UploadLastLog</string>
+   </property>
+  </action>
+  <action name="togglePreview">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Basic.Main.Preview</string>
    </property>
   </action>
  </widget>

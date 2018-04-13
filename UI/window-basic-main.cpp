@@ -292,6 +292,7 @@ OBSBasic::OBSBasic(QWidget *parent)
 	assignDockToggle(ui->mixerDock, ui->toggleMixer);
 	assignDockToggle(ui->transitionsDock, ui->toggleTransitions);
 	assignDockToggle(ui->controlsDock, ui->toggleControls);
+	assignDockToggle(ui->previewDock, ui->togglePreview);
 }
 
 static void SaveAudioDevice(const char *name, int channel, obs_data_t *parent,
