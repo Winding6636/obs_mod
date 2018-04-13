@@ -6590,6 +6590,7 @@
   <tabstop>listWidget</tabstop>
   <tabstop>streamType</tabstop>
   <tabstop>outputMode</tabstop>
+  <tabstop>recordingMode</tabstop>
   <tabstop>simpleOutputVBitrate</tabstop>
   <tabstop>simpleOutputABitrate</tabstop>
   <tabstop>simpleOutAdvanced</tabstop>
