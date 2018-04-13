@@ -75,7 +75,7 @@
         </property>
         <property name="icon">
          <iconset resource="obs.qrc">
-          <normaloff>:/settings/images/settings/1033-512.png</normaloff>:/settings/images/settings/1033-512.png</iconset>
+          <normaloff>:/settings/images/settings/rec.png</normaloff>:/settings/images/settings/rec.png</iconset>
         </property>
        </item>
        <item>
@@ -128,7 +128,7 @@
      <item>
       <widget class="QStackedWidget" name="settingsPages">
        <property name="currentIndex">
-        <number>3</number>
+        <number>2</number>
        </property>
        <widget class="QWidget" name="generalPage">
         <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -154,8 +154,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>804</width>
-              <height>744</height>
+              <width>521</width>
+              <height>715</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_19">
@@ -1037,7 +1037,7 @@
                 <item row="1" column="0">
                  <widget class="QStackedWidget" name="stackedWidget">
                   <property name="currentIndex">
-                   <number>1</number>
+                   <number>0</number>
                   </property>
                   <widget class="QWidget" name="advOutRecStandard">
                    <layout class="QVBoxLayout" name="verticalLayout_13">
@@ -1862,8 +1862,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>804</width>
-              <height>796</height>
+              <width>534</width>
+              <height>710</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_21">
@@ -5554,8 +5554,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>98</width>
-              <height>28</height>
+              <width>63</width>
+              <height>16</height>
              </rect>
             </property>
            </widget>
@@ -5973,8 +5973,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>717</width>
-              <height>867</height>
+              <width>609</width>
+              <height>744</height>
              </rect>
             </property>
             <layout class="QVBoxLayout" name="verticalLayout_16">
@@ -6597,6 +6597,77 @@
   <tabstop>simpleOutCustom</tabstop>
   <tabstop>simpleOutEnforce</tabstop>
   <tabstop>simpleOutStrEncoder</tabstop>
+  <tabstop>simpleOutputPath</tabstop>
+  <tabstop>simpleOutputBrowse</tabstop>
+  <tabstop>simpleNoSpace</tabstop>
+  <tabstop>simpleOutRecQuality</tabstop>
+  <tabstop>simpleOutRecFormat</tabstop>
+  <tabstop>simpleOutRecEncoder</tabstop>
+  <tabstop>simpleOutMuxCustom</tabstop>
+  <tabstop>simpleReplayBuf</tabstop>
+  <tabstop>simpleRBSecMax</tabstop>
+  <tabstop>simpleRBMegsMax</tabstop>
+  <tabstop>advOutTabs</tabstop>
+  <tabstop>advOutTrack1</tabstop>
+  <tabstop>advOutTrack2</tabstop>
+  <tabstop>advOutTrack3</tabstop>
+  <tabstop>advOutTrack4</tabstop>
+  <tabstop>advOutTrack5</tabstop>
+  <tabstop>advOutTrack6</tabstop>
+  <tabstop>advOutEncoder</tabstop>
+  <tabstop>advOutApplyService</tabstop>
+  <tabstop>advOutUseRescale</tabstop>
+  <tabstop>advOutRescale</tabstop>
+  <tabstop>advOutRecType</tabstop>
+  <tabstop>advOutRecPath</tabstop>
+  <tabstop>advOutRecPathBrowse</tabstop>
+  <tabstop>advOutNoSpace</tabstop>
+  <tabstop>advOutRecFormat</tabstop>
+  <tabstop>advOutRecTrack1</tabstop>
+  <tabstop>advOutRecTrack2</tabstop>
+  <tabstop>advOutRecTrack3</tabstop>
+  <tabstop>advOutRecTrack4</tabstop>
+  <tabstop>advOutRecTrack5</tabstop>
+  <tabstop>advOutRecTrack6</tabstop>
+  <tabstop>advOutRecEncoder</tabstop>
+  <tabstop>advOutRecUseRescale</tabstop>
+  <tabstop>advOutRecRescale</tabstop>
+  <tabstop>advOutMuxCustom</tabstop>
+  <tabstop>advOutFFRecPath</tabstop>
+  <tabstop>advOutFFPathBrowse</tabstop>
+  <tabstop>advOutFFURL</tabstop>
+  <tabstop>advOutFFFormat</tabstop>
+  <tabstop>advOutFFVBitrate</tabstop>
+  <tabstop>advOutFFVGOPSize</tabstop>
+  <tabstop>advOutFFUseRescale</tabstop>
+  <tabstop>advOutFFRescale</tabstop>
+  <tabstop>advOutFFIgnoreCompat</tabstop>
+  <tabstop>advOutFFVEncoder</tabstop>
+  <tabstop>advOutFFVCfg</tabstop>
+  <tabstop>advOutFFABitrate</tabstop>
+  <tabstop>advOutFFTrack1</tabstop>
+  <tabstop>advOutFFTrack2</tabstop>
+  <tabstop>advOutFFTrack3</tabstop>
+  <tabstop>advOutFFTrack4</tabstop>
+  <tabstop>advOutFFTrack5</tabstop>
+  <tabstop>advOutFFTrack6</tabstop>
+  <tabstop>advOutFFAEncoder</tabstop>
+  <tabstop>advOutFFACfg</tabstop>
+  <tabstop>advOutFFType</tabstop>
+  <tabstop>advOutFFMCfg</tabstop>
+  <tabstop>advOutFFNoSpace</tabstop>
+  <tabstop>advOutTrack1Bitrate</tabstop>
+  <tabstop>advOutTrack1Name</tabstop>
+  <tabstop>advOutTrack2Bitrate</tabstop>
+  <tabstop>advOutTrack2Name</tabstop>
+  <tabstop>advOutTrack3Bitrate</tabstop>
+  <tabstop>advOutTrack3Name</tabstop>
+  <tabstop>advOutTrack4Bitrate</tabstop>
+  <tabstop>advOutTrack4Name</tabstop>
+  <tabstop>advOutTrack5Bitrate</tabstop>
+  <tabstop>advOutTrack5Name</tabstop>
+  <tabstop>advOutTrack6Bitrate</tabstop>
+  <tabstop>advOutTrack6Name</tabstop>
   <tabstop>sampleRate</tabstop>
   <tabstop>channelSetup</tabstop>
   <tabstop>desktopAudioDevice1</tabstop>
@@ -6661,7 +6732,7 @@
  <resources>
   <include location="obs.qrc"/>
  </resources>
- <connections>
+  <connections>
   <connection>
    <sender>listWidget</sender>
    <signal>currentRowChanged(int)</signal>
@@ -6703,6 +6774,166 @@
     <hint type="sourcelabel">
      <x>241</x>
      <y>16</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutPreset</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_24</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutCustom</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_23</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advOutRecType</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>stackedWidget</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>232</x>
+     <y>41</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>241</x>
+     <y>30</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advOutFFUseRescale</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>advOutFFRescale</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>60</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>228</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advOutUseRescale</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>advOutRescale</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>259</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>228</x>
+     <y>29</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advOutRecUseRescale</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>advOutRecRescale</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>168</x>
+     <y>56</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>228</x>
+     <y>50</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>advOutFFType</sender>
+   <signal>currentIndexChanged(int)</signal>
+   <receiver>stackedWidget_2</receiver>
+   <slot>setCurrentIndex(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>50</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>52</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>simpleOutAdvanced</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>simpleOutEnforce</receiver>
+   <slot>setVisible(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
     </hint>
     <hint type="destinationlabel">
      <x>250</x>
@@ -6839,6 +7070,102 @@
    </hints>
   </connection>
   <connection>
+   <sender>recordWhenStreaming</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>keepRecordStreamStops</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>950</x>
+     <y>222</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>950</x>
+     <y>245</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>replayWhileStreaming</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>keepReplayStreamStops</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>950</x>
+     <y>268</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>950</x>
+     <y>291</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>streamDelayEnable</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>label_56</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>streamDelayEnable</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>streamDelaySec</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>streamDelayEnable</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>streamDelayInfo</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>streamDelayEnable</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>streamDelayPreserve</receiver>
+   <slot>setEnabled(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>250</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+<connection>
    <sender>recordWhenStreaming</sender>
    <signal>toggled(bool)</signal>
    <receiver>keepRecordStreamStops</receiver>
