@@ -6469,6 +6469,7 @@ void OBSBasic::on_lockUI_toggled(bool lock)
 	ui->mixerDock->setFeatures(features);
 	ui->transitionsDock->setFeatures(features);
 	ui->controlsDock->setFeatures(features);
+	ui->previewDock->setFeatures(features);
 }
 
 void OBSBasic::on_toggleListboxToolbars_toggled(bool visible)
