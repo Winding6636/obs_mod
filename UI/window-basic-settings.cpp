@@ -327,7 +327,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->multiviewLayout,      COMBO_CHANGED,  GENERAL_CHANGED);
 	HookWidget(ui->outputMode,           COMBO_CHANGED,  OUTPUTS_CHANGED);
 	HookWidget(ui->streamType,           COMBO_CHANGED,  STREAM1_CHANGED);
-	HookWidget(ui->outputMode,           COMBO_CHANGED,  OUTPUTS_CHANGED);
+	HookWidget(ui->recordingMode,        COMBO_CHANGED,  OUTPUTS_CHANGED);
 	HookWidget(ui->simpleOutputPath,     EDIT_CHANGED,   OUTPUTS_CHANGED);
 	HookWidget(ui->simpleNoSpace,        CHECK_CHANGED,  OUTPUTS_CHANGED);
 	HookWidget(ui->simpleOutRecFormat,   COMBO_CHANGED,  OUTPUTS_CHANGED);
@@ -616,6 +616,8 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	connect(ui->streamDelaySec, SIGNAL(valueChanged(int)),
 			this, SLOT(UpdateStreamDelayEstimate()));
 	connect(ui->outputMode, SIGNAL(currentIndexChanged(int)),
+			this, SLOT(UpdateStreamDelayEstimate()));
+	connect(ui->recordingMode, SIGNAL(currentIndexChanged(int)),
 			this, SLOT(UpdateStreamDelayEstimate()));
 	connect(ui->simpleOutputVBitrate, SIGNAL(valueChanged(int)),
 			this, SLOT(UpdateStreamDelayEstimate()));
@@ -2230,6 +2232,7 @@ void OBSBasicSettings::LoadOutputSettings()
 
 	int modeIdx = astrcmpi(mode, "Advanced") == 0 ? 1 : 0;
 	ui->outputMode->setCurrentIndex(modeIdx);
+	ui->recordingMode->setCurrentIndex(modeIdx);
 
 	LoadSimpleOutputSettings();
 	LoadAdvOutputStreamingSettings();
@@ -2241,6 +2244,7 @@ void OBSBasicSettings::LoadOutputSettings()
 
 	if (video_output_active(obs_get_video())) {
 		ui->outputMode->setEnabled(false);
+		ui->recordingMode->setEnabled(false);
 		ui->outputModeLabel->setEnabled(false);
 		ui->simpleRecordingGroupBox->setEnabled(false);
 		ui->replayBufferGroupBox->setEnabled(false);
