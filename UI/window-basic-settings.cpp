@@ -859,7 +859,9 @@ void OBSBasicSettings::SaveSpinBox(QSpinBox *widget, const char *section,
 
 void OBSBasicSettings::LoadServiceTypes()
 {
-	const char    *type;
+	const char    *type1;
+	const char    *type2;
+	const char    *type3;
 	size_t        idx = 0;
 	//add ServiceTypes
 	while (obs_enum_service_types(idx++, &type)) {
