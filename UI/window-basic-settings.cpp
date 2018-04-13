@@ -864,14 +864,28 @@ void OBSBasicSettings::LoadServiceTypes()
 	const char    *type3;
 	size_t        idx = 0;
 	//add ServiceTypes
-	while (obs_enum_service_types(idx++, &type)) {
-		const char *name = obs_service_get_display_name(type);
+	while (obs_enum_service_types(idx++, &type1)) {
+		const char *name = obs_service_get_display_name(type1);
 		QString qName = QT_UTF8(name);
-		QString qType = QT_UTF8(type);
+		QString qType = QT_UTF8(type1);
 
 		//ui->streamType->addItem(qName, qType);
 		ui->streamType1->addItem(qName, qType);
+	}
+	while (obs_enum_service_types(idx++, &type2)) {
+		const char *name = obs_service_get_display_name(type2);
+		QString qName = QT_UTF8(name);
+		QString qType = QT_UTF8(type2);
+
+		//ui->streamType->addItem(qName, qType);
 		ui->streamType2->addItem(qName, qType);
+	}
+	while (obs_enum_service_types(idx++, &type3)) {
+		const char *name = obs_service_get_display_name(type3);
+		QString qName = QT_UTF8(name);
+		QString qType = QT_UTF8(type3);
+
+		//ui->streamType->addItem(qName, qType);
 		ui->streamType3->addItem(qName, qType);
 	}
 
