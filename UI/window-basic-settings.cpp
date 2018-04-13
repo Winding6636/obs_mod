@@ -3986,7 +3986,7 @@ void OBSBasicSettings::SpeakerLayoutChanged(int idx)
 		/*
 		 * Display all bitrates
 		 */
-		ui->audioMsg_2->setText(warning);
+		ui->audioMsg->setText(warning);
 		PopulateAACBitrates({ui->simpleOutputABitrate,
 				ui->advOutTrack1Bitrate,
 				ui->advOutTrack2Bitrate,
@@ -3999,7 +3999,7 @@ void OBSBasicSettings::SpeakerLayoutChanged(int idx)
 		 * Reset audio bitrate for simple and adv mode, update list of
 		 * bitrates and save setting.
 		 */
-		ui->audioMsg_2->setText(QString());
+		ui->audioMsg->setText(QString());
 		RestrictResetBitrates({ui->simpleOutputABitrate,
 				ui->advOutTrack1Bitrate,
 				ui->advOutTrack2Bitrate,
