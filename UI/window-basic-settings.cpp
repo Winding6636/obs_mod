@@ -891,8 +891,8 @@ void OBSBasicSettings::LoadServiceTypes()
 
 	//type = obs_service_get_type(main->GetService()[0]);
 	type1 = obs_service_get_type(main->GetService()[0]);
-	type2 = obs_service_get_type(main->GetService()[1]);
-	type3 = obs_service_get_type(main->GetService()[2]);
+	type2 = obs_service_get_type(main->GetService()[0]);
+	type3 = obs_service_get_type(main->GetService()[0]);
 	//SetComboByValue(ui->streamType, type);
 	SetComboByValue(ui->streamType1, type1);
 	SetComboByValue(ui->streamType2, type2);
