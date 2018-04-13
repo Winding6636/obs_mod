@@ -862,9 +862,11 @@ void OBSBasicSettings::LoadServiceTypes()
 	const char    *type1;
 	const char    *type2;
 	const char    *type3;
-	size_t        idx = 0;
+	size_t        idx1 = 0;
+	size_t        idx2 = 0;
+	size_t        idx3 = 0;
 	//add ServiceTypes
-	while (obs_enum_service_types(idx++, &type1)) {
+	while (obs_enum_service_types(idx1++, &type1)) {
 		const char *name = obs_service_get_display_name(type1);
 		QString qName = QT_UTF8(name);
 		QString qType = QT_UTF8(type1);
@@ -872,7 +874,7 @@ void OBSBasicSettings::LoadServiceTypes()
 		//ui->streamType->addItem(qName, qType);
 		ui->streamType1->addItem(qName, qType);
 	}
-	while (obs_enum_service_types(idx++, &type2)) {
+	while (obs_enum_service_types(idx2++, &type2)) {
 		const char *name = obs_service_get_display_name(type2);
 		QString qName = QT_UTF8(name);
 		QString qType = QT_UTF8(type2);
@@ -880,7 +882,7 @@ void OBSBasicSettings::LoadServiceTypes()
 		//ui->streamType->addItem(qName, qType);
 		ui->streamType2->addItem(qName, qType);
 	}
-	while (obs_enum_service_types(idx++, &type3)) {
+	while (obs_enum_service_types(idx3++, &type3)) {
 		const char *name = obs_service_get_display_name(type3);
 		QString qName = QT_UTF8(name);
 		QString qType = QT_UTF8(type3);
@@ -891,8 +893,8 @@ void OBSBasicSettings::LoadServiceTypes()
 
 	//type = obs_service_get_type(main->GetService()[0]);
 	type1 = obs_service_get_type(main->GetService()[0]);
-	type2 = obs_service_get_type(main->GetService()[0]);
-	type3 = obs_service_get_type(main->GetService()[0]);
+	type2 = obs_service_get_type(main->GetService()[1]);
+	type3 = obs_service_get_type(main->GetService()[2]);
 	//SetComboByValue(ui->streamType, type);
 	SetComboByValue(ui->streamType1, type1);
 	SetComboByValue(ui->streamType2, type2);
