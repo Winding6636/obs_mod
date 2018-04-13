@@ -3183,7 +3183,7 @@ void OBSBasicSettings::SaveStream1Settings()
 	obs_data_release(hotkeyData);
 
 	if (!newService[0])
-		continue;
+		return;
 
 	main->SetService(newService[0] , 0);
 	main->SaveService(0);
@@ -3205,7 +3205,7 @@ void OBSBasicSettings::SaveStream2Settings()
 	obs_data_release(hotkeyData);
 
 	if (!newService[1])
-		continue;
+		return;
 
 	main->SetService(newService[1] , 1);
 	main->SaveService(1);
@@ -3227,7 +3227,7 @@ void OBSBasicSettings::SaveStream3Settings()
 	obs_data_release(hotkeyData);
 
 	if (!newService[2])
-		continue;
+		return;
 
 	main->SetService(newService[2] , 2);
 	main->SaveService(2);
