@@ -128,7 +128,7 @@
      <item>
       <widget class="QStackedWidget" name="settingsPages">
        <property name="currentIndex">
-        <number>2</number>
+        <number>0</number>
        </property>
        <widget class="QWidget" name="generalPage">
         <layout class="QVBoxLayout" name="verticalLayout_18">
@@ -154,7 +154,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>521</width>
+              <width>801</width>
               <height>715</height>
              </rect>
             </property>
@@ -777,7 +777,7 @@
             <item row="1" column="0" colspan="2">
              <widget class="QStackedWidget" name="recordingPages">
               <property name="currentIndex">
-               <number>1</number>
+               <number>0</number>
               </property>
               <widget class="QWidget" name="basicRecording">
                <layout class="QGridLayout" name="gridLayout_2">
@@ -1862,7 +1862,7 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>534</width>
+              <width>801</width>
               <height>710</height>
              </rect>
             </property>
@@ -5554,8 +5554,8 @@
              <rect>
               <x>0</x>
               <y>0</y>
-              <width>63</width>
-              <height>16</height>
+              <width>800</width>
+              <height>69</height>
              </rect>
             </property>
            </widget>
@@ -6732,7 +6732,7 @@
  <resources>
   <include location="obs.qrc"/>
  </resources>
-  <connections>
+ <connections>
   <connection>
    <sender>listWidget</sender>
    <signal>currentRowChanged(int)</signal>
@@ -7165,7 +7165,7 @@
     </hint>
    </hints>
   </connection>
-<connection>
+  <connection>
    <sender>recordWhenStreaming</sender>
    <signal>toggled(bool)</signal>
    <receiver>keepRecordStreamStops</receiver>
