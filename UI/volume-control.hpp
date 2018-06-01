@@ -80,6 +80,9 @@ class VolumeMeter : public QWidget
 		READ getInputPeakHoldDuration
 		WRITE setInputPeakHoldDuration DESIGNABLE true)
 
+private slots:
+	void ClipEnding();
+
 private:
 	obs_volmeter_t *obs_volmeter;
 	static QWeakPointer<VolumeMeterTimer> updateTimer;
@@ -147,12 +150,8 @@ public:
 	explicit VolumeMeter(QWidget *parent = nullptr,
 			obs_volmeter_t *obs_volmeter = nullptr,
 			bool vertical = false);
-	~VolumeMeter() override;
 
-	void setLevels(
-		const float magnitude[MAX_AUDIO_CHANNELS],
-		const float peak[MAX_AUDIO_CHANNELS],
-		const float inputPeak[MAX_AUDIO_CHANNELS]);
+	~VolumeMeter() override;
 
 	QColor getBackgroundNominalColor() const;
 	void setBackgroundNominalColor(QColor c);
@@ -192,6 +191,7 @@ public:
 	void setPeakHoldDuration(qreal v);
 	qreal getInputPeakHoldDuration() const;
 	void setInputPeakHoldDuration(qreal v);
+	void setPeakMeterType(enum obs_peak_meter_type peakMeterType);
 
 protected:
 	void paintEvent(QPaintEvent *event) override;
@@ -255,6 +255,7 @@ signals:
 public:
 	explicit VolControl(OBSSource source, bool showConfig = false,
 			bool vertical = false);
+
 	~VolControl() override;
 
 	inline obs_source_t *GetSource() const {return source;}
@@ -263,4 +264,5 @@ public:
 	void SetName(const QString &newName);
 
 	void SetMeterDecayRate(qreal q);
+	void setPeakMeterType(enum obs_peak_meter_type peakMeterType);
 };

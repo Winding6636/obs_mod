@@ -243,6 +243,32 @@ struct obs_source_frame {
 /* OBS context */
 
 /**
+ * Find a core libobs data file
+ * @param path name of the base file
+ * @return A string containing the full path to the file.
+ *          Use bfree after use.
+ */
+EXPORT char *obs_find_data_file(const char *file);
+
+/**
+ * Add a path to search libobs data files in.
+ * @param path Full path to directory to look in.
+ *             The string is copied.
+ */
+EXPORT void obs_add_data_path(const char *path);
+
+/**
+ * Remove a path from libobs core data paths.
+ * @param path The path to compare to currently set paths.
+ *             It does not need to be the same pointer, but
+ *             the path string must match an entry fully.
+ * @return Whether or not the path was successfully removed.
+ *         If false, the path could not be found.
+ */
+EXPORT bool obs_remove_data_path(const char *path);
+
+
+/**
  * Initializes OBS
  *
  * @param  locale              The locale to use for modules
@@ -275,6 +301,12 @@ EXPORT void obs_set_locale(const char *locale);
 
 /** @return the current locale */
 EXPORT const char *obs_get_locale(void);
+
+/** Initialize the Windows-specific crash handler */
+
+#ifdef _WIN32
+EXPORT void obs_init_win32_crash_handler(void);
+#endif
 
 /**
  * Returns the profiler name store (see util/profiler.h) used by OBS, which is
@@ -564,6 +596,10 @@ EXPORT void obs_render_main_view(void);
 /** Renders the last main output texture */
 EXPORT void obs_render_main_texture(void);
 
+/** Returns the last main output texture.  This can return NULL if the texture
+ * is unavailable. */
+EXPORT gs_texture_t *obs_get_main_texture(void);
+
 /** Sets the master user volume */
 EXPORT void obs_set_master_volume(float volume);
 
@@ -575,6 +611,12 @@ EXPORT obs_data_t *obs_save_source(obs_source_t *source);
 
 /** Loads a source from settings data */
 EXPORT obs_source_t *obs_load_source(obs_data_t *data);
+
+/** Send a save signal to sources */
+EXPORT void obs_source_save(obs_source_t *source);
+
+/** Send a load signal to sources */
+EXPORT void obs_source_load(obs_source_t *source);
 
 typedef void (*obs_load_source_cb)(void *private_data, obs_source_t *source);
 
@@ -622,6 +664,14 @@ EXPORT void obs_add_main_render_callback(
 		void *param);
 EXPORT void obs_remove_main_render_callback(
 		void (*draw)(void *param, uint32_t cx, uint32_t cy),
+		void *param);
+
+EXPORT void obs_add_raw_video_callback(
+		const struct video_scale_info *conversion,
+		void (*callback)(void *param, struct video_data *frame),
+		void *param);
+EXPORT void obs_remove_raw_video_callback(
+		void (*callback)(void *param, struct video_data *frame),
 		void *param);
 
 
@@ -1439,6 +1489,12 @@ EXPORT void obs_output_force_stop(obs_output_t *output);
 
 /** Returns whether the output is active */
 EXPORT bool obs_output_active(const obs_output_t *output);
+
+/** Returns output capability flags */
+EXPORT uint32_t obs_output_get_flags(const obs_output_t *output);
+
+/** Returns output capability flags */
+EXPORT uint32_t obs_get_output_flags(const char *id);
 
 /** Gets the default settings for an output type */
 EXPORT obs_data_t *obs_output_defaults(const char *id);

@@ -588,6 +588,42 @@ static string GetSceneCollectionFileFromName(const char *name)
 	return outputPath;
 }
 
+bool OBSApp::UpdatePre22MultiviewLayout(const char *layout)
+{
+	if (!layout)
+		return false;
+
+	if (astrcmpi(layout, "horizontaltop") == 0) {
+		config_set_int(globalConfig, "BasicWindow", "MultiviewLayout",
+			static_cast<int>(
+				MultiviewLayout::HORIZONTAL_TOP_8_SCENES));
+		return true;
+	}
+
+	if (astrcmpi(layout, "horizontalbottom") == 0) {
+		config_set_int(globalConfig, "BasicWindow", "MultiviewLayout",
+			static_cast<int>(
+				MultiviewLayout::HORIZONTAL_BOTTOM_8_SCENES));
+		return true;
+	}
+
+	if (astrcmpi(layout, "verticalleft") == 0) {
+		config_set_int(globalConfig, "BasicWindow", "MultiviewLayout",
+			static_cast<int>(
+				MultiviewLayout::VERTICAL_LEFT_8_SCENES));
+		return true;
+	}
+
+	if (astrcmpi(layout, "verticalright") == 0) {
+		config_set_int(globalConfig, "BasicWindow", "MultiviewLayout",
+			static_cast<int>(
+				MultiviewLayout::VERTICAL_RIGHT_8_SCENES));
+		return true;
+	}
+
+	return false;
+}
+
 bool OBSApp::InitGlobalConfig()
 {
 	char path[512];
@@ -651,6 +687,13 @@ bool OBSApp::InitGlobalConfig()
 		config_set_bool(globalConfig, "General", "Pre21Defaults",
 				useOldDefaults);
 		changed = true;
+	}
+
+	if (config_has_user_value(globalConfig, "BasicWindow",
+			"MultiviewLayout")) {
+		const char *layout = config_get_string(globalConfig,
+				"BasicWindow", "MultiviewLayout");
+		changed |= UpdatePre22MultiviewLayout(layout);
 	}
 
 	if (changed)
@@ -916,6 +959,9 @@ void OBSApp::AppInit()
 		EnableOSXVSync(false);
 #endif
 
+	enableHotkeysInFocus = !config_get_bool(globalConfig, "General",
+			"DisableHotkeysInFocus");
+
 	move_basic_to_profiles();
 	move_basic_to_scene_collections();
 
@@ -940,6 +986,18 @@ static bool StartupOBS(const char *locale, profiler_name_store_t *store)
 		return false;
 
 	return obs_startup(locale, path, store);
+}
+
+inline void OBSApp::ResetHotkeyState(bool inFocus)
+{
+	obs_hotkey_enable_background_press(
+			inFocus || enableHotkeysInFocus);
+}
+
+void OBSApp::EnableInFocusHotkeys(bool enable)
+{
+	enableHotkeysInFocus = enable;
+	ResetHotkeyState(applicationState() != Qt::ApplicationActive);
 }
 
 bool OBSApp::OBSInit()
@@ -973,13 +1031,12 @@ bool OBSApp::OBSInit()
 		mainWindow->OBSInit();
 
 		connect(this, &QGuiApplication::applicationStateChanged,
-				[](Qt::ApplicationState state)
+				[this](Qt::ApplicationState state)
 				{
-					obs_hotkey_enable_background_press(
+					ResetHotkeyState(
 						state != Qt::ApplicationActive);
 				});
-		obs_hotkey_enable_background_press(
-				applicationState() != Qt::ApplicationActive);
+		ResetHotkeyState(applicationState() != Qt::ApplicationActive);
 		return true;
 	} else {
 		return false;
@@ -1366,33 +1423,32 @@ static int run_program(fstream &logFile, int argc, char *argv[])
 
 	OBSApp program(argc, argv, profilerNameStore.get());
 	try {
+		bool created_log = false;
+
 		program.AppInit();
+		delete_oldest_file(false, "obs-studio-vtf/profiler_data");
 
 		OBSTranslator translator;
-
-		create_log_file(logFile);
-		delete_oldest_file(false,"obs-studio-vtf/profiler_data");
-
 		program.installTranslator(&translator);
 
 #ifdef _WIN32
 		/* --------------------------------------- */
 		/* check and warn if already running       */
 
+		bool cancel_launch = false;
 		bool already_running = false;
 		RunOnceMutex rom = GetRunOnceMutex(already_running);
 
-		if (already_running && !multi) {
-			blog(LOG_WARNING, "\n================================");
-			blog(LOG_WARNING, "Warning: OBS is already running!");
-			blog(LOG_WARNING, "================================\n");
+		if (!already_running) {
+			goto run;
+		}
 
+		if (!multi) {
 			QMessageBox::StandardButtons buttons(
 					QMessageBox::Yes | QMessageBox::Cancel);
 			QMessageBox mb(QMessageBox::Question,
 					QTStr("AlreadyRunning.Title"),
-					QTStr("AlreadyRunning.Text"),
-					buttons,
+					QTStr("AlreadyRunning.Text"), buttons,
 					nullptr);
 			mb.setButtonText(QMessageBox::Yes,
 					QTStr("AlreadyRunning.LaunchAnyway"));
@@ -1401,23 +1457,37 @@ static int run_program(fstream &logFile, int argc, char *argv[])
 
 			QMessageBox::StandardButton button;
 			button = (QMessageBox::StandardButton)mb.exec();
-			if (button == QMessageBox::Cancel) {
-				blog(LOG_INFO, "User shut down the program "
-						"because OBS was already "
-						"running");
-				return 0;
-			}
+			cancel_launch = button == QMessageBox::Cancel;
+		}
 
-			blog(LOG_WARNING, "User is now running a secondary "
-					"instance of OBS!");
+		if (cancel_launch)
+			return 0;
 
-		} else if (already_running && multi) {
+		if (!created_log) {
+			create_log_file(logFile);
+			created_log = true;
+		}
+
+		if (multi) {
 			blog(LOG_INFO, "User enabled --multi flag and is now "
 					"running multiple instances of OBS.");
+		} else {
+			blog(LOG_WARNING, "================================");
+			blog(LOG_WARNING, "Warning: OBS is already running!");
+			blog(LOG_WARNING, "================================");
+			blog(LOG_WARNING, "User is now running multiple "
+					"instances of OBS!");
 		}
 
 		/* --------------------------------------- */
+run:
 #endif
+
+		if (!created_log) {
+			create_log_file(logFile);
+			created_log = true;
+		}
+
 		if (argc > 1) {
 			stringstream stor;
 			stor << argv[1];
@@ -1889,6 +1959,7 @@ int main(int argc, char *argv[])
 #endif
 
 #ifdef _WIN32
+	obs_init_win32_crash_handler();
 	SetErrorMode(SEM_FAILCRITICALERRORS);
 	load_debug_privilege();
 	base_set_crash_handler(main_crash_handler, nullptr);

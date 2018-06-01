@@ -25,9 +25,9 @@ void VolControl::OBSVolumeChanged(void *data, float db)
 }
 
 void VolControl::OBSVolumeLevel(void *data,
-	const float magnitude[MAX_AUDIO_CHANNELS],
-	const float peak[MAX_AUDIO_CHANNELS],
-	const float inputPeak[MAX_AUDIO_CHANNELS])
+		const float magnitude[MAX_AUDIO_CHANNELS],
+		const float peak[MAX_AUDIO_CHANNELS],
+		const float inputPeak[MAX_AUDIO_CHANNELS])
 {
 	VolControl *volControl = static_cast<VolControl*>(data);
 
@@ -491,10 +491,9 @@ VolumeMeter::~VolumeMeter()
 	updateTimerRef->RemoveVolControl(this);
 }
 
-void VolumeMeter::setLevels(
-	const float magnitude[MAX_AUDIO_CHANNELS],
-	const float peak[MAX_AUDIO_CHANNELS],
-	const float inputPeak[MAX_AUDIO_CHANNELS])
+void VolumeMeter::setLevels(const float magnitude[MAX_AUDIO_CHANNELS],
+		const float peak[MAX_AUDIO_CHANNELS],
+		const float inputPeak[MAX_AUDIO_CHANNELS])
 {
 	uint64_t ts = os_gettime_ns();
 	QMutexLocker locker(&dataMutex);
@@ -560,7 +559,7 @@ inline bool VolumeMeter::detectIdle(uint64_t ts)
 }
 
 inline void VolumeMeter::calculateBallisticsForChannel(int channelNr,
-	uint64_t ts, qreal timeSinceLastRedraw)
+		uint64_t ts, qreal timeSinceLastRedraw)
 {
 	if (currentPeak[channelNr] >= displayPeak[channelNr] ||
 		isnan(displayPeak[channelNr])) {
@@ -629,7 +628,7 @@ inline void VolumeMeter::calculateBallisticsForChannel(int channelNr,
 }
 
 inline void VolumeMeter::calculateBallistics(uint64_t ts,
-	qreal timeSinceLastRedraw)
+		qreal timeSinceLastRedraw)
 {
 	QMutexLocker locker(&dataMutex);
 

@@ -29,6 +29,7 @@
 #include "window-basic-transform.hpp"
 #include "window-basic-adv-audio.hpp"
 #include "window-basic-filters.hpp"
+#include "window-projector.hpp"
 
 #include <obs-frontend-internal.hpp>
 
@@ -67,11 +68,11 @@ enum class QtDataRole {
 	OBSSignals,
 };
 
-enum class ProjectorType {
-	Source,
-	Preview,
-	StudioProgram,
-	Multiview
+struct SavedProjectorInfo {
+	ProjectorType type;
+	int monitor;
+	std::string geometry;
+	std::string name;
 };
 
 struct QuickTransition {
@@ -172,10 +173,12 @@ private:
 
 	ConfigFile    basicConfig;
 
+	std::vector<SavedProjectorInfo*> savedProjectorsArray;
 	QPointer<QWidget> projectors[10];
 	QList<QPointer<QWidget>> windowProjectors;
 
 	QPointer<QWidget> stats;
+	QPointer<QWidget> remux;
 
 	QPointer<QMenu> startStreamMenu;
 
@@ -200,6 +203,7 @@ private:
 	void          CreateDefaultScene(bool firstStart);
 
 	void          UpdateVolumeControlsDecayRate();
+	void          UpdateVolumeControlsPeakMeterType();
 	void          ClearVolumeControls();
 
 	void          UploadLog(const char *subdir, const char *file);
@@ -255,16 +259,15 @@ private:
 	void ClearSceneData();
 
 	void Nudge(int dist, MoveDir dir);
-	void OpenProjector(obs_source_t *source, int monitor, bool window,
-			QString title = nullptr,
-			ProjectorType type = ProjectorType::Source);
+
+	OBSProjector *OpenProjector(obs_source_t *source, int monitor,
+			QString title, ProjectorType type);
 
 	void GetAudioSourceFilters();
 	void GetAudioSourceProperties();
 	void VolControlContextMenu();
 	void ToggleVolControlLayout();
 
-	void AddSceneCollection(bool create_new);
 	void RefreshSceneCollections();
 	void ChangeSceneCollection();
 	void LogScenes();
@@ -370,18 +373,6 @@ private:
 	obs_data_array_t *SaveProjectors();
 	void LoadSavedProjectors(obs_data_array_t *savedProjectors);
 
-	obs_data_array_t *SavePreviewProjectors();
-	void LoadSavedPreviewProjectors(
-		obs_data_array_t *savedPreviewProjectors);
-
-	obs_data_array_t *SaveStudioProgramProjectors();
-	void LoadSavedStudioProgramProjectors(
-		obs_data_array_t *savedStudioProgramProjectors);
-
-	obs_data_array_t *SaveMultiviewProjectors();
-	void LoadSavedMultiviewProjectors(
-		obs_data_array_t *savedMultiviewProjectors);
-
 public slots:
 	void DeferSaveBegin();
 	void DeferSaveEnd();
@@ -451,6 +442,10 @@ public slots:
 	void SetCurrentScene(OBSSource scene, bool force = false,
 			bool direct = false);
 
+	bool AddSceneCollection(
+			bool create_new,
+			const QString &name = QString());
+
 private slots:
 	void AddSceneItem(OBSSceneItem item);
 	void RemoveSceneItem(OBSSceneItem item);
@@ -513,7 +508,7 @@ private:
 	static void SceneItemRemoved(void *data, calldata_t *params);
 	static void SceneItemSelected(void *data, calldata_t *params);
 	static void SceneItemDeselected(void *data, calldata_t *params);
-	static void SourceLoaded(void *data, obs_source_t *source);
+	static void SourceCreated(void *data, calldata_t *params);
 	static void SourceRemoved(void *data, calldata_t *params);
 	static void SourceActivated(void *data, calldata_t *params);
 	static void SourceDeactivated(void *data, calldata_t *params);
@@ -603,7 +598,6 @@ public:
 	void SystemTray(bool firstStarted);
 
 	void OpenSavedProjectors();
-	void RemoveSavedProjectors(int monitor);
 
 protected:
 	virtual void closeEvent(QCloseEvent *event) override;
@@ -761,6 +755,10 @@ private slots:
 	void on_streamButton_2_clicked();
 
 	void on_streamButton_3_clicked();
+
+	void DeferredLoad(const QString &file, int requeueCount);
+
+	void StackedMixerAreaContextMenuRequested();
 
 public slots:
 	void on_actionResetTransform_triggered();
