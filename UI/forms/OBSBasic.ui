@@ -96,11 +96,14 @@
     </widget>
     <addaction name="actionHelpPortal"/>
     <addaction name="actionWebsite"/>
+    <addaction name="actionDiscord"/>
     <addaction name="separator"/>
     <addaction name="menuLogFiles"/>
     <addaction name="menuCrashLogs"/>
     <addaction name="separator"/>
     <addaction name="actionCheckForUpdates"/>
+    <addaction name="actionShowAbout"/>
+    <addaction name="separator"/>
    </widget>
    <widget class="QMenu" name="menuBasic_MainMenu_Edit">
     <property name="title">
@@ -243,6 +246,7 @@
      <addaction name="toggleTransitions"/>
      <addaction name="toggleControls"/>
      <addaction name="togglePreview"/>
+     <addaction name="toggleStats"/>
     </widget>
     <action name="actionFullscreenInterface">
      <property name="text">
@@ -469,7 +473,7 @@
          <number>0</number>
         </property>
         <item>
-         <widget class="SourceListWidget" name="sources">
+         <widget class="SourceTree" name="sources">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
             <horstretch>0</horstretch>
@@ -1616,7 +1620,7 @@
   </action>
   <action name="autoConfigure">
    <property name="text">
-    <string>Basic.AutoConfig.Beta</string>
+    <string>Basic.AutoConfig</string>
    </property>
   </action>
   <action name="stats">
@@ -1710,6 +1714,11 @@
     <string>Basic.MainMenu.Help.CrashLogs.UploadLastLog</string>
    </property>
   </action>
+  <action name="actionDiscord">
+   <property name="text">
+    <string>Basic.MainMenu.Help.Discord</string>
+   </property>
+  </action>
   <action name="togglePreview">
    <property name="checkable">
     <bool>true</bool>
@@ -1719,6 +1728,22 @@
    </property>
    <property name="text">
     <string>Basic.Main.Preview</string>
+   </property>
+  </action>
+  <action name="toggleStats">
+   <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
+    <bool>true</bool>
+   </property>
+   <property name="text">
+    <string>Basic.Stats</string>
+   </property>
+  </action>
+  <action name="actionShowAbout">
+   <property name="text">
+    <string>Basic.MainMenu.Help.About</string>
    </property>
   </action>
  </widget>
@@ -1747,9 +1772,9 @@
    <container>1</container>
   </customwidget>
   <customwidget>
-   <class>SourceListWidget</class>
-   <extends>QListWidget</extends>
-   <header>source-list-widget.hpp</header>
+   <class>SourceTree</class>
+   <extends>QListView</extends>
+   <header>source-tree.hpp</header>
   </customwidget>
  </customwidgets>
  <resources>

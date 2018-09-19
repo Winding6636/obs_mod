@@ -505,6 +505,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	HookWidget(ui->auxAudioDevice1,      COMBO_CHANGED,  AUDIO_CHANGED);
 	HookWidget(ui->auxAudioDevice2,      COMBO_CHANGED,  AUDIO_CHANGED);
 	HookWidget(ui->auxAudioDevice3,      COMBO_CHANGED,  AUDIO_CHANGED);
+	HookWidget(ui->auxAudioDevice4,      COMBO_CHANGED,  AUDIO_CHANGED);
 	HookWidget(ui->baseResolution,       CBEDIT_CHANGED, VIDEO_RES);
 	HookWidget(ui->outputResolution,     CBEDIT_CHANGED, VIDEO_RES);
 	HookWidget(ui->downscaleFilter,      COMBO_CHANGED,  VIDEO_CHANGED);
@@ -525,6 +526,7 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 #endif
 #ifdef _WIN32
 	HookWidget(ui->disableAudioDucking,  CHECK_CHANGED,  ADV_CHANGED);
+	HookWidget(ui->browserHWAccel,       CHECK_CHANGED,  ADV_RESTART);
 #endif
 	HookWidget(ui->filenameFormatting,   EDIT_CHANGED,   ADV_CHANGED);
 	HookWidget(ui->overwriteIfExists,    CHECK_CHANGED,  ADV_CHANGED);
@@ -594,6 +596,8 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	delete ui->advancedGeneralGroupBox;
 	delete ui->enableNewSocketLoop;
 	delete ui->enableLowLatencyMode;
+	delete ui->browserHWAccel;
+	delete ui->sourcesGroup;
 #if defined(__APPLE__) || HAVE_PULSEAUDIO
 	delete ui->disableAudioDucking;
 #endif
@@ -606,6 +610,8 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 	ui->advancedGeneralGroupBox = nullptr;
 	ui->enableNewSocketLoop = nullptr;
 	ui->enableLowLatencyMode = nullptr;
+	ui->browserHWAccel = nullptr;
+	ui->sourcesGroup = nullptr;
 #if defined(__APPLE__) || HAVE_PULSEAUDIO
 	ui->disableAudioDucking = nullptr;
 #endif
@@ -810,6 +816,9 @@ OBSBasicSettings::OBSBasicSettings(QWidget *parent)
 
 OBSBasicSettings::~OBSBasicSettings()
 {
+	bool disableHotkeysInFocus = config_get_bool(App()->GlobalConfig(),
+			"General", "DisableHotkeysInFocus");
+	delete ui->filenameFormatting->completer();
 	main->EnableOutputs(true);
 }
 
@@ -2453,6 +2462,7 @@ void OBSBasicSettings::LoadAudioDevices()
 		LoadListValues(ui->auxAudioDevice1, inputs, 3);
 		LoadListValues(ui->auxAudioDevice2, inputs, 4);
 		LoadListValues(ui->auxAudioDevice3, inputs, 5);
+		LoadListValues(ui->auxAudioDevice4, inputs, 6);
 		obs_properties_destroy(input_props);
 	}
 
@@ -2734,6 +2744,10 @@ void OBSBasicSettings::LoadAdvancedSettings()
 
 	ui->enableNewSocketLoop->setChecked(enableNewSocketLoop);
 	ui->enableLowLatencyMode->setChecked(enableLowLatencyMode);
+
+	bool browserHWAccel = config_get_bool(App()->GlobalConfig(),
+			"General", "BrowserHWAccel");
+	ui->browserHWAccel->setChecked(browserHWAccel);
 #endif
 
 	loading = false;
@@ -2848,6 +2862,47 @@ void OBSBasicSettings::LoadHotkeySettings(obs_hotkey_id ignoreKey)
 	auto widget = new QWidget();
 	widget->setLayout(layout);
 	ui->hotkeyPage->setWidget(widget);
+
+	auto filterLayout = new QGridLayout();
+	auto filterWidget = new QWidget();
+	filterWidget->setLayout(filterLayout);
+
+	auto filterLabel = new QLabel(QTStr("Basic.Settings.Hotkeys.Filter"));
+	auto filter = new QLineEdit();
+
+	auto setRowVisible = [=](int row, bool visible, QLayoutItem *label) {
+		label->widget()->setVisible(visible);
+
+		auto field = layout->itemAt(row, QFormLayout::FieldRole);
+		if (field)
+			field->widget()->setVisible(visible);
+	};
+
+	auto searchFunction = [=](const QString &text) {
+		for (int i = 0; i < layout->rowCount(); i++) {
+			auto label = layout->itemAt(i, QFormLayout::LabelRole);
+			if (label) {
+				OBSHotkeyLabel *item =
+					qobject_cast<OBSHotkeyLabel*>(
+					label->widget());
+				if(item) {
+					if (item->text().toLower()
+						.contains(text.toLower()))
+						setRowVisible(i, true, label);
+					else
+						setRowVisible(i, false, label);
+				}
+			}
+		}
+	};
+
+	connect(filter, &QLineEdit::textChanged,
+		this, searchFunction);
+
+	filterLayout->addWidget(filterLabel, 0, 0);
+	filterLayout->addWidget(filter, 0, 1);
+
+	layout->addRow(filterWidget);
 
 	using namespace std;
 	using encoders_elem_t =
@@ -3293,6 +3348,10 @@ void OBSBasicSettings::SaveAdvancedSettings()
 
 	SaveCheckBox(ui->enableNewSocketLoop, "Output", "NewSocketLoopEnable");
 	SaveCheckBox(ui->enableLowLatencyMode, "Output", "LowLatencyEnable");
+
+	bool browserHWAccel = ui->browserHWAccel->isChecked();
+	config_set_bool(App()->GlobalConfig(), "General",
+			"BrowserHWAccel", browserHWAccel);
 #endif
 
 #ifdef __APPLE__
@@ -3756,6 +3815,8 @@ void OBSBasicSettings::SaveAudioSettings()
 			"Basic.AuxDevice2", 4);
 	UpdateAudioDevice(true, ui->auxAudioDevice3,
 			"Basic.AuxDevice3", 5);
+	UpdateAudioDevice(true, ui->auxAudioDevice4,
+			"Basic.AuxDevice4", 6);
 	main->SaveProject();
 }
 
@@ -4999,6 +5060,69 @@ void OBSBasicSettings::SimpleReplayBufferChanged()
 
 	UpdateAutomaticReplayBufferCheckboxes();
 
+		char encoderJsonPath[512];
+		int ret = GetProfilePath(encoderJsonPath,
+				sizeof(encoderJsonPath), "recordEncoder.json");
+		if (ret > 0) {
+			obs_data_t *data = obs_data_create_from_json_file_safe(
+					encoderJsonPath, "bak");
+			obs_data_apply(settings, data);
+			obs_data_release(data);
+		}
+	}
+
+	int vbitrate = (int)obs_data_get_int(settings, "bitrate");
+	const char *rateControl = obs_data_get_string(settings, "rate_control");
+
+	if (!rateControl)
+		rateControl = "";
+
+	bool lossless = strcmp(rateControl, "lossless") == 0 ||
+			ui->advOutRecType->currentIndex() == 1;
+	bool replayBufferEnabled = ui->advReplayBuf->isChecked();
+
+	int abitrate = 0;
+	if (ui->advOutRecTrack1->isChecked())
+		abitrate += ui->advOutTrack1Bitrate->currentText().toInt();
+	if (ui->advOutRecTrack2->isChecked())
+		abitrate += ui->advOutTrack2Bitrate->currentText().toInt();
+	if (ui->advOutRecTrack3->isChecked())
+		abitrate += ui->advOutTrack3Bitrate->currentText().toInt();
+	if (ui->advOutRecTrack4->isChecked())
+		abitrate += ui->advOutTrack4Bitrate->currentText().toInt();
+	if (ui->advOutRecTrack5->isChecked())
+		abitrate += ui->advOutTrack5Bitrate->currentText().toInt();
+	if (ui->advOutRecTrack6->isChecked())
+		abitrate += ui->advOutTrack6Bitrate->currentText().toInt();
+
+	int seconds = ui->advRBSecMax->value();
+
+	int64_t memMB = int64_t(seconds) * int64_t(vbitrate + abitrate) *
+			1000 / 8 / 1024 / 1024;
+	if (memMB < 1)
+		memMB = 1;
+
+	bool varRateControl = (astrcmpi(rateControl, "CBR") == 0 ||
+	                       astrcmpi(rateControl, "VBR") == 0 ||
+	                       astrcmpi(rateControl, "ABR") == 0);
+	if (vbitrate == 0)
+		varRateControl = false;
+
+	ui->advRBMegsMax->setVisible(!varRateControl);
+	ui->advRBMegsMaxLabel->setVisible(!varRateControl);
+
+	if (varRateControl)
+		ui->advRBEstimate->setText(
+				QTStr(ESTIMATE_STR).arg(
+				QString::number(int(memMB))));
+	else
+		ui->advRBEstimate->setText(QTStr(ESTIMATE_UNKNOWN_STR));
+
+	ui->advReplayBufferGroupBox->setVisible(!lossless && replayBufferEnabled);
+	ui->line_4->setVisible(!lossless && replayBufferEnabled);
+	ui->advReplayBuf->setEnabled(!lossless);
+
+	UpdateAutomaticReplayBufferCheckboxes();
 }
 
 #define SIMPLE_OUTPUT_WARNING(str) \
@@ -5075,12 +5199,6 @@ void OBSBasicSettings::SimpleRecordingEncoderChanged()
 			warning += SIMPLE_OUTPUT_WARNING("Encoder_0");
 			warning += SIMPLE_OUTPUT_WARNING("Encoder_1");
 			warning += SIMPLE_OUTPUT_WARNING("Encoder_2");
-		}
-
-		if (streamEnc == enc && enc == SIMPLE_ENCODER_QSV) {
-			if (!warning.isEmpty())
-				warning += "\n\n";
-			warning += SIMPLE_OUTPUT_WARNING("MultipleQSV");
 		}
 	}
 
